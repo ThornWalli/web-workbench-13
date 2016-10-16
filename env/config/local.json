@@ -84,7 +84,7 @@
           "loader": "handlebars-loader",
           "query": {
             "exclude": "node_modules",
-            "knownHelpers": ["block", "content", "mixin"],
+            "knownHelpers": ["block", "content"],
             "helperDirs": [
               "<%= root %>/src/tmpl/partials"
             ],

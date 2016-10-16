@@ -3,7 +3,7 @@
     position: relative;
     display: inline-block;
     margin-right: 9px;
-    [data-partial="elements/context-menu/link"] {
+    [data-partial="elements/context-menu/item"] {
       display: block;
       padding: 2px 4px;
       padding-bottom: 1px;
@@ -11,11 +11,16 @@
       color: $workbenchColor_3;
       text-decoration: none;
     }
-    &:hover>[data-partial="elements/context-menu/link"] {
+    &:hover>[data-partial="elements/context-menu/item"] {
       background-color: $workbenchColor_2;
       color: $workbenchColor_4;
+      svg {
+        .primary {
+          fill: $workbenchColor_4;
+        }
+      }
     }
-    [data-partial="elements/context-menu/link"]:hover+.partial[data-partial="fragments/header/context-menu"] {
+    [data-partial="elements/context-menu/item"]:hover+.partial[data-partial="fragments/header/context-menu"] {
       display: block;
     }
   }
@@ -37,6 +42,11 @@
     border: solid $workbenchColor_3 2px;
     box-sizing: border-box;
     background-color: $workbenchColor_1;
+
+    [data-partial="elements/context-menu/item"] {
+    padding: 4px;
+    padding-bottom: 1px;
+    }
     li {
       display: block;
       margin-right: 0px;

@@ -1,7 +1,9 @@
 "use strict";
 
-var loadingUrlTmpl = require('../../../tmpl/partials/elements/messages/loadingUrl.hbs');
-var errorFromUrlTmpl = require('../../../tmpl/partials/elements/messages/error-from-url.hbs');
+// var loadingUrlTmpl = require('../../../tmpl/partials/elements/messages/loading-url.hbs');
+// var errorFromUrlTmpl = require('../../../tmpl/partials/elements/messages/error-from-url.hbs');
+var loadingUrlTmpl = require('../../tmpl/messages/loading-url.hbs');
+var errorFromUrlTmpl = require('../../tmpl/messages/error-from-url.hbs');
 
 var Controller = require('agency-pkg-base/Controller');
 var DomModel = require('agency-pkg-base/DomModel');
@@ -14,7 +16,7 @@ var contentLoader = require('../services/contentLoader');
 require('pepjs');
 
 module.exports = Controller.extend({
-
+test :loadingUrlTmpl,
     modelConstructor: DomModel.extend({
         session: {
             header: {
@@ -112,39 +114,44 @@ module.exports = Controller.extend({
         Controller.prototype.initialize.apply(this, arguments);
         this.contentEl = this.queryByHook('window-content');
         this.model.screenBounds = this.targetModel.bounds;
+
         // Events
         this.model.on('event:updateDimension', onUpdateDimension, this);
+        this.model.on('change:header', function() {
 
-        if (this.model.url) {
-            this.contentEl.innerHTML = loadingUrlTmpl({
-                url: this.model.url
-            });
-            contentLoader.load(this.model.url, function(html) {
-                this.contentEl.innerHTML = html;
-                if (this.contentEl.children.length && this.contentEl.children[0].dataset.title) {
-                    console.log(this.model.header, this.contentEl.children[0].dataset.title);
-                    this.model.header.title = this.contentEl.children[0].dataset.title;
-                }
-                this.model.refresh();
-            }.bind(this), function(e) {
-                this.contentEl.innerHTML += errorFromUrlTmpl({
-                    url: this.model.url,
-                    status: e.status
+            if (this.model.url) {
+                this.contentEl.innerHTML = loadingUrlTmpl({
+                    url: this.model.url
                 });
-            }.bind(this));
-        }
+                contentLoader.load(this.model.url, function(html) {
+                    this.contentEl.innerHTML = html;
+                    if (this.contentEl.children.length && this.contentEl.children[0].dataset.title) {
+                        console.log(this.model.header, this.contentEl.children[0].dataset.title);
+                        this.model.header.title = this.contentEl.children[0].dataset.title;
+                    }
+                    this.model.refresh();
+                    // this.refresh();
+                }.bind(this), function(e) {
+                    this.contentEl.innerHTML += errorFromUrlTmpl({
+                        url: this.model.url,
+                        status: e.status
+                    });
+                }.bind(this));
+            }
 
-        // history.register('window-' + this.cid, function() {
-        //     console.log('window open');
-        // });
+            // history.register('window-' + this.cid, function() {
+            //     console.log('window open');
+            // });
 
-        if (this.targetModel) {
-            this.targetModel.registerWindow(this.model);
-        } else {
-            console.error('Window has no Target');
-        }
+            if (this.targetModel) {
+                this.targetModel.registerWindow(this.model);
+            } else {
+                console.error('Window has no Target');
+            }
 
-        this.refresh();
+            this.refresh();
+
+        }, this);
 
     },
 

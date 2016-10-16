@@ -1,27 +1,45 @@
 .partial[data-partial="components/window"] {
+  visibility: hidden;
+  &[init] {
+    visibility: visible;
+  }
   border: solid $workbenchColor_1 2px;
   border-top-width: 0;
   position: relative;
   top: 0px;
   left: 0px;
   min-width: 150px;
-  min-height: 170px;
-  width: 150px;
-  height: 170px;
-  >.inner {
+  min-height: 40px;
     background: $workbenchColor_3;
+  >.inner {
     margin-top: -20px;
     padding-top: 20px;
     height: 100%;
   }
   .window-content {
     line-height: 18px;
-    padding: 1px 3px;
+    padding: 3px 3px;
     p {
       margin: 0;
     }
     pre {
       overflow: visible;
+    }
+    ul {
+      padding: 0.5em 0;
+      li {
+        position: relative;
+        padding-left: 0.75em;
+        &:before {
+          content: "•";
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0em;
+
+
+        }
+      }
     }
   }
 }

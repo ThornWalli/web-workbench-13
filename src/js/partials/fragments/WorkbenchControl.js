@@ -49,11 +49,10 @@ module.exports = Controller.extend({
             this.windows.slice(this.windows.indexOf(windowModel), 1);
             this.trigger('event:unregisterWindow', this, windowModel);
         },
-        openWindow: function(url) {
-            var data = {
+        openWindow: function(url, options) {
+            this.trigger('event:openWindow', this, extend({
                 url: url
-            };
-            this.trigger('event:openWindow', this, data);
+            },options));
         },
         setWindowFocus: function(windowModel, top) {
             this.trigger('event:changeWindowFocus', this, {
@@ -85,29 +84,34 @@ module.exports = Controller.extend({
 
         this.windowsEl = this.queryByHook('windows');
         createWindow(this, {
-            scroll: true,
-            url: './pages/start.html'
+            scroll: false,
+            url: './pages/start.html',
+            width: 40
         });
     }
 });
 
-function createWindow(scope, data) {
-    data = extend({
+function createWindow(scope, options) {
+    options = extend({
         url: null,
         title: null,
-        scroll: false
-    }, data);
-    var tmpl = data.scroll ? scope.tmpl.scroll : scope.tmpl.default;
+        scrollbar: false,
+        width: null
+    }, options);
+    var tmpl = options.scrollbar ? scope.tmpl.scroll : scope.tmpl.default;
     var id = uniqueId('window_');
     tmpl = tmpl.replace(/@id/g, id);
     $(scope.windowsEl).append(tmpl);
     var windowEl = scope.windowsEl.querySelector('[data-id="' + id + '"]');
-    if (data.url) {
-        windowEl.setAttribute('data-url', data.url);
+    if (options.url) {
+        windowEl.setAttribute('data-url', options.url);
+    }
+    if (options.width) {
+        windowEl.setAttribute('data-width', options.width);
     }
     var windowHeaderEl = windowEl.querySelector('[data-partial="components/header/window"]');
-    if (data.title) {
-        windowHeaderEl.setAttribute('data-title', data.title);
+    if (options.title) {
+        windowHeaderEl.setAttribute('data-title', options.title);
     }
     parseJS(windowEl);
 }
@@ -124,9 +128,9 @@ function onUnregisterWindow(model, windowModel) {
     console.log('onUnregisterWindow', model, windowModel);
 }
 
-function onOpenWindow(model, data) {
-    console.log('openWindow', model, data);
-    createWindow(this, data);
+function onOpenWindow(model, options) {
+    console.log('openWindow', model, options);
+    createWindow(this, options);
 }
 
 function onChangeWindowFocus(model, data) {

@@ -11,7 +11,6 @@ module.exports = Controller.extend({
         this.setup();
     },
     setup: function() {
-        console.log('32333', this.targetModel);
         /**
          * Override this function
          */
@@ -24,5 +23,7 @@ module.exports = Controller.extend({
 
 function onClickWindowOpen(e) {
     e.preventDefault();
-    this.targetModel.openWindow(e.currentTarget.getAttribute('href'));
+    this.targetModel.openWindow(e.currentTarget.getAttribute('href'), {
+        scrollbar: e.currentTarget.dataset.scrollbar || false
+    });
 }

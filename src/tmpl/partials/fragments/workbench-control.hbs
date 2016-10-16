@@ -35,7 +35,8 @@ tmpl:
 
     <script id="{{{id}}}" type="text/x-handlebars-template">
       {{#with data}}
-        {{{mixin "components/window" this}}}
+        {{#mixin "components/window" this}}
+        {{#content "content"}}{{/content}}{{/mixin}}
       {{/with}}
     </script>
 
