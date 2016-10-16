@@ -3,12 +3,15 @@ layout: 'layouts/window-content'
 title: "Runtime Import / Export"
 ---
 
+<div class="partial controller" data-partial="components/runtime-import-export" data-controller="./partials/components/RuntimeImportExport" data-target="[data-partial='fragments/workbench-control']">
+
 <p>
   Applications: <span data-hook="application">0</span><br/><br/>
   Windows: <span data-hook="windows">0</span>
 </p>
 
-<input class="partial color-1" data-partial="elements/button" type="button" value="export" />
-<input class="partial color-2" data-partial="elements/button" type="button" value="export" />
-<input class="partial color-3" data-partial="elements/button" type="button" value="export" />
-<input class="partial color-4" data-partial="elements/button" type="button" value="export" />
+<input class="partial color-2" data-partial="elements/button" type="button" value="Import" />
+<input class="partial color-2" data-partial="elements/button" type="button" value="Export" />
+
+
+</div>

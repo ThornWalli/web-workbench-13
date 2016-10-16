@@ -1,19 +1,7 @@
 {
-    "title": "TITLE",
-    "keywords": "KEYWORDS",
-    "description": "DESCRIPTION",
-    "social": {
-        "title": "Social Title",
-        "description": "Social Description",
-        "image": {
-            "url": "image url",
-            "secureUrl": "secure image url",
-            "type": "image/png",
-            "width": 200,
-            "height": 200
-        },
-        "localization": "de_DE"
-    },
+    "title": "Workbench 1.3 Alpha",
+    "keywords": "Amiga,Workbench,1.3,Alpha,Lammpee",
+    "description": "",
     "body": {
       "stage": {
         "overline": {

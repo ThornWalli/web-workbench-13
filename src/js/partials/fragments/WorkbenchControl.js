@@ -40,19 +40,33 @@ module.exports = Controller.extend({
                 }
             }
         },
-
+        getWindowModel: function(windowId) {
+            return this.windows.find(function(windowModel) {
+                console.log(windowModel.id , windowId);
+                if (windowModel.id === windowId) {
+                    return windowModel;
+                }
+            });
+        },
         registerWindow: function(windowModel) {
             this.windows.push(windowModel);
             this.trigger('event:registerWindow', this, windowModel);
         },
         unregisterWindow: function(windowModel) {
-            this.windows.slice(this.windows.indexOf(windowModel), 1);
+            this.windows.splice(this.windows.indexOf(windowModel), 1);
             this.trigger('event:unregisterWindow', this, windowModel);
         },
         openWindow: function(url, options) {
+            // if (this.windows.find(function(windowModel) {
+            //     if (windowModel.url === url) {
+            //         return windowModel;
+            //     }
+            // })) {
+            //     return;
+            // }
             this.trigger('event:openWindow', this, extend({
                 url: url
-            },options));
+            }, options));
         },
         setWindowFocus: function(windowModel, top) {
             this.trigger('event:changeWindowFocus', this, {

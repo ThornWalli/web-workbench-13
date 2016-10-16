@@ -1,9 +1,9 @@
 "use strict";
 
-var Controller = require('agency-pkg-base/Controller');
+var Header = require('../Header');
 var DomModel = require('agency-pkg-base/DomModel');
 
-module.exports = Controller.extend({
+module.exports = Header.extend({
 
     modelConstructor: DomModel.extend({
         session: {
@@ -27,7 +27,7 @@ module.exports = Controller.extend({
 
 
     initialize: function() {
-        Controller.prototype.initialize.apply(this, arguments);
+        Header.prototype.initialize.apply(this, arguments);
         if (this.targetModel) {
             this.targetModel.header = this.model;
         }

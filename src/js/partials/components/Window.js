@@ -115,6 +115,12 @@ test :loadingUrlTmpl,
         this.contentEl = this.queryByHook('window-content');
         this.model.screenBounds = this.targetModel.bounds;
 
+        if (this.targetModel) {
+            this.targetModel.registerWindow(this.model);
+        } else {
+            console.error('Window has no Target');
+        }
+
         // Events
         this.model.on('event:updateDimension', onUpdateDimension, this);
         this.model.on('change:header', function() {
@@ -125,6 +131,7 @@ test :loadingUrlTmpl,
                 });
                 contentLoader.load(this.model.url, function(html) {
                     this.contentEl.innerHTML = html;
+                    parseJS(this.contentEl);
                     if (this.contentEl.children.length && this.contentEl.children[0].dataset.title) {
                         console.log(this.model.header, this.contentEl.children[0].dataset.title);
                         this.model.header.title = this.contentEl.children[0].dataset.title;
@@ -142,12 +149,6 @@ test :loadingUrlTmpl,
             // history.register('window-' + this.cid, function() {
             //     console.log('window open');
             // });
-
-            if (this.targetModel) {
-                this.targetModel.registerWindow(this.model);
-            } else {
-                console.error('Window has no Target');
-            }
 
             this.refresh();
 
@@ -228,4 +229,9 @@ function onPointerUpHelperMove() {
     $(document).off('pointerup.move_' + this.cid);
     $(document).off('pointermove.move_' + this.cid);
     // global.animationFrame.add(onRefresh.bind(this));
+}
+
+
+function parseJS(element) {
+    require('agency-pkg-services/parser/js')(require('../../packages')).parse(element);
 }
