@@ -1,0 +1,45 @@
+.partial[data-partial="fragments/header/context-menu"] {
+  li {
+    position: relative;
+    display: inline-block;
+    margin-right: 9px;
+    [data-partial="elements/context-menu/link"] {
+      display: block;
+      padding: 2px 4px;
+      padding-bottom: 1px;
+      white-space: nowrap;
+      color: $workbenchColor_3;
+      text-decoration: none;
+    }
+    &:hover>[data-partial="elements/context-menu/link"] {
+      background-color: $workbenchColor_2;
+      color: $workbenchColor_4;
+    }
+    [data-partial="elements/context-menu/link"]:hover+.partial[data-partial="fragments/header/context-menu"] {
+      display: block;
+    }
+  }
+  .partial[data-partial="fragments/header/context-menu"] .partial[data-partial="fragments/header/context-menu"] {
+    top: 0;
+    left: 100%;
+    margin-left: -2px;
+  }
+  .partial[data-partial="fragments/header/context-menu"]:hover {
+    display: block;
+  }
+  .partial[data-partial="fragments/header/context-menu"] {
+    display: none;
+    position: absolute;
+    min-width: 75px;
+    margin-top: -2px;
+    top: 100%;
+    left: 0;
+    border: solid $workbenchColor_3 2px;
+    box-sizing: border-box;
+    background-color: $workbenchColor_1;
+    li {
+      display: block;
+      margin-right: 0px;
+    }
+  }
+}

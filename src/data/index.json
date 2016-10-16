@@ -1,0 +1,149 @@
+{
+    "title": "TITLE",
+    "keywords": "KEYWORDS",
+    "description": "DESCRIPTION",
+    "social": {
+        "title": "Social Title",
+        "description": "Social Description",
+        "image": {
+            "url": "image url",
+            "secureUrl": "secure image url",
+            "type": "image/png",
+            "width": 200,
+            "height": 200
+        },
+        "localization": "de_DE"
+    },
+    "body": {
+      "stage": {
+        "overline": {
+          "text": "Kategorie"
+        },
+        "headline": {
+          "text": "Katze auf Bild"
+        },
+        "subline": {
+          "text": "Schwarz & Weiß"
+        },
+        "picture": {
+            "title": "Katze",
+            "sources": [{
+                "type": "lg",
+                "srcset": "//placekitten.com/g/1920/1080"
+            }, {
+                "type": "md",
+                "srcset": "//placekitten.com/g/1199/674"
+            }, {
+                "type": "sm",
+                "srcset": "//placekitten.com/g/991/557"
+            }, {
+                "type": "xs",
+                "srcset": "//placekitten.com/g/767/431"
+            }, {
+                "type": "default",
+                "srcset": "//placekitten.com/g/479/269"
+            }]
+        }
+      },
+      "intro": {
+        "article": {
+          "overline": {
+            "text": "Intro Overline"
+          },
+          "headline": {
+            "text": "Intro"
+          },
+          "subline": {
+            "text": "Intro Subline"
+          },
+          "content": {
+            "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim."
+          }
+        }
+      },
+      "teasers": [
+        {
+          "class": "controller left-to-right",
+          "extendedRange": true,
+          "headlineText": {
+            "headline": {
+              "text": "Teaser A"
+            },
+            "content": {
+              "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+            }
+          },
+          "picture": {
+            "title": "Katze",
+            "sources": [{
+              "type": "lg",
+              "srcset": "//placekitten.com/g/960/540"
+            }, {
+              "type": "md",
+              "srcset": "//placekitten.com/g/600/337"
+            }, {
+                "type": "sm",
+                "srcset": "//placekitten.com/g/496/279"
+            }, {
+                "type": "xs",
+                "srcset": "//placekitten.com/g/384/215"
+            }, {
+                "type": "default",
+                "srcset": "//placekitten.com/g/239/134"
+            }]
+          }
+        }, {
+          "class": "controller right-to-left",
+          "extendedRange": true,
+          "headlineText": {
+            "headline": {
+              "text": "Teaser B"
+            },
+            "content": {
+              "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+            }
+          },
+          "picture": {
+            "title": "Katze",
+            "sources": [{
+              "type": "lg",
+              "srcset": "//placekitten.com/960/540"
+            }, {
+              "type": "md",
+              "srcset": "//placekitten.com/600/337"
+            }, {
+                "type": "sm",
+                "srcset": "//placekitten.com/496/279"
+            }, {
+                "type": "xs",
+                "srcset": "//placekitten.com/384/215"
+            }, {
+                "type": "default",
+                "srcset": "//placekitten.com/239/134"
+            }]
+          }
+        }
+      ],
+      "main": {
+        "article": {
+          "overline": {
+            "text": "Main Overline"
+          },
+          "headline": {
+            "text": "Main"
+          },
+          "subline": {
+            "text": "Main Subline"
+          },
+          "content": {
+            "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim."
+          }
+        }
+      },
+      "svgImage": {
+        "svg": {
+          "clipPath": "#skew-vertical-left-shape"
+        }
+      }
+    }
+}

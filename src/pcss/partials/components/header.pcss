@@ -1,0 +1,23 @@
+.partial[data-partial="components/header"], .partial[data-partial^="components/header/"] {
+  position: relative;
+  height: 20px;
+  color: $workbenchColor_3;
+}
+
+.partial[data-partial="components/header"] {
+background: $workbenchColor_1;
+  >.cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    padding-top: 2px;
+    padding-left: 5px;
+  }
+  >.partial[data-partial="fragments/header/navigation"] {
+    visibility: visible;
+    margin-left: 25px;
+  }
+}

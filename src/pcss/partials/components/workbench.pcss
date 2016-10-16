@@ -1,0 +1,24 @@
+.partial[data-partial="components/workbench"] {
+  body>& {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -calc(860 / 2)px;
+    margin-top: -calc(672 / 2)px
+  }
+  user-select: none;
+  cursor: url(../assets/img/cursor/pointer.png), auto;
+  &.loading {
+    cursor: url(../assets/img/cursor/wait.png), auto;
+  }
+  .partial[data-partial="components/header"] {
+    z-index: 10000;
+  }
+  .partial[data-partial="fragments/workbench-control"] {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    bottom: 0;
+      z-index: 100;
+  }
+}

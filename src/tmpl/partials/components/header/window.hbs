@@ -1,0 +1,32 @@
+---
+title: 'Window Title'
+---
+{{#mixin "components/header" this}}
+  {{#content "attributes"}}
+    touch-action="none"
+    data-partial="components/header/window"
+    data-controller="./partials/components/window/Header"
+    {{#if window-id}} data-target="[data-partial='components/window'][data-id='{{{window-id}}}']"{{/if}}
+    data-title="{{{title}}}"
+  {{/content}}
+  {{#content "content"}}
+
+    <div class="handlers left">
+      <span class="close" data-hook="close" touch-action="none">
+        {{{mixin "svgs/icons/close"}}}
+      </span>
+    </div>
+    <span class="background">
+      <span class="line"></span><span class="line"></span><span class="dots"></span>
+    </span>
+    <span class="title" data-hook="window-title">{{{title}}}</span>
+    <div class="handlers right">
+      <span class="focus-max" data-hook="focus-max" touch-action="none">
+      {{{mixin "svgs/icons/focus-max" class="focus-max"}}}
+    </span>
+    <span class="focus-min" data-hook="focus-min" touch-action="none">
+       {{{mixin "svgs/icons/focus-min" class="focus-min"}}}
+    </span>
+    </div>
+  {{/content}}
+{{/mixin}}

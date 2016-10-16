@@ -1,0 +1,19 @@
+---
+id: 'dummy-window'
+scroll: true
+---
+<div class="partial controller active" data-partial="components/window" data-controller="./partials/components/Window" data-id="{{{id}}}" data-target="[data-partial='fragments/workbench-control']"{{#if scroll}} data-scroll="true"{{/if}}>
+
+  {{{mixin "components/header/window" header window-id=id}}}
+
+  <div class="inner">
+    {{#if scroll}}
+      {{{mixin "fragments/window/scroll-content" this}}}
+    {{else}}
+      <div class="window-content" data-hook="window-content">
+        {{#block "content"}}{{/block}}
+      </div>
+    {{/if}}
+  </div>
+
+</div>

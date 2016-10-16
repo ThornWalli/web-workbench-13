@@ -1,0 +1,66 @@
+{
+  "name": "agency-boilerplate",
+  "version": "3.0.0",
+  "description": "agency - frontend boilerplate",
+  "keywords": [
+    "boilerplate"
+  ],
+  "homepage": "https://github.com/StephanGerbeth/agency-boilerplate#readme",
+  "bugs": {
+    "url": "https://github.com/StephanGerbeth/agency-boilerplate/issues"
+  },
+  "license": "MIT",
+  "author": "Stephan Gerbeth <stephan.gerbeth@gmail.com>",
+  "contributors": [
+    {
+      "name": "Stephan Gerbeth",
+      "email": "stephan.gerbeth@grabarzundpartner.de"
+    },
+    {
+      "name": "Thorn Walli",
+      "email": "lammpee@gmail.com; thorn.walli@grabarzundpartner.de"
+    }
+  ],
+  "main": "none",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StephanGerbeth/agency-boilerplate.git"
+  },
+  "scripts": {
+    "heroku": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=production --server=agency-server",
+    "build": "node node_modules/gulp/bin/gulp build --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=build",
+    "export": "node node_modules/gulp/bin/gulp export --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=export",
+    "dev": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=development --server=agency-server",
+    "dev-ip": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=development --server=agency-server --ip=true",
+    "prod": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=production --server=agency-server",
+    "server": "node node_modules/gulp/bin/gulp default --serverConfig=./env/config/local.json --env=development --server=agency-server",
+    "test": "npm run build",
+    "template": "yo agency-boilerplate:hbs-template",
+    "create-package" : "yo agency-boilerplate:package"
+  },
+  "dependencies": {
+    "agency-environment": "git+https://git@github.com/StephanGerbeth/agency-environment.git#feature/flat-files",
+    "agency-pkg-base": "git+https://git@github.com/StephanGerbeth/agency-pkg-base.git#feature/flat-files",
+    "agency-pkg-common": "git+https://git@github.com/StephanGerbeth/agency-pkg-common.git#feature/flat-files",
+    "agency-pkg-docs": "git+https://git@github.com/StephanGerbeth/agency-pkg-docs.git#feature/flat-files",
+    "agency-pkg-elements": "git+https://git@github.com/StephanGerbeth/agency-pkg-elements.git#feature/flat-files",
+    "agency-pkg-embed": "git+https://git@github.com/StephanGerbeth/agency-pkg-embed.git#feature/flat-files",
+    "agency-pkg-layouts": "git+https://git@github.com/StephanGerbeth/agency-pkg-layouts.git#feature/flat-files",
+    "agency-pkg-polyfills": "git+https://git@github.com/StephanGerbeth/agency-pkg-polyfills.git#feature/flat-files",
+    "agency-pkg-services": "git+https://git@github.com/StephanGerbeth/agency-pkg-services.git#feature/flat-files",
+    "agency-pkg-utils": "git+https://git@github.com/StephanGerbeth/agency-pkg-utils.git#feature/flat-files",
+    "agency-server": "git+https://git@github.com/StephanGerbeth/agency-server.git",
+    "color": "^0.11.1",
+    "fastdom": "^1.0.1",
+    "fastdom-sequencer": "^1.0.3",
+    "gsap": "^1.18.4",
+    "modernizr": "^3.0.0",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "fb": "^1.0.2",
+    "htmlescape": "^1.1.0",
+    "jshint": "^2.8.0",
+    "minimist": "^1.2.0"
+  }
+}

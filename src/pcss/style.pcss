@@ -1,0 +1,30 @@
+@import "../../generated/pcss/purecss/custom-media-variables.pcss";
+
+/* package for docs css */
+@import "agency-pkg-docs";
+
+@import "agency-pkg-base";
+@import "agency-pkg-elements";
+@import "agency-pkg-services";
+@import "agency-pkg-layouts";
+
+@import "./base/variables.pcss";
+
+@import "./partials.pcss";
+
+.disable-hover,
+.disable-hover * {
+  pointer-events: none !important;
+}
+
+
+body {
+  background: $workbenchBackgroundColor_default;
+
+    &,pre {
+      font-family: $workbenchFont_topaz;
+    }
+
+  font-size: 16px;
+  color: $workbenchColor_1;
+}

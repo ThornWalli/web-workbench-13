@@ -1,0 +1,44 @@
+---
+
+tmpl:
+  -
+    id: 'window-template'
+    data:
+      id: '@id'
+      scroll: false
+      header:
+        title: '@title'
+  -
+    id: 'window-scroll-template'
+    data:
+      id: '@id'
+      scroll: true
+      header:
+        title: '@title'
+
+---
+<div class="partial controller" data-partial="fragments/workbench-control" data-controller="./partials/fragments/WorkbenchControl" data-target="[data-partial='components/workbench']">
+
+  <div class="content">
+
+    {{#block "content"}}{{/block}}
+
+  </div>
+
+  <div class="windows" data-hook="windows">
+
+    {{#block "windows"}}{{/block}}
+
+  </div>
+
+  {{#each tmpl}}
+
+    <script id="{{{id}}}" type="text/x-handlebars-template">
+      {{#with data}}
+        {{{mixin "components/window" this}}}
+      {{/with}}
+    </script>
+
+  {{/each}}
+
+</div>

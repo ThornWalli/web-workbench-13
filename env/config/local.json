@@ -1,0 +1,292 @@
+{
+  "build": {
+    "dest": "build",
+    "root": "./build",
+    "dev": false
+  },
+  "export": {
+    "dest": "export",
+    "root": "./export",
+    "dev": false
+  },
+  "development": {
+    "host": "localhost",
+    "dest": "dev",
+    "root": "./",
+    "dev": true,
+    "hapi": {
+      "options": {
+        "port": 8050,
+        "secret": "UNSAFE: CHANGE ME"
+      },
+      "routes": [{
+        "module": "agency-server/lib/hapi/route/debug",
+        "options": {}
+      }, {
+        "module": "agency-server/lib/hapi/route/kewego",
+        "options": {
+          "appKey": "UNSAFE: CHANGE ME"
+        }
+      }, {
+        "module": "agency-server/lib/hapi/route/auth/session",
+        "options": {
+          "appId": "1649448378651481",
+          "appSecret": "f6ef2995e1483b161d013c49e86c0273"
+        }
+      }, {
+        "module": "agency-server/lib/hapi/route/static",
+        "options": {
+          "config": {
+            "state": {
+              "parse": false,
+              "failAction": "ignore"
+            }
+          }
+        }
+      }, {
+        "module": "agency-server/lib/hapi/route/proxy",
+        "options": {}
+      }, {
+        "module": "../../../../env/routes/getMenuConfig",
+        "options": {}
+      }]
+    },
+    "websocket": {
+
+    },
+    "webpack": {
+      "entry": {
+        "app": "./src/js/main"
+      },
+      "plugins": [{
+        "script": "agency-environment/lib/webpack/plugins/provide",
+        "config": {
+          "$": "jquery",
+          "jQuery": "jquery",
+          "window.jQuery": "jquery",
+          "root.jQuery": "jquery"
+        }
+      }, {
+        "script": "agency-environment/lib/webpack/plugins/polyfills"
+      }, {
+        "script": "agency-environment/lib/webpack/plugins/dedupe"
+      }, {
+        "script": "agency-environment/lib/webpack/plugins/hotReplacement"
+      }],
+      "module": {
+        "preLoaders": [{
+          "test": ".js$",
+          "exclude": "node_modules",
+          "loader": "jshint-loader"
+        }],
+        "loaders": [{
+          "test": ".hbs$",
+          "loader": "handlebars-loader",
+          "query": {
+            "exclude": "node_modules",
+            "knownHelpers": ["block", "content", "mixin"],
+            "helperDirs": [
+              "<%= root %>/src/tmpl/partials"
+            ],
+            "debug": false
+          },
+          "agency": {
+            "customs": ["agency-environment/lib/handlebars/customs/yamlExclude"]
+          }
+        }, {
+          "test": ".css$",
+          "loader": "style-loader!css-loader"
+        }, {
+          "test": ".(png|jpg|gif|svg|ttf|woff|eot)$",
+          "loader": "url-loader?limit=100000"
+        }, {
+          "test": ".modernizrrc$",
+          "loader": "modernizr"
+        }]
+      },
+      "resolve": {
+        "alias": {
+          "modernizr$": "<%= root %>/.modernizrrc"
+        }
+      },
+      "files": {
+        "dest": "js/[name].js",
+        "library": ["[name]"]
+      },
+      "port": 8051
+    },
+    "weinre": {
+      "port": 8052
+    },
+    "livereload": {
+      "port": 8053
+    }
+  },
+
+  "production": {
+    "host": "localhost",
+    "dest": "production",
+    "root": "./production",
+    "dev": false,
+    "hapi": {
+      "options": {
+        "port": 8050,
+        "secret": "UNSAFE: CHANGE ME"
+      },
+      "routes": [{
+        "module": "agency-server/lib/hapi/route/debug",
+        "options": {}
+      }, {
+        "module": "agency-server/lib/hapi/route/kewego",
+        "options": {
+          "appKey": "UNSAFE: CHANGE ME"
+        }
+      }, {
+        "module": "agency-server/lib/hapi/route/auth/session",
+        "options": {}
+      }, {
+        "module": "agency-server/lib/hapi/route/static",
+        "options": {
+          "config": {
+            "state": {
+              "parse": false,
+              "failAction": "ignore"
+            }
+          }
+        }
+      }, {
+        "module": "agency-server/lib/hapi/route/proxy",
+        "options": {}
+      }]
+    }
+  },
+
+  "package-development": {
+    "host": "localhost",
+    "dest": "dev",
+    "root": "./",
+    "dev": true,
+    "hapi": {
+      "options": {
+        "port": 8050,
+        "secret": "UNSAFE: CHANGE ME"
+      },
+      "routes": [{
+        "module": "agency-server/lib/hapi/route/static",
+        "options": {
+          "config": {
+            "state": {
+              "parse": false,
+              "failAction": "ignore"
+            }
+          }
+        }
+      }]
+    },
+    "websocket": {
+
+    },
+    "webpack": {
+      "entry": {
+        "app": "./test/js/main"
+      },
+      "plugins": [{
+        "script": "agency-environment/lib/webpack/plugins/provide",
+        "config": {
+          "$": "jquery",
+          "jQuery": "jquery",
+          "window.jQuery": "jquery",
+          "root.jQuery": "jquery"
+        }
+      }, {
+        "script": "agency-environment/lib/webpack/plugins/polyfills"
+      }, {
+        "script": "agency-environment/lib/webpack/plugins/dedupe"
+      }, {
+        "script": "agency-environment/lib/webpack/plugins/hotReplacement"
+      }],
+      "module": {
+        "preLoaders": [{
+          "test": ".js$",
+          "exclude": "node_modules",
+          "loader": "jshint-loader"
+        }],
+        "loaders": [{
+          "test": ".hbs$",
+          "loader": "handlebars-loader",
+          "query": {
+            "exclude": "node_modules",
+            "knownHelpers": ["block", "content"],
+            "helperDirs": [
+              "<%= root %>/test/tmpl/partials"
+            ],
+            "debug": false
+          }
+        }, {
+          "test": ".css$",
+          "loader": "style-loader!css-loader"
+        }, {
+          "test": ".(png|jpg|gif|svg|ttf|woff|eot)$",
+          "loader": "url-loader?limit=100000"
+        }, {
+          "test": ".modernizrrc$",
+          "loader": "modernizr"
+        }]
+      },
+      "resolve": {
+        "alias": {
+          "modernizr$": "node_modules/agency-boilerplate/.modernizrrc"
+        }
+      },
+      "files": {
+        "dest": "js/[name].js",
+        "library": ["[name]"]
+      },
+      "port": 8051
+    },
+    "weinre": {
+      "port": 8052
+    },
+    "livereload": {
+      "port": 8053
+    }
+  },
+
+  "package-production": {
+    "host": "localhost",
+    "dest": "production",
+    "root": "./production",
+    "dev": false,
+    "hapi": {
+      "options": {
+        "port": 8050,
+        "secret": "UNSAFE: CHANGE ME"
+      },
+      "routes": [{
+        "module": "agency-server/lib/hapi/route/debug",
+        "options": {}
+      }, {
+        "module": "agency-server/lib/hapi/route/kewego",
+        "options": {
+          "appKey": "UNSAFE: CHANGE ME"
+        }
+      }, {
+        "module": "agency-server/lib/hapi/route/auth/session",
+        "options": {}
+      }, {
+        "module": "agency-server/lib/hapi/route/static",
+        "options": {
+          "config": {
+            "state": {
+              "parse": false,
+              "failAction": "ignore"
+            }
+          }
+        }
+      }, {
+        "module": "agency-server/lib/hapi/route/proxy",
+        "options": {}
+      }]
+    }
+  }
+}

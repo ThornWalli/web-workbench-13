@@ -1,0 +1,187 @@
+  .partial[data-partial="components/header/window"] {
+    .title {
+      position: absolute;
+      top: 0;
+      left: 25px;
+      display: inline-block;
+      padding: 2px 2px;
+      padding-bottom: 1px;
+      background-color: $workbenchColor_1;
+      white-space: nowrap;
+    }
+    >.background {
+      position: absolute;
+      left: 26px;
+      right: 51px;
+      width: auto;
+      height: 20px;
+      background-color: $workbenchColor_1;
+      overflow: hidden;
+      &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: block;
+        width: 3px;
+        height: 20px;
+        background: $workbenchColor_1;
+      }
+      .dots {
+        visibility: visible;
+        &:before, &:after {
+          position: absolute;
+          border: dotted $workbenchColor_1 4px;
+          content: "";
+          box-sizing: border-box;
+        }
+        &:before {
+          top: 4px;
+          height: 12px;
+          width: 100%;
+          border: dotted $workbenchColor_1 2px;
+        }
+        &:after {
+          top: 6px;
+          left: -2px;
+          height: 8px;
+          width: 100%;
+          border: dotted $workbenchColor_1 2px;
+        }
+      }
+      .line {
+        display: block;
+        width: 100%;
+        border: solid $workbenchColor_3 2px;
+        position: absolute;
+        &:first-child {
+          top: 4px;
+        }
+        &:nth-child(2) {
+          top: 12px;
+        }
+      }
+    }
+    >.handlers {
+      font-size: 0;
+      &.left {
+        position: absolute;
+        top: 0;
+        left: 0;
+        &:before {
+          content: "";
+          display: inline-block;
+          width: 1px;
+          height: 20px;
+          background: $workbenchColor_1;
+          margin-right: 2px;
+        }
+      }
+      &.right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        &:after {
+          content: "";
+          display: inline-block;
+          width: 1px;
+          height: 20px;
+          background: $workbenchColor_1;
+        }
+      }
+      >* {
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        box-sizing: content-box;
+      }
+      .close {
+        position: relative;
+        background: $workbenchColor_3;
+        width: 20px;
+        .primary {
+          fill: #ffffff;
+        }
+        .secondary {
+          fill: #000000;
+        }
+        &:active {
+          background-color: $workbenchColor_4;
+          .primary {
+            fill: #000000;
+          }
+          .secondary {
+            fill: #ffffff;
+          }
+        }
+      }
+      .focus-min {
+        position: relative;
+        background: $workbenchColor_3;
+        width: 22px;
+        /*margin-left: 2px;*/
+        margin-right: 2px;
+        .primary {
+          fill: #ffffff;
+        }
+        .secondary {
+          fill: #000000;
+        }
+        &:active {
+          background-color: $workbenchColor_4;
+          .primary {
+            fill: #000000;
+          }
+          .secondary {
+            fill: #ffffff;
+          }
+        }
+      }
+      .focus-max {
+        width: 22px;
+        position: relative;
+        background: $workbenchColor_3;
+        margin-right: 2px;
+        .primary {
+          fill: #ffffff;
+        }
+        .secondary {
+          fill: #000000;
+        }
+        &:active {
+          background-color: $workbenchColor_4;
+          .primary {
+            fill: #000000;
+          }
+          .secondary {
+            fill: #ffffff;
+          }
+        }
+      }
+    }
+  }
+
+  .partial[data-partial="components/window"] {
+    &.active {
+      .partial[data-partial^="components/header/"] {
+        >.background {
+          >.dots {
+            visibility: hidden;
+          }
+        }
+      }
+    }
+  }
+
+  .partial[data-partial="components/window"] {
+    &:active {
+      .partial[data-partial^="components/header/"] {
+        >.background {
+          >.dots {
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }

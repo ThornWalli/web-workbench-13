@@ -1,0 +1,13 @@
+[{
+  "name": "Amiga Topaz 13",
+  "path": "assets/fonts/amiga-topaz-13/amiga-topaz-13",
+  "style": "normal",
+  "weight": "400",
+  "testString": "ABCD"
+},{
+  "name": "Amiga Icons 13",
+  "path": "assets/fonts/amiga-icons-13/amiga-icons-13",
+  "style": "normal",
+  "weight": "400",
+  "testString": "ꀁꀃꀒ"
+}]

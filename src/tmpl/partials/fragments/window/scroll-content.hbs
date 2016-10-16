@@ -1,0 +1,44 @@
+---
+id: #window id
+---
+
+<div class="partial controller" data-partial="fragments/window/scroll-content" data-controller="./partials/fragments/ScrollContent" data-target="[data-partial='components/window'][data-id='{{{id}}}']">
+
+  <div class="scroll-wrapper">
+    <div class="scroll-content">
+      <div class="scroll-inner window-content" data-hook="window-content">
+      {{#block "content"}}{{/block}}
+      </div>
+  </div>
+  </div>
+
+  <div class="scrollbar right">
+    <span class="helper-top" touch-action="none">
+      {{{mixin "svgs/icons/scrollbar-arrow-top"}}}
+    </span>
+    <span class="arrow-top"></span>
+    <span class="range">
+      <span class="helper"><span class="spacer" touch-action="none"></span></span>
+    </span>
+    <span class="helper-bottom" touch-action="none">
+      {{{mixin "svgs/icons/scrollbar-arrow-bottom"}}}
+    </span>
+  </div>
+
+  <span class="helper-scale" touch-action="none">
+    {{{mixin "svgs/icons/scrollbar-scale"}}}
+  </span>
+
+  <div class="scrollbar bottom">
+    <span class="helper-left" touch-action="none">
+    {{{mixin "svgs/icons/scrollbar-arrow-left"}}}
+    </span>
+    <span class="range">
+      <span class="helper"><span class="spacer" touch-action="none"></span></span>
+    </span>
+    <span class="helper-right" touch-action="none">
+    {{{mixin "svgs/icons/scrollbar-arrow-right"}}}
+  </span>
+  </div>
+
+</div>

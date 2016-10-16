@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "viewport": "initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0",
+    "favicon": "assets/favicon/favicon.ico",
+    "webAppCapable": "yes",
+    "statusBarStyle": "black",
+    "formatDetection": "telephone=no",
+    "author": "AUTHOR"
+  },
+  "css": {
+    "critical": "COMING SOON",
+    "main": "COMING SOON"
+  },
+  "js": {
+    "critical": "COMING SOON",
+    "main": "COMING SOON"
+  }
+
+}
