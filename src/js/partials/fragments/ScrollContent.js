@@ -4,13 +4,59 @@ var Vector = require('agency-pkg-base/Vector');
 var Bounds = require('agency-pkg-base/Bounds');
 var Controller = require('agency-pkg-base/Controller');
 var viewport = require('agency-pkg-services/viewport');
-
+var Enum = require('enum');
 require('pepjs');
 
-var SCROLLBAR_WIDTH = 16;
-var SCROLLBAR_HEIGHT = 16;
+
+
+
+function setScrollByEvent(scope, direction) {
+
+    global.clearInterval(scope.scrollInterval);
+    scope.scrollInterval = setInterval(function() {
+        console.log(direction);
+        switch (direction) {
+            case scope.SCROLL_DIRECTIONS.LEFT:
+                scope.scrollContentEl.scrollLeft -= 16;
+                break;
+            case scope.SCROLL_DIRECTIONS.TOP:
+                scope.scrollContentEl.scrollTop -= 16;
+                break;
+            case scope.SCROLL_DIRECTIONS.RIGHT:
+                scope.scrollContentEl.scrollLeft += 16;
+                break;
+            case scope.SCROLL_DIRECTIONS.BOTTOM:
+                scope.scrollContentEl.scrollTop += 16;
+                break;
+        }
+        setScrollByEvent(scope, direction);
+    }, 125);
+
+}
+
+function onClickScrollBarArrowTop() {
+    setScrollByEvent(this, this.SCROLL_DIRECTIONS.TOP);
+}
+
+function onClickScrollBarArrowBottom() {
+    setScrollByEvent(this, this.SCROLL_DIRECTIONS.BOTTOM);
+}
+
+function onClickScrollBarArrowLeft() {
+    setScrollByEvent(this, this.SCROLL_DIRECTIONS.LEFT);
+}
+
+function onClickScrollBarArrowRight() {
+    setScrollByEvent(this, this.SCROLL_DIRECTIONS.RIGHT);
+}
+
+function onPointerUpScrollBarArrow() {
+    global.clearInterval(this.scrollInterval);
+}
 
 module.exports = Controller.extend({
+    scrollInterval: null,
+    SCROLL_DIRECTIONS: new Enum(['LEFT', 'TOP', 'RIGHT', 'BOTTOM']),
 
     scrollContentWidth: 0,
     scrollContentHeight: 0,
@@ -24,9 +70,14 @@ module.exports = Controller.extend({
     bounds: new Bounds(),
 
     events: {
-
-
-
+        'pointerdown [data-hook="scrollbar-arrow-top"]': onClickScrollBarArrowTop,
+        'pointerdown [data-hook="scrollbar-arrow-bottom"]': onClickScrollBarArrowBottom,
+        'pointerdown [data-hook="scrollbar-arrow-let"]': onClickScrollBarArrowLeft,
+        'pointerdown [data-hook="scrollbar-arrow-right"]': onClickScrollBarArrowRight,
+        'pointerup [data-hook="scrollbar-arrow-top"]': onPointerUpScrollBarArrow,
+        'pointerup [data-hook="scrollbar-arrow-bottom"]': onPointerUpScrollBarArrow,
+        'pointerup [data-hook="scrollbar-arrow-let"]': onPointerUpScrollBarArrow,
+        'pointerup [data-hook="scrollbar-arrow-right"]': onPointerUpScrollBarArrow,
     },
 
     initialize: function() {
@@ -40,7 +91,6 @@ module.exports = Controller.extend({
         this.scrollRightSpacerEl = this.el.querySelector('.scrollbar.right>.range>.helper>.spacer');
         this.scrollBottomHelperEl = this.el.querySelector('.scrollbar.bottom>.range>.helper');
         this.scrollBottomSpacerEl = this.el.querySelector('.scrollbar.bottom>.range>.helper>.spacer');
-
 
         $(this.scrollHelperScaleEl).on('pointerdown', onPointerDownHelperScale.bind(this));
         $(this.scrollRightSpacerEl).on('pointerdown', onPointerDownRightSpacer.bind(this));
@@ -74,15 +124,12 @@ function onPointerMoveHelperScale(e) {
     var width = scale_startSize.x + scale_movePosition.x;
     var height = scale_startSize.y + scale_movePosition.y + 20;
 
-    console.log(this.targetModel.bounds.min.x + width, this.targetModel.screenBounds.max.x - this.targetModel.screenBounds.min.x);
     width = Math.min(this.targetModel.bounds.min.x + width, this.targetModel.screenBounds.max.x - this.targetModel.screenBounds.min.x);
     width -= this.targetModel.bounds.min.x;
     height = Math.min(this.targetModel.bounds.min.y + height, this.targetModel.screenBounds.max.y - this.targetModel.screenBounds.min.y);
     height -= this.targetModel.bounds.min.y;
-    // height = Math.min(Math.max(height, 0), this.targetModel.dimension.y - this.model.dimension.y);
 
-        // this.targetModel.setDimension(Math.max(width, 150), Math.max(height, 170));
-            this.targetModel.setDimension(width, height);
+    this.targetModel.setDimension(width, height);
 
 }
 
@@ -112,7 +159,7 @@ function onPointerDownBottomSpacer(e) {
 function onPointerMoveBottomSpacer(e) {
     scroll_movePosition.setX(e.clientX);
     scroll_movePosition.subtractLocal(scroll_startPosition);
-    this.scrollContentEl.scrollLeft = scroll_startScroll + (this.scrollWidth) * scroll_movePosition.x / this.scrollBottomHelperWidth;
+    this.scrollContentEl.scrollLeft = scroll_startScroll + (this.scrollInnerWidth) * scroll_movePosition.x / this.scrollBottomHelperWidth;
 }
 
 function onPointerUpBottomSpacer() {
@@ -149,7 +196,7 @@ function updateEl(scope) {
 }
 
 function refreshScrollbar(scope) {
-    value = scope.scrollContentEl.scrollLeft / (scope.scrollWidth - scope.scrollWrapperWidth);
+    value = scope.scrollContentEl.scrollLeft / (scope.scrollInnerWidth - scope.scrollWrapperWidth);
     value = Math.round(value * 100) / 100;
     value *= -1 + scope.scrollBottomHelperWidth / scope.scrollBottomSpacerWidth;
     value *= 100;
@@ -178,13 +225,11 @@ function onRefresh() {
     this.scrollWrapperWidth = this.scrollWrapperEl.offsetWidth;
     this.scrollWrapperHeight = this.scrollWrapperEl.offsetHeight;
 
-    this.scrollWidth = this.scrollContentEl.scrollWidth + SCROLLBAR_WIDTH;
-    this.scrollHeight = this.scrollContentEl.scrollHeight + SCROLLBAR_HEIGHT;
-
     this.scrollInnerWidth = this.scrollInnerEl.offsetWidth;
     this.scrollInnerHeight = this.scrollInnerEl.offsetHeight;
+
     this.scrollBottomHelperWidth = this.scrollBottomHelperEl.offsetWidth;
-    this.scrollBottomSpacerWidth = Math.round((this.scrollContentWidth / (this.scrollWidth)) * this.scrollBottomHelperWidth);
+    this.scrollBottomSpacerWidth = Math.round((this.scrollContentWidth / (this.scrollInnerWidth)) * this.scrollBottomHelperWidth);
 
     this.scrollRightHelperHeight = this.scrollRightHelperEl.offsetHeight;
     this.scrollRightSpacerHeight = Math.round(Math.min(this.scrollContentHeight / this.scrollInnerHeight, 1) * this.scrollRightHelperHeight);

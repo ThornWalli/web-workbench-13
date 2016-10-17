@@ -6,11 +6,16 @@ require('pepjs');
 
 module.exports = Controller.extend({
 
+    errors: [],
+
     modelConstructor: DomModel.extend({
-        session: {}
+        session: {},
     }),
-    
+
     events: {
+        'click .screen-button': function() {
+            this.el.classList.toggle('js-workbench-off');
+        }
     },
 
     initialize: function() {

@@ -15,7 +15,7 @@ module.exports = Controller.extend({
          * Override this function
          */
         if (this.targetModel) {
-            $(document).on('click', '.js-click-window-open', onClickWindowOpen.bind(this));
+            $(document).on('click', '.js-click-view-open', onClickWindowOpen.bind(this));
         }
     }
 

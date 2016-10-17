@@ -1,2 +1,35 @@
 .partial[data-partial="elements/error"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  .title {
+    float: left;
+  }
+  .input {
+    float: right;
+  }
+  .inner {
+    margin: 0 auto;
+    width: 600px;
+    display: block;
+    padding: 15px 40px;
+    border: solid #FF0000 1px;
+    border-width: 6px 5px;
+    color: #ff0000;
+    text-decoration: none;
+  }
+  .message {
+    clear: both;
+    display: block;
+    text-align: center;
+  }
+  [data-partial="components/workbench"] & {
+    visibility: hidden;
+  }
+  [data-partial="components/workbench"].error & {
+    visibility: visible;
+  }
 }

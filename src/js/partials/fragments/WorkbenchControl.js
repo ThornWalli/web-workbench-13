@@ -7,12 +7,22 @@ var DomModel = require('agency-pkg-base/DomModel');
 var extend = require('lodash/extend');
 var uniqueId = require('lodash/uniqueId');
 
+
+var AmpersandCollection = require('ampersand-collection');
+
 require('pepjs');
 
 module.exports = Controller.extend({
 
     modelConstructor: DomModel.extend({
         session: {
+            views : {
+                type: 'AmpersandCollection',
+                required: true,
+                default: function (){
+                    return new AmpersandCollection();
+                }
+            },
             windows: {
                 type: 'array',
                 required: true,
@@ -48,22 +58,11 @@ module.exports = Controller.extend({
                 }
             });
         },
-        registerWindow: function(windowModel) {
-            this.windows.push(windowModel);
-            this.trigger('event:registerWindow', this, windowModel);
-        },
-        unregisterWindow: function(windowModel) {
-            this.windows.splice(this.windows.indexOf(windowModel), 1);
-            this.trigger('event:unregisterWindow', this, windowModel);
+        registerView: function(model) {
+            this.windows.push(model);
+            this.views.add(model);
         },
         openWindow: function(url, options) {
-            // if (this.windows.find(function(windowModel) {
-            //     if (windowModel.url === url) {
-            //         return windowModel;
-            //     }
-            // })) {
-            //     return;
-            // }
             this.trigger('event:openWindow', this, extend({
                 url: url
             }, options));
@@ -83,24 +82,27 @@ module.exports = Controller.extend({
         refreshBounds(this);
 
         // Events
+        this.model.views.on('add', onViewsAdd, this);
+        this.model.views.on('remove', onViewsRemove, this);
         this.model.on('event:openWindow', onOpenWindow, this);
-        this.model.on('event:registerWindow', onRegisterWindow, this);
-        this.model.on('event:unregisterWindow', onUnregisterWindow, this);
         this.model.on('event:changeWindowFocus', onChangeWindowFocus, this);
 
         this.tmpl = {
             default: null,
             scroll: null
         };
-        this.tmpl.default = this.el.querySelector('#window-template').innerHTML;
-        this.tmpl.scroll = this.el.querySelector('#window-scroll-template').innerHTML;
+        this.tmpl.default = this.el.querySelector('#view-template').innerHTML;
+        this.tmpl.scroll = this.el.querySelector('#view-scroll-template').innerHTML;
         console.log(this.tmpl);
 
         this.windowsEl = this.queryByHook('windows');
         createWindow(this, {
-            scroll: false,
+            scrollbar: false,
             url: './pages/start.html',
-            width: 40
+        });
+        createWindow(this, {
+            scrollbar: false,
+            url: './pages/workbench/runtime_import_export.html'
         });
     }
 });
@@ -109,8 +111,7 @@ function createWindow(scope, options) {
     options = extend({
         url: null,
         title: null,
-        scrollbar: false,
-        width: null
+        scrollbar: false
     }, options);
     var tmpl = options.scrollbar ? scope.tmpl.scroll : scope.tmpl.default;
     var id = uniqueId('window_');
@@ -120,10 +121,7 @@ function createWindow(scope, options) {
     if (options.url) {
         windowEl.setAttribute('data-url', options.url);
     }
-    if (options.width) {
-        windowEl.setAttribute('data-width', options.width);
-    }
-    var windowHeaderEl = windowEl.querySelector('[data-partial="components/header/window"]');
+    var windowHeaderEl = windowEl.querySelector('[data-partial="components/header/view"]');
     if (options.title) {
         windowHeaderEl.setAttribute('data-title', options.title);
     }
@@ -134,12 +132,12 @@ function parseJS(element) {
     require('agency-pkg-services/parser/js')(require('../../packages')).parse(element);
 }
 
-function onRegisterWindow(model, windowModel) {
-    console.log('onRegisterWindow', model, windowModel);
+function onViewsAdd(model, windowModel) {
+    console.log('onViewsAdd', model, windowModel);
 }
 
-function onUnregisterWindow(model, windowModel) {
-    console.log('onUnregisterWindow', model, windowModel);
+function onViewsRemove(model, windowModel) {
+    console.log('onViewsRemove', model, windowModel);
 }
 
 function onOpenWindow(model, options) {
@@ -148,13 +146,13 @@ function onOpenWindow(model, options) {
 }
 
 function onChangeWindowFocus(model, data) {
-    var $window = $('[data-partial="components/window"][data-id="' + data.id + '"]');
+    var $view = $('[data-partial="components/view"][data-id="' + data.id + '"]');
     if (data.moveTop) {
-        if ($window.next().length) {
-            $window.next().after($window);
+        if ($view.next().length) {
+            $view.next().after($view);
         }
     } else {
-        $window.prev().before($window);
+        $view.prev().before($view);
     }
 }
 

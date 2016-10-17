@@ -1,26 +1,26 @@
 ---
-id: #window id
+id: #view id
 ---
 
-<div class="partial controller" data-partial="fragments/window/scroll-content" data-controller="./partials/fragments/ScrollContent" data-target="[data-partial='components/window'][data-id='{{{id}}}']">
+<div class="partial controller" data-partial="fragments/view/scroll-content" data-controller="./partials/fragments/ScrollContent" data-target="[data-partial='components/view'][data-id='{{{id}}}']">
 
   <div class="scroll-wrapper">
     <div class="scroll-content">
-      <div class="scroll-inner window-content" data-hook="window-content">
+      <div class="scroll-inner view-content" data-hook="view-content">
       {{#block "content"}}{{/block}}
       </div>
   </div>
   </div>
 
   <div class="scrollbar right">
-    <span class="helper-top" touch-action="none">
+    <span class="helper-top" data-hook="scrollbar-arrow-top" touch-action="none">
       {{{mixin "svgs/icons/scrollbar-arrow-top"}}}
     </span>
     <span class="arrow-top"></span>
     <span class="range">
       <span class="helper"><span class="spacer" touch-action="none"></span></span>
     </span>
-    <span class="helper-bottom" touch-action="none">
+    <span class="helper-bottom" data-hook="scrollbar-arrow-bottom" touch-action="none">
       {{{mixin "svgs/icons/scrollbar-arrow-bottom"}}}
     </span>
   </div>
@@ -30,13 +30,13 @@ id: #window id
   </span>
 
   <div class="scrollbar bottom">
-    <span class="helper-left" touch-action="none">
+    <span class="helper-left" data-hook="scrollbar-arrow-left" touch-action="none">
     {{{mixin "svgs/icons/scrollbar-arrow-left"}}}
     </span>
     <span class="range">
       <span class="helper"><span class="spacer" touch-action="none"></span></span>
     </span>
-    <span class="helper-right" touch-action="none">
+    <span class="helper-right" data-hook="scrollbar-arrow-right" touch-action="none">
     {{{mixin "svgs/icons/scrollbar-arrow-right"}}}
   </span>
   </div>

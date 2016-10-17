@@ -10,7 +10,10 @@ module.exports = Controller.extend({
 
     }),
 
-    events: {},
+    events: {
+        'click [data-hook="import"]': onClickImport,
+        'click [data-hook="export"]': onClickExport
+    },
 
 
     initialize: function() {
@@ -18,12 +21,12 @@ module.exports = Controller.extend({
         if (this.targetModel) {
 
 
-            var windowModel = this.targetModel.getWindowModel($(this.el).closest('[data-partial="components/window"]').attr('data-id'));
+            var windowModel = this.targetModel.getWindowModel($(this.el).closest('[data-partial="components/view"]').attr('data-id'));
             windowModel.on('destroy', function() {
 
             });
-            this.targetModel.on('event:registerWindow', onRefresh, this);
-            this.targetModel.on('event:unregisterWindow', onRefresh, this);
+            this.targetModel.views.on('add', onRefresh, this);
+            this.targetModel.views.on('remove', onRefresh, this);
             onRefresh.bind(this)();
         }
 
@@ -38,6 +41,26 @@ function onRefresh() {
 }
 
 
-function generateExport(){
+function onClickImport() {
 
+}
+
+function onClickExport() {
+    generateExport(this);
+}
+
+function generateExport(scope) {
+    var data = {};
+    // windows
+    data.windows = [];
+    scope.targetModel.windows.forEach(function(windowModel) {
+        data.windows.push({
+            url: windowModel.url
+        });
+    });
+    data = JSON.stringify(data);
+var url = 'data:text/json;charset=utf8,' + encodeURIComponent(data);
+window.open(url, '_blank');
+window.focus();
+    console.log(data);
 }

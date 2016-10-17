@@ -96,10 +96,10 @@ test :loadingUrlTmpl,
 
     events: {
 
-        'pointerdown [data-partial="components/header/window"]': onPointerDownHelperMove,
-        'pointerup [data-partial="components/header/window"] [data-hook="close"]': onPointerUpClose,
-        'pointerup [data-partial="components/header/window"] [data-hook="focus-max"]': onPointerUpFocusMax,
-        'pointerup [data-partial="components/header/window"] [data-hook="focus-min"]': onPointerUpFocusMin
+        'pointerdown [data-partial="components/header/view"]': onPointerDownHelperMove,
+        'pointerup [data-partial="components/header/view"] [data-hook="close"]': onPointerUpClose,
+        'pointerup [data-partial="components/header/view"] [data-hook="focus-max"]': onPointerUpFocusMax,
+        'pointerup [data-partial="components/header/view"] [data-hook="focus-min"]': onPointerUpFocusMin
 
     },
 
@@ -112,13 +112,13 @@ test :loadingUrlTmpl,
 
     initialize: function() {
         Controller.prototype.initialize.apply(this, arguments);
-        this.contentEl = this.queryByHook('window-content');
+        this.contentEl = this.queryByHook('view-content');
         this.model.screenBounds = this.targetModel.bounds;
 
         if (this.targetModel) {
-            this.targetModel.registerWindow(this.model);
+            this.targetModel.registerView(this.model);
         } else {
-            console.error('Window has no Target');
+            console.error('View has no Target');
         }
 
         // Events
@@ -137,7 +137,10 @@ test :loadingUrlTmpl,
                         this.model.header.title = this.contentEl.children[0].dataset.title;
                     }
                     this.model.refresh();
-                    // this.refresh();
+                    global.animationFrame.add(function (){
+                        this.model.dimension.x = this.el.offsetWidth;
+                        this.model.dimension.y = this.el.offsetHeight;
+                    }.bind(this));
                 }.bind(this), function(e) {
                     this.contentEl.innerHTML += errorFromUrlTmpl({
                         url: this.model.url,
@@ -146,8 +149,8 @@ test :loadingUrlTmpl,
                 }.bind(this));
             }
 
-            // history.register('window-' + this.cid, function() {
-            //     console.log('window open');
+            // history.register('view-' + this.cid, function() {
+            //     console.log('view open');
             // });
 
             this.refresh();
@@ -158,7 +161,6 @@ test :loadingUrlTmpl,
 
     destroy: function() {
         Controller.prototype.destroy.apply(this, arguments);
-        this.targetModel.unregisterWindow(this.model);
     },
 
     refresh: function() {

@@ -1,4 +1,4 @@
-.partial[data-partial="fragments/window/scroll-content"] {
+.partial[data-partial="fragments/view/scroll-content"] {
   position: relative;
   height: 100%;
   >.scroll-wrapper {
@@ -19,7 +19,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        right: 0;
+        /*right: 0;*/
       }
     }
   }
@@ -33,13 +33,31 @@
     padding-left: 2px;
     padding-bottom: 2px;
     padding-top: 2px;
-    svg {
+    >* {
       margin: 0 auto;
       display: block;
+    }
+    .primary {
       fill: $workbenchColor_3;
+    }
+    &:active {
+      .primary {
+        fill: $workbenchColor_2;
+      }
     }
   }
   >.scrollbar {
+
+    .helper-top, .helper-left, .helper-bottom, .helper-right {
+      .primary {
+        fill: $workbenchColor_3;
+      }
+      &:active {
+        .primary {
+          fill: $workbenchColor_2;
+        }
+      }
+    }
     display: none;
     &.right {
       display: block;
@@ -63,8 +81,6 @@
           fill: $workbenchColor_3;
         }
         display: block;
-
-
       }
       .helper-top {
         top: 0;
@@ -89,7 +105,7 @@
             width: 100%;
             height: 20%;
             background: #ffffff;
-            .partial[data-partial="components/window"].js-scaling & {
+            .partial[data-partial="components/view"].js-scaling & {
               visibility: hidden;
             }
           }
@@ -148,7 +164,7 @@
             width: 20%;
             height: 100%;
             background: #ffffff;
-            .partial[data-partial="components/window"].js-scaling & {
+            .partial[data-partial="components/view"].js-scaling & {
               visibility: hidden;
             }
           }

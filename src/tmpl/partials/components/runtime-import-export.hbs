@@ -1,0 +1,25 @@
+---
+buttons:
+  -
+    type: 'button'
+    hook: 'import'
+    title: 'Import'
+  -
+    type: 'button'
+    hook: 'export'
+    title: 'Export'
+
+---
+
+<div class="partial controller" data-partial="components/runtime-import-export" data-controller="./partials/components/RuntimeImportExport" data-target="[data-partial='fragments/workbench-control']">
+
+  <p>
+    Applications: <span data-hook="application">0</span><br/><br/>
+    Windows: <span data-hook="windows">0</span>
+  </p>
+
+  {{#each buttons}}
+    {{{mixin "elements/button/primary" this}}}
+  {{/each}}
+
+</div>

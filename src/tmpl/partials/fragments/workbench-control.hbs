@@ -2,14 +2,14 @@
 
 tmpl:
   -
-    id: 'window-template'
+    id: 'view-template'
     data:
       id: '@id'
       scroll: false
       header:
         title: '@title'
   -
-    id: 'window-scroll-template'
+    id: 'view-scroll-template'
     data:
       id: '@id'
       scroll: true
@@ -35,7 +35,7 @@ tmpl:
 
     <script id="{{{id}}}" type="text/x-handlebars-template">
       {{#with data}}
-        {{#mixin "components/window" this}}
+        {{#mixin "components/view" this}}
         {{#content "content"}}{{/content}}{{/mixin}}
       {{/with}}
     </script>

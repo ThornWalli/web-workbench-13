@@ -1,4 +1,4 @@
-.partial[data-partial="elements/button"] {
+.partial[data-partial^="elements/button/"] {
   display: block;
   background: transparent;
   margin: 0;
@@ -6,24 +6,4 @@
   margin-top: 4px;
   margin-bottom: 4px;
   outline: none;
-  &.color-1 {
-    border: solid $workbenchColor_1 2px;
-    &:active {
-      color: $workbenchColor_4;
-      border-color: $workbenchColor_4;
-    }
-  }
-  &.color-2 {
-    border: solid $workbenchColor_3 2px;
-    color: $workbenchColor_3;
-    background: $workbenchColor_1;
-    outline: solid $workbenchColor_1;
-    outline-width: 2px;
-    &:active {
-      color: $workbenchColor_1;
-      background: $workbenchColor_2;
-      outline: solid $workbenchColor_2;
-      border-color: $workbenchColor_1;
-    }
-  }
 }

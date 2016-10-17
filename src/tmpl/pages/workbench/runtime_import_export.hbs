@@ -1,17 +1,6 @@
 ---
-layout: 'layouts/window-content'
+layout: 'layouts/view-content'
 title: "Runtime Import / Export"
 ---
 
-<div class="partial controller" data-partial="components/runtime-import-export" data-controller="./partials/components/RuntimeImportExport" data-target="[data-partial='fragments/workbench-control']">
-
-<p>
-  Applications: <span data-hook="application">0</span><br/><br/>
-  Windows: <span data-hook="windows">0</span>
-</p>
-
-<input class="partial color-2" data-partial="elements/button" type="button" value="Import" />
-<input class="partial color-2" data-partial="elements/button" type="button" value="Export" />
-
-
-</div>
+{{{mixin "components/runtime-import-export"}}}

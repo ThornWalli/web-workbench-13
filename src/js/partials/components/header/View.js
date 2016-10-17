@@ -21,7 +21,7 @@ module.exports = Header.extend({
     bindings: {
         'model.title': {
             type: 'innerHTML',
-            hook: 'window-title'
+            hook: 'view-title'
         }
     },
 
