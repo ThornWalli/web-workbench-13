@@ -58,9 +58,12 @@ module.exports = Controller.extend({
     scrollInterval: null,
     SCROLL_DIRECTIONS: new Enum(['LEFT', 'TOP', 'RIGHT', 'BOTTOM']),
 
-    scrollContentWidth: 0,
-    scrollContentHeight: 0,
-    scrollInnerHeight: 0,
+
+    dimension: new Vector(),
+    scrollWrapperDimension: new Vector(),
+    scrollContentDimension: new Vector(),
+    scrollInnerDimension: new Vector(),
+
     scrollContentEl: null,
     scrollInnerEl: null,
 
@@ -96,12 +99,15 @@ module.exports = Controller.extend({
         $(this.scrollRightSpacerEl).on('pointerdown', onPointerDownRightSpacer.bind(this));
         $(this.scrollBottomSpacerEl).on('pointerdown', onPointerDownBottomSpacer.bind(this));
 
-        this.targetModel.on('event:refresh', onRefresh, this);
-        this.scrollContentEl.addEventListener('scroll', onScroll.bind(this));
+        this.targetModel.on('event:refresh', onRefresh.bind(this)(), this);
+        this.scrollContentEl.addEventListener('scroll', global.animationFrame.throttle('scroll-content' + this.cid, function() {
+            updateEl(this);
+        }.bind(this), function() {
+            refreshScrollbar(this);
+        }.bind(this)));
 
-        viewport.on('RESIZE', onRefresh.bind(this));
-
-        global.animationFrame.add(onRefresh.bind(this));
+        viewport.on('RESIZE', onRefresh.bind(this)());
+        onRefresh.bind(this)()();
 
     }
 });
@@ -112,9 +118,9 @@ var scale_movePosition = new Vector();
 
 function onPointerDownHelperScale(e) {
     scale_startPosition.setX(e.pageX).setY(e.pageY);
-    scale_startSize.setX(this.el.offsetWidth).setY(this.el.offsetHeight);
     $(document).on('pointermove.scale_' + this.cid, onPointerMoveHelperScale.bind(this));
     $(document).on('pointerup.scale_' + this.cid, onPointerUpHelperScale.bind(this));
+    scale_startSize.setX(this.el.offsetWidth).setY(this.el.offsetHeight);
     this.targetModel.scaling = true;
 }
 
@@ -136,7 +142,7 @@ function onPointerMoveHelperScale(e) {
 function onPointerUpHelperScale() {
     $(document).off('pointerup.scale_' + this.cid);
     $(document).off('pointermove.scale_' + this.cid);
-    global.animationFrame.add(onRefresh.bind(this));
+    global.animationFrame.add(onRefresh.bind(this)());
     this.targetModel.scaling = false;
 }
 
@@ -159,7 +165,7 @@ function onPointerDownBottomSpacer(e) {
 function onPointerMoveBottomSpacer(e) {
     scroll_movePosition.setX(e.clientX);
     scroll_movePosition.subtractLocal(scroll_startPosition);
-    this.scrollContentEl.scrollLeft = scroll_startScroll + (this.scrollInnerWidth) * scroll_movePosition.x / this.scrollBottomHelperWidth;
+    this.scrollContentEl.scrollLeft = scroll_startScroll + (this.scrollInnerDimension.x) * scroll_movePosition.x / this.scrollBottomHelperWidth;
 }
 
 function onPointerUpBottomSpacer() {
@@ -181,7 +187,7 @@ function onPointerDownRightSpacer(e) {
 function onPointerMoveRightSpacer(e) {
     scroll_movePosition.setX(e.clientX).setY(e.clientY);
     scroll_movePosition.subtractLocal(scroll_startPosition);
-    this.scrollContentEl.scrollTop = scroll_startScroll + (this.scrollInnerHeight) * scroll_movePosition.y / this.scrollRightHelperHeight;
+    this.scrollContentEl.scrollTop = scroll_startScroll + (this.scrollInnerDimension.y) * scroll_movePosition.y / this.scrollRightHelperHeight;
 }
 
 function onPointerUpRightSpacer() {
@@ -191,50 +197,40 @@ function onPointerUpRightSpacer() {
 
 function updateEl(scope) {
 
-    scope.scrollBottomSpacerEl.style.cssText = 'width: ' + scope.scrollBottomSpacerWidth + 'px;transform: translateX(' + scope.scrollX + '%);';
-    scope.scrollRightSpacerEl.style.cssText = 'height: ' + scope.scrollRightSpacerHeight + 'px;transform: translateY(' + scope.scrollY + '%);';
+    scope.scrollBottomSpacerEl.style.cssText = 'width: ' + (scope.scrollBottomSpacerWidth / scope.scrollBottomHelperWidth) * 100 + '%;transform: translateX(' + scope.scrollX + '%);';
+    scope.scrollRightSpacerEl.style.cssText = 'height: ' + (scope.scrollRightSpacerHeight / scope.scrollRightHelperHeight) * 100 + '%;transform: translateY(' + scope.scrollY + '%);';
 }
 
 function refreshScrollbar(scope) {
-    value = scope.scrollContentEl.scrollLeft / (scope.scrollInnerWidth - scope.scrollWrapperWidth);
-    value = Math.round(value * 100) / 100;
+    value = scope.scrollContentEl.scrollLeft / (scope.scrollInnerDimension.x - scope.scrollWrapperDimension.x);
+    value = (value * 100) / 100;
     value *= -1 + scope.scrollBottomHelperWidth / scope.scrollBottomSpacerWidth;
     value *= 100;
     scope.scrollX = value;
-
-    var value = scope.scrollContentEl.scrollTop / ((scope.scrollInnerHeight - scope.scrollWrapperHeight));
-    value = Math.round(value * 100) / 100;
+    var value = scope.scrollContentEl.scrollTop / ((scope.scrollInnerDimension.y - scope.scrollWrapperDimension.y));
+    value = (value * 100) / 100;
     value *= -1 + scope.scrollRightHelperHeight / scope.scrollRightSpacerHeight;
     value *= 100;
     scope.scrollY = value;
 }
 
-function onScroll() {
-    var scope = this;
-
-    global.animationFrame.throttle('scroll-content' + this.cid, function() {
-        refreshScrollbar(scope);
-    }, function() {
-        updateEl(scope);
-    })();
-}
 
 function onRefresh() {
-    this.scrollContentWidth = this.scrollContentEl.offsetWidth;
-    this.scrollContentHeight = this.scrollContentEl.offsetHeight;
-    this.scrollWrapperWidth = this.scrollWrapperEl.offsetWidth;
-    this.scrollWrapperHeight = this.scrollWrapperEl.offsetHeight;
+    return global.animationFrame.throttle('scroll-content' + this.cid, function() {
+        updateEl(this);
+    }.bind(this), function() {
 
-    this.scrollInnerWidth = this.scrollInnerEl.offsetWidth;
-    this.scrollInnerHeight = this.scrollInnerEl.offsetHeight;
+        this.dimension.resetValues(this.el.offsetWidth, this.el.offsetHeight,0);
+        this.scrollContentDimension.resetValues(this.scrollContentEl.offsetWidth, this.scrollContentEl.offsetHeight,0);
+        this.scrollWrapperDimension.resetValues(this.scrollWrapperEl.offsetWidth,this.scrollWrapperEl.offsetHeight,0);
+        this.scrollInnerDimension.resetValues(this.scrollInnerEl.offsetWidth, this.scrollInnerEl.offsetHeight,0);
 
-    this.scrollBottomHelperWidth = this.scrollBottomHelperEl.offsetWidth;
-    this.scrollBottomSpacerWidth = Math.round((this.scrollContentWidth / (this.scrollInnerWidth)) * this.scrollBottomHelperWidth);
+        this.scrollBottomHelperWidth = this.scrollBottomHelperEl.offsetWidth;
+        this.scrollBottomSpacerWidth = (this.scrollContentDimension.x / (this.scrollInnerDimension.x)) * this.scrollBottomHelperWidth;
 
-    this.scrollRightHelperHeight = this.scrollRightHelperEl.offsetHeight;
-    this.scrollRightSpacerHeight = Math.round(Math.min(this.scrollContentHeight / this.scrollInnerHeight, 1) * this.scrollRightHelperHeight);
+        this.scrollRightHelperHeight = this.scrollRightHelperEl.offsetHeight;
+        this.scrollRightSpacerHeight = (this.scrollContentDimension.y / this.scrollInnerDimension.y) * this.scrollRightHelperHeight;
 
-    refreshScrollbar(this);
-    updateEl(this);
-
+        refreshScrollbar(this);
+    }.bind(this));
 }

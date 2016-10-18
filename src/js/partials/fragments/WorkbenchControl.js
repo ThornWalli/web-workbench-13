@@ -96,13 +96,17 @@ module.exports = Controller.extend({
         console.log(this.tmpl);
 
         this.windowsEl = this.queryByHook('windows');
+        // createWindow(this, {
+        //     scrollbar: false,
+        //     url: './pages/start.html',
+        // });
+        // createWindow(this, {
+        //     scrollbar: false,
+        //     url: './pages/workbench/runtime_import_export.html'
+        // });
         createWindow(this, {
-            scrollbar: false,
-            url: './pages/start.html',
-        });
-        createWindow(this, {
-            scrollbar: false,
-            url: './pages/workbench/runtime_import_export.html'
+            scrollbar: true,
+            url: './pages/debug-view-scroll.html'
         });
     }
 });

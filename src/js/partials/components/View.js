@@ -133,7 +133,6 @@ test :loadingUrlTmpl,
                     this.contentEl.innerHTML = html;
                     parseJS(this.contentEl);
                     if (this.contentEl.children.length && this.contentEl.children[0].dataset.title) {
-                        console.log(this.model.header, this.contentEl.children[0].dataset.title);
                         this.model.header.title = this.contentEl.children[0].dataset.title;
                     }
                     this.model.refresh();
