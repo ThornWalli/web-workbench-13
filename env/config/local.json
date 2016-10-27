@@ -221,6 +221,9 @@
               "<%= root %>/test/tmpl/partials"
             ],
             "debug": false
+          },
+          "agency": {
+            "customs": ["agency-environment/lib/handlebars/customs/yamlExclude"]
           }
         }, {
           "test": ".css$",
@@ -235,7 +238,7 @@
       },
       "resolve": {
         "alias": {
-          "modernizr$": "node_modules/agency-boilerplate/.modernizrrc"
+          "modernizr$": "<%= root %>/.modernizrrc"
         }
       },
       "files": {

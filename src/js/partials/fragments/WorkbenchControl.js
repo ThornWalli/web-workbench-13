@@ -133,7 +133,7 @@ function createWindow(scope, options) {
 }
 
 function parseJS(element) {
-    require('agency-pkg-services/parser/js')(require('../../packages')).parse(element);
+    require('agency-pkg-service-parser')().parse(element);
 }
 
 function onViewsAdd(model, windowModel) {

@@ -1,4 +1,5 @@
 .partial[data-partial="components/view"] {
+  transform-origin: top left;
   visibility: hidden;
   &[init] {
     visibility: visible;
@@ -9,12 +10,16 @@
   top: 0px;
   left: 0px;
   min-width: 150px;
-  min-height: 40px;
-    background: $workbenchColor_3;
+  min-height: 60px;
+  /*width: 150px;*/
+  height: 60px;
+  background: $workbenchColor_3;
   >.inner {
     margin-top: -20px;
     padding-top: 20px;
     height: 100%;
+    min-width: 150px;
+    min-height: 40px;
   }
   .view-content {
     line-height: 18px;
@@ -36,9 +41,31 @@
           position: absolute;
           top: 0;
           left: 0em;
-
-
         }
+      }
+    }
+  }
+  >.helper-scale {
+    display: block;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background-color: $workbenchColor_1;
+    padding-left: 2px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+    >* {
+      margin: 0 auto;
+      display: block;
+    }
+    .primary {
+      fill: $workbenchColor_3;
+    }
+  }
+  &.js-scaling {
+    >.helper-scale {
+      .primary {
+        fill: $workbenchColor_2;
       }
     }
   }

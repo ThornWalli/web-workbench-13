@@ -1,30 +1,24 @@
 {
-  "name": "agency-boilerplate",
+  "name": "workbench-13-boilerplate",
   "version": "3.0.0",
-  "description": "agency - frontend boilerplate",
+  "description": "Workbench 1.3",
   "keywords": [
     "boilerplate"
   ],
-  "homepage": "https://github.com/StephanGerbeth/agency-boilerplate#readme",
+  "homepage": "https://github.com/ThornWalli/workbench-13#readme",
   "bugs": {
-    "url": "https://github.com/StephanGerbeth/agency-boilerplate/issues"
+    "url": "https://github.com/ThornWalli/workbench-13/issues"
   },
   "license": "MIT",
-  "author": "Stephan Gerbeth <stephan.gerbeth@gmail.com>",
-  "contributors": [
-    {
-      "name": "Stephan Gerbeth",
-      "email": "stephan.gerbeth@grabarzundpartner.de"
-    },
-    {
-      "name": "Thorn Walli",
-      "email": "lammpee@gmail.com; thorn.walli@grabarzundpartner.de"
-    }
-  ],
+  "author": "Thorn Walli <lammpee@gmail.com>",
+  "contributors": [ {
+    "name": "Thorn Walli",
+    "email": "lammpee@gmail.com"
+  }],
   "main": "none",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/StephanGerbeth/agency-boilerplate.git"
+    "url": "git+https://github.com/ThornWalli/workbench-13.git"
   },
   "scripts": {
     "heroku": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=production --server=agency-server",
@@ -36,20 +30,25 @@
     "server": "node node_modules/gulp/bin/gulp default --serverConfig=./env/config/local.json --env=development --server=agency-server",
     "test": "npm run build",
     "template": "yo agency-boilerplate:hbs-template",
-    "create-package" : "yo agency-boilerplate:package"
+    "create-package": "yo agency-boilerplate:package"
   },
   "dependencies": {
-    "agency-environment": "git+https://git@github.com/StephanGerbeth/agency-environment.git#feature/flat-files",
-    "agency-pkg-base": "git+https://git@github.com/StephanGerbeth/agency-pkg-base.git#feature/flat-files",
-    "agency-pkg-common": "git+https://git@github.com/StephanGerbeth/agency-pkg-common.git#feature/flat-files",
-    "agency-pkg-docs": "git+https://git@github.com/StephanGerbeth/agency-pkg-docs.git#feature/flat-files",
-    "agency-pkg-elements": "git+https://git@github.com/StephanGerbeth/agency-pkg-elements.git#feature/flat-files",
-    "agency-pkg-embed": "git+https://git@github.com/StephanGerbeth/agency-pkg-embed.git#feature/flat-files",
-    "agency-pkg-layouts": "git+https://git@github.com/StephanGerbeth/agency-pkg-layouts.git#feature/flat-files",
-    "agency-pkg-polyfills": "git+https://git@github.com/StephanGerbeth/agency-pkg-polyfills.git#feature/flat-files",
-    "agency-pkg-services": "git+https://git@github.com/StephanGerbeth/agency-pkg-services.git#feature/flat-files",
-    "agency-pkg-utils": "git+https://git@github.com/StephanGerbeth/agency-pkg-utils.git#feature/flat-files",
-    "agency-server": "git+https://git@github.com/StephanGerbeth/agency-server.git",
+    "agency-environment": "git+https://git@github.com/agency-framework/agency-environment.git",
+    "agency-pkg-base": "git+https://git@github.com/agency-framework/agency-pkg-base.git",
+    "agency-pkg-documentation": "git+https://git@github.com/agency-framework/agency-pkg-documentation.git",
+    "agency-pkg-element-headline": "git+https://git@github.com/agency-framework/agency-pkg-element-headline.git",
+    "agency-pkg-element-link": "git+https://git@github.com/agency-framework/agency-pkg-element-link.git",
+    "agency-pkg-element-modal": "git+https://git@github.com/agency-framework/agency-pkg-element-modal.git",
+    "agency-pkg-element-picture": "git+https://git@github.com/agency-framework/agency-pkg-element-picture.git",
+    "agency-pkg-element-browser-notes": "git+https://git@github.com/agency-framework/agency-pkg-element-browser-notes.git",
+    "agency-pkg-polyfills": "git+https://git@github.com/agency-framework/agency-pkg-polyfills.git",
+    "agency-pkg-service-animation-frame": "git+https://git@github.com/agency-framework/agency-pkg-service-animation-frame.git",
+    "agency-pkg-service-history": "git+https://git@github.com/agency-framework/agency-pkg-service-history.git",
+    "agency-pkg-service-dev-tools": "git+https://git@github.com/agency-framework/agency-pkg-service-dev-tools.git",
+    "agency-pkg-service-parser": "git+https://git@github.com/agency-framework/agency-pkg-service-parser.git",
+    "agency-pkg-service-viewport": "git+https://git@github.com/agency-framework/agency-pkg-service-viewport.git",
+    "agency-pkg-utils": "git+https://git@github.com/agency-framework/agency-pkg-utils.git",
+    "agency-server": "git+https://git@github.com/agency-framework/agency-server.git",
     "color": "^0.11.1",
     "fastdom": "^1.0.1",
     "fastdom-sequencer": "^1.0.3",
