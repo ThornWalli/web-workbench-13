@@ -135,17 +135,12 @@ module.exports = Controller.extend({
 
     refresh: function() {
         var css = '';
-        console.log('????', this.move_movePosition, this.move_startPosition);
         if (cssTransform && (this.model.scaling || this.model.moving)) {
             css += 'left: ' + this.move_startPosition.x + 'px; top: ' + this.move_startPosition.y + 'px;width: ' + this.scale_startDimension.x + 'px; height: ' + this.scale_startDimension.y + 'px;';
             css += 'transform: translate(' + ((this.model.bounds.min.x - this.move_startPosition.x) / this.scale_startDimension.x) * 100 + '%, ' + ((this.model.bounds.min.y - this.move_startPosition.y) / this.scale_startDimension.y) * 100 + '%) scale(' + (this.scale_dimension.x / this.scale_startDimension.x) + ', ' + (this.scale_dimension.y / this.scale_startDimension.y) + ');';
 
         } else {
-            if (this.model.scroll) {
                 css += 'left: ' + this.model.bounds.min.x + 'px; top: ' + this.model.bounds.min.y + 'px;width: ' + this.scale_dimension.x + 'px; height: ' + this.scale_dimension.y + 'px;';
-            } else {
-                css += 'left: ' + this.model.bounds.min.x + 'px; top: ' + this.model.bounds.min.y + 'px;';
-            }
         }
         console.log(css);
         this.el.style.cssText = css;
