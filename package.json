@@ -1,8 +1,11 @@
 {
-  "name": "workbench-13-boilerplate",
+  "name": "web-workbench-13",
   "version": "3.0.0",
-  "description": "Workbench 1.3",
+  "description": "Web Workbench 1.3",
   "keywords": [
+    "web",
+    "workbench",
+    "1.3",
     "boilerplate"
   ],
   "homepage": "https://github.com/ThornWalli/workbench-13#readme",
@@ -11,12 +14,10 @@
   },
   "license": "MIT",
   "author": "Thorn Walli <lammpee@gmail.com>",
-  "contributors": [
-    {
-      "name": "Thorn Walli",
-      "email": "lammpee@gmail.com"
-    }
-  ],
+  "contributors": [{
+    "name": "Thorn Walli",
+    "email": "lammpee@gmail.com"
+  }],
   "main": "none",
   "repository": {
     "type": "git",
