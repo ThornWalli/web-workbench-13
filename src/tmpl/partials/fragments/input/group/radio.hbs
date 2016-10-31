@@ -1,0 +1,29 @@
+---
+items:
+  -
+    label: 'Radio Box 1'
+    value: '1'
+    name: 'examples-input-radios'
+  -
+    label: 'Radio Box 2'
+    name: 'examples-input-radios'
+  -
+    label: 'Radio Box 3'
+    name: 'examples-input-radios'
+---
+
+{{#mixin "fragments/input/group" this}}
+
+  {{#content "attributes"}} data-partial="fragments/input/group/radio"{{/content}}
+
+  {{#content "items"}}
+
+    {{#each items}}
+      <li>
+        <label>{{{mixin "elements/input/radio" this}}}</label>
+      </li>
+    {{/each}}
+
+  {{/content}}
+
+{{/mixin}}

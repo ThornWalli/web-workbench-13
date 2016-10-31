@@ -1,0 +1,29 @@
+---
+items:
+  -
+    label: 'Checkbox 1'
+    value: '1'
+    name: 'examples-input-checkbox'
+  -
+    label: 'Checkbox 2'
+    name: 'examples-input-checkbox'
+  -
+    label: 'Checkbox 3'
+    name: 'examples-input-checkbox'
+---
+
+{{#mixin "fragments/input/group" this}}
+
+  {{#content "attributes"}} data-partial="fragments/input/group/checkbox"{{/content}}
+
+  {{#content "items"}}
+
+    {{#each items}}
+      <li>
+        {{{mixin "elements/input/checkbox" this}}}
+      </li>
+    {{/each}}
+
+  {{/content}}
+
+{{/mixin}}

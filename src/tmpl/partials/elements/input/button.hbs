@@ -1,0 +1,5 @@
+---
+type: 'button'
+title: 'Default Button'
+---
+<input class="partial{{#if class}} {{{class}}}{{/if}}"{{#block "attributes"}} data-partial="elements/input/button/primary"{{/block}} type="{{{type}}}" value="{{{title}}}"{{#if hook}} data-hook="{{{hook}}}"{{/if}} />

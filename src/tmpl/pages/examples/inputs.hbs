@@ -1,0 +1,68 @@
+---
+layout: 'layouts/view-content'
+title: 'Examples Input'
+---
+<section>
+
+  <table width="100%">
+    <tr>
+      <th>
+        Inputs
+      </th>
+      <th>
+        Buttons
+      </th>
+      <th>
+        Others
+      </th>
+    </tr>
+
+    <tr>
+      <td>
+        {{{mixin "fragments/input/group"}}} {{{mixin "fragments/input/group/checkbox"}}} {{{mixin "fragments/input/group/radio"}}}
+      </td>
+      <td>
+        {{#mixin "fragments/input/group/button"}}
+
+        {{#content "items"}}
+
+            <li>
+                        {{{mixin "elements/input/button/upload" import}}}
+            </li>
+                          <li>
+                        {{{mixin "elements/input/button/primary" export}}}
+            </li>
+                          <li>
+                        {{{mixin "elements/input/button/secondary" export}}}
+            </li>
+
+        {{/content}}
+
+        {{/mixin}}
+
+      </td>
+      <td>
+        {{#mixin "fragments/input/group"}}
+
+          {{#content "items"}}
+            <li>
+              {{{mixin "elements/input/checkbox"}}}
+            </li>
+            <li>
+              {{{mixin "elements/input/radio"}}}
+            </li>
+            <li>
+            {{{mixin "elements/input/select"}}}
+            </li>
+          {{/content}}
+
+        {{/mixin}}
+      </td>
+    </tr>
+
+  </table>
+
+
+  </div>
+
+</section>

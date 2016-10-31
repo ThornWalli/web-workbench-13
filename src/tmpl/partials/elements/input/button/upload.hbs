@@ -1,0 +1,13 @@
+---
+id: #
+name: #
+type: 'button'
+title: 'Upload Button'
+accept: 'application/json'
+---
+<div class="partial{{#if class}} {{{class}}}{{/if}}" {{#block "attributes"}} data-partial="elements/input/button/upload"{{/block}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}>
+  <label>
+    <input name="{{{name}}}" id="{{{id}}}" type="file" accept="{{{accept}}}">
+    <span>{{{title}}}</span>
+</label>
+</div>

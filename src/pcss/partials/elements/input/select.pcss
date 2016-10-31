@@ -1,0 +1,34 @@
+.partial[data-partial="elements/input/select"] {
+  position: relative;
+  display: inline-block;
+  >* {
+    display: inline-block;
+  }
+  >.label {
+    line-height: 18px;
+  }
+  >select {
+    appearance: none;
+    outline: none;
+    margin: 0;
+    padding: 5px 10px;
+    padding-bottom: 2px;
+    border-radius: 0;
+    border: solid 2px;
+    background: transparent;
+    border-color: $workbenchColor_1;
+    color: $workbenchColor_1;
+    html.no-touchevents & {
+      &:hover {
+        border-color: $workbenchColor_4;
+        color: $workbenchColor_4;
+      }
+    }
+    html.touchevents & {
+      &:active {
+        border-color: $workbenchColor_4;
+        color: $workbenchColor_4;
+      }
+    }
+  }
+}

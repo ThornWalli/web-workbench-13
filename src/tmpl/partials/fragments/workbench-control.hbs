@@ -5,13 +5,6 @@ tmpl:
     id: 'view-template'
     data:
       id: '@id'
-      scroll: false
-      header:
-        title: '@title'
-  -
-    id: 'view-scroll-template'
-    data:
-      id: '@id'
       scroll: true
       header:
         title: '@title'
@@ -25,9 +18,9 @@ tmpl:
 
   </div>
 
-  <div class="windows" data-hook="windows">
+  <div class="views" data-hook="views">
 
-    {{#block "windows"}}{{/block}}
+    {{#block "views"}}{{/block}}
 
   </div>
 

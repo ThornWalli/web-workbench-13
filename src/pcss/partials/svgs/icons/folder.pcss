@@ -1,0 +1,23 @@
+.partial[data-partial="svgs/icons/folder"] {
+  .primary {
+    fill: $workbenchColor_1
+  }
+  .secondary {
+    fill: $workbenchColor_2
+  }
+  >g {
+    visibility: hidden;
+  }
+  >g+g {
+    visibility: visible;
+  }
+  .js-selected & {
+
+    >g {
+      visibility: visible;
+    }
+    >g+g {
+      visibility: hidden;
+    }
+  }
+}

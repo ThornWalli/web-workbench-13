@@ -10,27 +10,55 @@
   top: 0px;
   left: 0px;
   min-width: 150px;
-  min-height: 60px;
+  min-height: 100px;
   /*width: 150px;*/
-  height: 60px;
+  height: 100px;
   background: $workbenchColor_3;
-  >.inner {
-    margin-top: -20px;
-    padding-top: 20px;
-    height: 100%;
-    min-width: 150px;
-    min-height: 40px;
-  }
   .view-content {
+    margin-top: -20px;
+    min-width: 146px;
+    min-height: 80px;
     line-height: 18px;
     padding: 3px 3px;
+    padding-top: 23px;
+    table {
+      border-collapse: collapse;
+      border-width: 0;
+      margin: 0px;
+      /*Fix Table width, with margin (Chrome)*/
+      margin-right: 4px;
+      margin-bottom: 2px;
+
+      padding: 0px;
+      box-sizing: content-box;
+      th {
+        font-weight: normal;
+      }
+      th, td {
+        margin: 0;
+        padding: 2px 4px;
+        padding-bottom: 1px;
+        position: relative;
+        box-sizing: content-box;
+        border-collapse: collapse;
+        border: solid $workbenchColor_1 2px;
+        border-right-width: 2px;
+        border-bottom-width: 2px;
+      }
+    }
+    h2 {
+      font-weight: normal;
+      font-size: 32px;
+      line-height: 1;
+    }
     p {
       margin: 0;
+      overflow: hidden;
     }
     pre {
       overflow: visible;
     }
-    ul {
+    ul.bullets {
       padding: 0.5em 0;
       li {
         position: relative;
@@ -46,7 +74,7 @@
     }
   }
   >.helper-scale {
-    display: block;
+    display: none;
     position: absolute;
     right: 0px;
     bottom: 0px;
@@ -60,6 +88,25 @@
     }
     .primary {
       fill: $workbenchColor_3;
+    }
+  }
+  &.js-scroll {
+    >.inner {
+      height: 100%;
+    }
+  }
+  &.js-moving, &.js-scaling {
+    border-color: $workbenchColor_4;
+    border-width: 2px;
+    mix-blend-mode: difference;
+    * {
+      visibility: hidden !important;
+    }
+    background:transparent;
+  }
+  &.js-scale {
+    >.helper-scale {
+      display: block;
     }
   }
   &.js-scaling {

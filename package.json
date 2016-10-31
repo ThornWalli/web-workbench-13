@@ -11,10 +11,12 @@
   },
   "license": "MIT",
   "author": "Thorn Walli <lammpee@gmail.com>",
-  "contributors": [ {
-    "name": "Thorn Walli",
-    "email": "lammpee@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Thorn Walli",
+      "email": "lammpee@gmail.com"
+    }
+  ],
   "main": "none",
   "repository": {
     "type": "git",
@@ -36,19 +38,20 @@
     "agency-environment": "git+https://git@github.com/agency-framework/agency-environment.git",
     "agency-pkg-base": "git+https://git@github.com/agency-framework/agency-pkg-base.git",
     "agency-pkg-documentation": "git+https://git@github.com/agency-framework/agency-pkg-documentation.git",
+    "agency-pkg-element-browser-notes": "git+https://git@github.com/agency-framework/agency-pkg-element-browser-notes.git",
     "agency-pkg-element-headline": "git+https://git@github.com/agency-framework/agency-pkg-element-headline.git",
     "agency-pkg-element-link": "git+https://git@github.com/agency-framework/agency-pkg-element-link.git",
     "agency-pkg-element-modal": "git+https://git@github.com/agency-framework/agency-pkg-element-modal.git",
     "agency-pkg-element-picture": "git+https://git@github.com/agency-framework/agency-pkg-element-picture.git",
-    "agency-pkg-element-browser-notes": "git+https://git@github.com/agency-framework/agency-pkg-element-browser-notes.git",
     "agency-pkg-polyfills": "git+https://git@github.com/agency-framework/agency-pkg-polyfills.git",
     "agency-pkg-service-animation-frame": "git+https://git@github.com/agency-framework/agency-pkg-service-animation-frame.git",
-    "agency-pkg-service-history": "git+https://git@github.com/agency-framework/agency-pkg-service-history.git",
     "agency-pkg-service-dev-tools": "git+https://git@github.com/agency-framework/agency-pkg-service-dev-tools.git",
+    "agency-pkg-service-history": "git+https://git@github.com/agency-framework/agency-pkg-service-history.git",
     "agency-pkg-service-parser": "git+https://git@github.com/agency-framework/agency-pkg-service-parser.git",
     "agency-pkg-service-viewport": "git+https://git@github.com/agency-framework/agency-pkg-service-viewport.git",
     "agency-pkg-utils": "git+https://git@github.com/agency-framework/agency-pkg-utils.git",
     "agency-server": "git+https://git@github.com/agency-framework/agency-server.git",
+    "ampersand-subcollection": "^2.0.3",
     "color": "^0.11.1",
     "fastdom": "^1.0.1",
     "fastdom-sequencer": "^1.0.3",

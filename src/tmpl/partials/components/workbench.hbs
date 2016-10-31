@@ -7,13 +7,25 @@ header:
         items:
           -
             class: 'js-click-view-open'
-            title: Import/Export Runtime
+            title: 'Import/Export Runtime'
             url: './pages/workbench/runtime_import_export.html'
+          -
+            hotkey: 'i'
+            class: 'js-click-view-open'
+            title: 'Settings'
+            url: './pages/workbench/settings.html'
           -
             hotkey: 'i'
             class: 'js-click-view-open'
             title: 'Info'
             url: './pages/info.html'
+      -
+        title: 'Examples'
+        items:
+          -
+            class: 'js-click-view-open'
+            title: 'Inputs'
+            url: './pages/examples/inputs.html'
       -
         title: 'Debug'
         items:
@@ -36,13 +48,10 @@ header:
 
         {{#content "windows"}}
 
-
-
-
         {{/content}}
         {{#content "content"}}
 
-
+          {{{mixin "fragments/icon-control"}}}
 
         {{/content}}
 

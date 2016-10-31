@@ -2,11 +2,10 @@
 id: 'dummy-view'
 scroll: true
 ---
-<div class="partial controller active" data-partial="components/view" data-controller="./partials/components/View" data-id="{{{id}}}" data-target="[data-partial='fragments/workbench-control']"{{#if scroll}} data-scroll="true"{{/if}}>
+<aside class="partial controller active" data-partial="components/view" data-controller="./partials/components/View" data-id="{{{id}}}" data-target="[data-partial='fragments/workbench-control']"{{#if scroll}} data-scroll="true"{{/if}}>
 
   {{{mixin "components/header/view" header view-id=id}}}
 
-  <div class="inner">
     {{#if scroll}}
       {{{mixin "fragments/view/scroll-content" this}}}
     {{else}}
@@ -36,10 +35,9 @@ scroll: true
         {{/block}}
       </div>
     {{/if}}
-  </div>
 
   <span class="helper-scale" touch-action="none">
-    {{{mixin "svgs/icons/scrollbar-scale"}}}
+    {{{mixin "svgs/icons/controls/scrollbar-scale"}}}
   </span>
 
-</div>
+</aside>

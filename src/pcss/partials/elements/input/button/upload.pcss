@@ -1,0 +1,37 @@
+.partial[data-partial="elements/input/button/upload"] {
+  overflow: hidden;
+  position: relative;
+  display: block;
+  margin: 4px 0px;
+  padding: 0;
+  outline: solid $workbenchColor_1 2px;
+  /*
+  box-sizing: content-box;*/
+  /*padding: 2px;*/
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-25%);
+    visibility: hidden;
+  }
+  label {
+    display: block;
+    background: transparent;
+    margin: 0;
+    padding: 4px;
+    padding-bottom: 2px;
+    text-align: center;
+    border: solid $workbenchColor_3 2px;
+    color: $workbenchColor_3;
+    background: $workbenchColor_1;
+  }
+  &:active {
+    outline-color: $workbenchColor_2;
+    label {
+      color: $workbenchColor_1;
+      background: $workbenchColor_2;
+      border-color: $workbenchColor_1;
+    }
+  }
+}

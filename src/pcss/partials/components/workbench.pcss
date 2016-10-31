@@ -10,9 +10,11 @@
   * {
     user-select: none;
   }
-  cursor: url(../assets/img/cursor/pointer.png), auto;
-  cursor: url(../assets/img/cursor/pointer.png), pointer;
-  cursor: url(../assets/img/cursor/pointer.png), text;
+  &, * {
+    cursor: url(../assets/img/cursor/pointer.png), auto !important;
+    cursor: url(../assets/img/cursor/pointer.png), pointer !important;
+    cursor: url(../assets/img/cursor/pointer.png), text !important;
+  }
   &.loading {
     cursor: url(../assets/img/cursor/wait.png), auto;
   }
@@ -24,9 +26,9 @@
     top: 20px;
     left: 0;
     bottom: 0;
-      z-index: 100;
+    z-index: 100;
   }
   .partial[data-partial="elements/error"] {
-      z-index: 10001;
+    z-index: 10001;
   }
 }

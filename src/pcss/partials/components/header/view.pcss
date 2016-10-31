@@ -106,19 +106,13 @@
         background: $workbenchColor_3;
         width: 20px;
         .primary {
-          fill: #ffffff;
+          fill: $workbenchColor_1;
         }
         .secondary {
-          fill: #000000;
+          fill: $workbenchColor_2;
         }
         &:active {
-          background-color: $workbenchColor_4;
-          .primary {
-            fill: #000000;
-          }
-          .secondary {
-            fill: #ffffff;
-          }
+            filter: invert();
         }
       }
       .focus-min {
@@ -128,19 +122,13 @@
         /*margin-left: 2px;*/
         margin-right: 2px;
         .primary {
-          fill: #ffffff;
+          fill: $workbenchColor_1;
         }
         .secondary {
-          fill: #000000;
+          fill: $workbenchColor_2;
         }
         &:active {
-          background-color: $workbenchColor_4;
-          .primary {
-            fill: #000000;
-          }
-          .secondary {
-            fill: #ffffff;
-          }
+            filter: invert();
         }
       }
       .focus-max {
@@ -149,19 +137,13 @@
         background: $workbenchColor_3;
         margin-right: 2px;
         .primary {
-          fill: #ffffff;
+          fill: $workbenchColor_1;
         }
         .secondary {
-          fill: #000000;
+          fill: $workbenchColor_2;
         }
         &:active {
-          background-color: $workbenchColor_4;
-          .primary {
-            fill: #000000;
-          }
-          .secondary {
-            fill: #ffffff;
-          }
+          filter: invert();
         }
       }
     }

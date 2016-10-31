@@ -23,7 +23,7 @@ module.exports = Controller.extend({
 
 function onClickWindowOpen(e) {
     e.preventDefault();
-    this.targetModel.openWindow(e.currentTarget.getAttribute('href'), {
+    this.targetModel.openView(e.currentTarget.getAttribute('href'), {
         scrollbar: e.currentTarget.dataset.scrollbar || false
     });
 }

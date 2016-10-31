@@ -1,0 +1,13 @@
+---
+name: # Field Name
+id: # Field Id
+checked: true
+label: 'Radio Label'
+---
+<label class="partial" data-partial="elements/input/radio">
+  <input{{#if name}} name="{{{name}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}} type="radio"{{#if checked}} checked{{/if}} />
+  {{{mixin "svgs/icons/controls/input-radio"}}}
+  {{#if label}}
+    <span class="label">{{{label}}}</span>
+  {{/if}}
+</label>

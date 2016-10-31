@@ -6,19 +6,15 @@
     [data-partial="elements/context-menu/item"] {
       display: block;
       padding: 2px 4px;
-      padding-bottom: 1px;
+      padding-bottom: 0px;
       white-space: nowrap;
       color: $workbenchColor_3;
       text-decoration: none;
+      background-color: $workbenchColor_1;
     }
     &:hover>[data-partial="elements/context-menu/item"] {
-      background-color: $workbenchColor_2;
-      color: $workbenchColor_4;
-      svg {
-        .primary {
-          fill: $workbenchColor_4;
-        }
-      }
+    padding-bottom: 1px;
+      filter: invert();
     }
     [data-partial="elements/context-menu/item"]:hover+.partial[data-partial="fragments/header/context-menu"] {
       display: block;

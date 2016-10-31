@@ -1,0 +1,19 @@
+---
+
+tmpl:
+  -
+    id: 'view-template'
+    data:
+      id: '@id'
+      scroll: true
+      header:
+        title: '@title'
+
+---
+<div class="partial controller{{#if class}} {{{class}}}{{/if}}" data-partial="fragments/icon-control" data-controller="./partials/fragments/IconControl" data-target="[data-partial='fragments/workbench-control']">
+
+  <div class="items" data-hook="items">
+    {{{block "items"}}}
+  </div>
+
+</div>

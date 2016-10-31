@@ -1,0 +1,23 @@
+---
+items:
+  -
+    title: 'Item 1'
+    value: '1'
+    name: 'examples-input-radios'
+  -
+    title: 'Radio Box 2'
+    name: 'examples-input-radios'
+  -
+    title: 'Radio Box 3'
+    name: 'examples-input-radios'
+---
+
+<ul class="partial {{{class}}}" {{#block "attributes"}} data-partial="fragments/input/group"{{/block}}>
+  {{#block "items"}}
+    {{#each items}}
+      <li>
+        {{{title}}}
+      </li>
+    {{/each}}
+  {{/block}}
+</ul>

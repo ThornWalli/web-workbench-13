@@ -3,8 +3,10 @@
 var Vector = require('agency-pkg-base/Vector');
 var Bounds = require('agency-pkg-base/Bounds');
 var Controller = require('agency-pkg-base/Controller');
+var DomModel = require('agency-pkg-base/DomModel');
 var viewport = require('agency-pkg-service-viewport');
 var Enum = require('enum');
+var workbenchConfig = require('../../services/workbenchConfig');
 require('pepjs');
 
 module.exports = Controller.extend({
@@ -20,10 +22,30 @@ module.exports = Controller.extend({
     scrollContentEl: null,
     scrollInnerEl: null,
 
+    offsetTop: 0,
     scrollX: 0,
     scrollY: 0,
 
     bounds: new Bounds(),
+
+    modelConstructor: DomModel.extend({
+        session: {
+            active: {
+                type: 'boolean',
+                required: true,
+                default: function() {
+                    return true;
+                }
+            }
+        }
+    }),
+
+    bindings: {
+        'model.active': {
+            type: 'booleanClass',
+            yes: 'js-active'
+        }
+    },
 
     events: {
         'pointerdown [data-hook="scrollbar-arrow-top"]': onClickScrollBarArrowTop,
@@ -47,7 +69,10 @@ module.exports = Controller.extend({
         $(this.scrollRightSpacerEl).on('pointerdown', onPointerDownRightSpacer.bind(this));
         $(this.scrollBottomSpacerEl).on('pointerdown', onPointerDownBottomSpacer.bind(this));
 
+        this.targetModel.scrollContent = this.model;
+        this.targetModel.scale = true;
         this.targetModel.on('event:refresh', onRefresh.bind(this)(), this);
+
         this.scrollContentEl.addEventListener('scroll', global.animationFrame.throttle('scroll-content' + this.cid, function() {
             updateEl(this);
         }.bind(this), function() {
@@ -110,21 +135,24 @@ function onPointerUpRightSpacer() {
 }
 
 function updateEl(scope) {
-
-    scope.scrollBottomSpacerEl.style.cssText = 'width: ' + (scope.scrollBottomSpacerWidth / scope.scrollBottomHelperWidth) * 100 + '%;transform: translateX(' + scope.scrollX + '%);';
-    scope.scrollRightSpacerEl.style.cssText = 'height: ' + (scope.scrollRightSpacerHeight / scope.scrollRightHelperHeight) * 100 + '%;transform: translateY(' + scope.scrollY + '%);';
+    if (workbenchConfig.get('core-css-transform')) {
+        scope.scrollBottomSpacerEl.style.cssText = 'width: ' + Math.min((scope.scrollBottomSpacerWidth / scope.scrollBottomHelperWidth) * 100, 100) + '%;transform: translateX(' + scope.scrollX * 100 + '%);';
+        scope.scrollRightSpacerEl.style.cssText = 'height: ' + Math.min((scope.scrollRightSpacerHeight / scope.scrollRightHelperHeight) * 100, 100) + '%;transform: translateY(' + scope.scrollY * 100 + '%);';
+    } else {
+        scope.scrollBottomSpacerEl.style.cssText = 'width: ' + Math.min((scope.scrollBottomSpacerWidth / scope.scrollBottomHelperWidth) * 100, 100) + '%;left: ' + (scope.scrollX * scope.scrollBottomSpacerWidth) + 'px;';
+        scope.scrollRightSpacerEl.style.cssText = 'height: ' + Math.min((scope.scrollRightSpacerHeight / scope.scrollRightHelperHeight) * 100, 100) + '%;top: ' + (scope.scrollY * scope.scrollRightSpacerHeight) + 'px;';
+    }
 }
 
 function refreshScrollbar(scope) {
     value = scope.scrollContentEl.scrollLeft / (scope.scrollInnerDimension.x - scope.scrollWrapperDimension.x);
     value = (value * 100) / 100;
     value *= -1 + scope.scrollBottomHelperWidth / scope.scrollBottomSpacerWidth;
-    value *= 100;
     scope.scrollX = value;
-    var value = scope.scrollContentEl.scrollTop / ((scope.scrollInnerDimension.y - scope.scrollWrapperDimension.y));
+    console.log(scope.scrollInnerDimension.y, scope.scrollWrapperDimension.y, scope.offsetTop);
+    var value = (scope.scrollContentEl.scrollTop) / (((scope.scrollInnerDimension.y - scope.offsetTop) - scope.scrollWrapperDimension.y));
     value = (value * 100) / 100;
     value *= -1 + scope.scrollRightHelperHeight / scope.scrollRightSpacerHeight;
-    value *= 100;
     scope.scrollY = value;
 }
 
@@ -134,14 +162,13 @@ function onRefresh() {
         updateEl(this);
     }.bind(this), function() {
 
+        this.offsetTop = this.el.offsetTop;
+
         this.dimension.resetValues(this.el.offsetWidth, this.el.offsetHeight, 0);
         this.scrollContentDimension.resetValues(this.scrollContentEl.offsetWidth, this.scrollContentEl.offsetHeight, 0);
         this.scrollWrapperDimension.resetValues(this.scrollWrapperEl.offsetWidth, this.scrollWrapperEl.offsetHeight, 0);
         this.scrollInnerDimension.resetValues(this.scrollInnerEl.offsetWidth, this.scrollInnerEl.offsetHeight, 0);
 
-        // if (this.scrollContentDimension.x > this.scrollInnerDimension.x) {
-        //     this.scrollInnerDimension.x = this.scrollContentDimension.x;
-        // }
         this.scrollBottomHelperWidth = this.scrollBottomHelperEl.offsetWidth;
         this.scrollBottomSpacerWidth = (this.scrollContentDimension.x / (this.scrollInnerDimension.x)) * this.scrollBottomHelperWidth;
 
