@@ -1,7 +1,19 @@
 {
-    "title": "Workbench 1.3 Alpha",
-    "keywords": "Amiga,Workbench,1.3,Alpha,Lammpee",
+    "title": "Web-Workbench 1.3",
+    "keywords": "Amiga,Web,Workbench,1.3,Lammpee",
     "description": "",
+    "social": {
+        "title": "Web-Workbench 1.3",
+        "description": "",
+        "image": {
+            "url": "https://web-workbench-13.herokuapp.com/assets/img/share.png",
+            "secureUrl": "https://web-workbench-13.herokuapp.com/assets/img/share.png",
+            "type": "image/png",
+            "width": 470,
+            "height": 246
+        },
+        "localization": "de_DE"
+    },
     "body": {
       "stage": {
         "overline": {
