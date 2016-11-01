@@ -6,6 +6,12 @@ var uniqueId = require('lodash/uniqueId');
 var TYPES = require('../../utils/types');
 
 module.exports = {
+
+    dataTypes: {
+
+    },
+
+
     session: {
         bounds: {
             type: 'Bounds',
@@ -29,21 +35,21 @@ module.exports = {
             }
         },
         iconType: {
-            type: 'enum',
+            type: 'IconTypeEnum',
             required: true,
             default: function() {
                 return TYPES.ICON_TYPE.DEFAULT;
             }
         },
         icon: {
-            type: 'enum',
+            type: 'IconEnum',
             required: true,
             default: function() {
                 return TYPES.ICON.DISK_1;
             }
         },
         type: {
-            type: 'enum',
+            type: 'ItemEnum',
             required: true,
             default: function() {
                 return TYPES.ITEM.DEFAULT;
@@ -76,7 +82,7 @@ module.exports = {
             var data = [];
             items.forEach(function(item) {
                 console.log(item);
-                data.push(item.toArray());
+                data.push(!!item.toArray ? item.toArray() : item);
             });
             return data;
         }
@@ -85,7 +91,7 @@ module.exports = {
                 x: this.bounds.min.x,
                 y: this.bounds.min.y
             },
-            id: this.iconType.key,
+            // id: this.id,
             iconType: this.iconType.key,
             icon: this.icon.key,
             type: this.type.key,

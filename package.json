@@ -52,7 +52,6 @@
     "agency-pkg-service-viewport": "git+https://git@github.com/agency-framework/agency-pkg-service-viewport.git",
     "agency-pkg-utils": "git+https://git@github.com/agency-framework/agency-pkg-utils.git",
     "agency-server": "git+https://git@github.com/agency-framework/agency-server.git",
-    "ampersand-subcollection": "^2.0.3",
     "color": "^0.11.1",
     "fastdom": "^1.0.1",
     "fastdom-sequencer": "^1.0.3",

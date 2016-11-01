@@ -16,7 +16,7 @@ require('pepjs');
 
 module.exports = Controller.extend({
 
-    modelConstructor: DomModel.extend(require('../../base/dataTypeDefinition'), {
+    modelConstructor: DomModel.extend(require('../../base/collectionTypeDefinition'), {
         session: {
             items: {
                 type: 'ItemCollection',
@@ -125,7 +125,8 @@ function showFolder(scope, item) {
 
 function selectItem(scope, item) {
     if (!item.disabled) {
-        if (item.type === TYPES.ITEM.FOLDER) {
+        console.log(item.type);
+        if (TYPES.ITEM.FOLDER.is(item.type)) {
             console.log('select FOLDER', item);
             showFolder(scope, item);
             scope.itemElMap[item.id].classList.add('js-selected');
@@ -139,14 +140,15 @@ function selectItem(scope, item) {
 
 function renderItem(scope, item) {
     var html;
-    if (item.iconType === TYPES.ICON_TYPE.SVG || item.iconType === TYPES.ICON_TYPE.DEFAULT) {
+    if (TYPES.ICON_TYPE.SVG.is(item.iconType) || TYPES.ICON_TYPE.DEFAULT.is(item.iconType)) {
+        console.log( item.icon.key,icons);
         html = svgTmpl({
-            svg: icons[item.icon](),
+            svg: icons[item.icon.key](),
             title: item.title,
         });
-    } else if (item.iconType === TYPES.ICON_TYPE.IMG) {
+    } else if (TYPES.ICON_TYPE.IMG.is(item.iconType)) {
         html = imageTmpl({
-            svg: icons[item.icon](),
+            svg: icons[item.icon.key](),
             title: item.title,
         });
     }

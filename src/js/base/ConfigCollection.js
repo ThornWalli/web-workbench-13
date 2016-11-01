@@ -29,15 +29,26 @@ ConfigCollection.prototype.get = function(name) {
 };
 ConfigCollection.prototype.set = function(data, value) {
     if (typeof data === 'object') {
-        for (var name in data) {
-            if (data.hasOwnProperty(name)) {
-                var entry = this.dataMap[name] || createEntry(name, data[name]);
+        if (Array.isArray(data)) {
+            data.forEach(function(entry) {
                 if (!this.dataMap[name]) {
                     this.data.push(entry);
                     this.dataMap[name] = entry;
                 }
                 entry.value = data[name];
                 this.trigger('change:' + name, value);
+            }.bind(this));
+        } else {
+            for (var name in data) {
+                if (data.hasOwnProperty(name)) {
+                    var entry = this.dataMap[name] || createEntry(name, data[name]);
+                    if (!this.dataMap[name]) {
+                        this.data.push(entry);
+                        this.dataMap[name] = entry;
+                    }
+                    entry.value = data[name];
+                    this.trigger('change:' + name, value);
+                }
             }
         }
     } else {
@@ -76,7 +87,7 @@ function detectStorage(scope, name) {
 }
 
 function setStorage(scope, storageType) {
-    storageType = storageType === scope.STORAGE_TYPES.AUTO ? detectStorage(scope, 'workbench13') : storageType;
+    storageType = scope.STORAGE_TYPES.AUTO.is(storageType) ? detectStorage(scope, 'workbench13') : storageType;
     switch (storageType) {
         case scope.STORAGE_TYPES.LOCAL:
             scope.storage = global.localStorage;

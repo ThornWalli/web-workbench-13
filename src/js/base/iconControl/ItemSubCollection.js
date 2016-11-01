@@ -4,6 +4,6 @@ var AmpersandCollection = require('ampersand-collection');
 var AmpersandModel = require('ampersand-model');
 
 var ItemSubCollection = AmpersandCollection.extend({
-    model: AmpersandModel.extend(require('./itemAttributes'))
+    model: AmpersandModel.extend(require('agency-pkg-base/dataTypeDefinition'),require('./itemAttributes'))
 });
 module.exports = ItemSubCollection;

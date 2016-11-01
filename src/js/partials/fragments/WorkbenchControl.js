@@ -113,8 +113,12 @@ module.exports = Controller.extend({
         //     scrollbar: true,
         //     url: './pages/debug-view-scroll.html'
         // });
-        //
-        //
+        // createView(this, {
+        //     scrollbar: true,
+        //     url: './pages/workbench/runtime_import_export.html'
+        // });
+
+
         var testItems = [{
             type: TYPES.ITEM.DEFAULT,
             icon: TYPES.ICON.DISK_1,
@@ -178,22 +182,9 @@ module.exports = Controller.extend({
 
         this.model.on('change:iconControl', function(model, iconControl) {
             iconControl.items.add(testItems);
-                // iconControl.items.add(parseItems(testItems));
         }, this);
     }
 });
-
-function parseItems(items) {
-    var parsedItems = [];
-    items.forEach(function(itemData) {
-        itemData.items = itemData.items; //new ItemCollection(itemData.items);
-        console.log(itemData);
-        var item = new Item(itemData);
-        console.log(itemData, item.title);
-        parsedItems.push(item);
-    });
-    return parsedItems;
-}
 
 function createView(scope, options) {
     options = extend({
@@ -219,8 +210,8 @@ function createView(scope, options) {
         controller.model.dimension.resetValues(options.dimension.x, options.dimension.y);
     }
     if (options.bounds) {
-        controller.model.bounds.min.resetValues(options.bounds.min.x, options.bounds.min.y);
-        controller.model.bounds.max.resetValues(options.bounds.max.x, options.bounds.max.y);
+        controller.model.bounds.min.reset(options.bounds.min);
+        controller.model.bounds.max.reset(options.bounds.max);
     }
     return controller.model;
 }
