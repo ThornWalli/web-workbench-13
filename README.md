@@ -1,3 +1,3 @@
-# workbench 1.3
+# web-workbench 1.3
 
-Heroku App: [workbench-13.herokuapp.com](https://workbench-13.herokuapp.com/)
+Heroku App: [web-workbench-13.herokuapp.com](https://web-workbench-13.herokuapp.com/)
