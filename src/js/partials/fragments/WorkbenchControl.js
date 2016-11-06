@@ -7,11 +7,10 @@ var DomModel = require('agency-pkg-base/DomModel');
 var extend = require('lodash/extend');
 var uniqueId = require('lodash/uniqueId');
 
-var TYPES = require('../../utils/types');
-// var ItemCollection = require('../../base/iconControl/ItemCollection');
-var Item = require('../../base/iconControl/Item');
+var handlebars = require('handlebars/dist/handlebars');
 
-var controllerParser = require('agency-pkg-service-parser');
+var TYPES = require('../../utils/types');
+// var ItemCollection = require('../../base/itemControl/ItemCollection');
 
 var AmpersandCollection = require('ampersand-collection');
 
@@ -19,7 +18,7 @@ require('pepjs');
 
 module.exports = Controller.extend({
 
-    modelConstructor: DomModel.extend({
+    modelConstructor: DomModel.extend(require('../../base/collectionTypeDefinition'), {
         session: {
             views: {
                 type: 'AmpersandCollection',
@@ -28,10 +27,15 @@ module.exports = Controller.extend({
                     return new AmpersandCollection();
                 }
             },
-            iconControl: {
+            // root itemControl
+            itemControl: {
                 type: 'object',
                 required: true,
                 default: null
+            },
+            selectedItems: {
+                type: 'ItemCollection',
+                required: true
             },
             core: {
                 type: 'object',
@@ -69,46 +73,57 @@ module.exports = Controller.extend({
                 openView_callback: callback
             }, options));
         },
-        setViewFocus: function(windowModel, top) {
-            this.trigger('event:changeWindowFocus', this, {
-                id: windowModel.id,
+        setViewFocus: function(view, top) {
+            this.trigger('event:changeViewFocus', this, {
+                view: view,
                 moveTop: top || false
             });
+        },
+        createDialog: function(options) {
+            this.trigger('event:createDialog', options);
+        },
+        deselectItems: function() {
+            this.selectedItems.reset();
         }
     }),
-
 
     initialize: function() {
         Controller.prototype.initialize.apply(this, arguments);
         this.model.core = this.targetModel;
+        this.model.core.on('event:refresh', function() {
+            console.log('refresh');
+            refreshBounds(this);
+            this.model.views.forEach(function(view) {
+                view.refreshBounds();
+            });
+        }.bind(this));
         refreshBounds(this);
 
         // Events
         this.model.views.on('add', onViewsAdd, this);
         this.model.views.on('remove', onViewsRemove, this);
+        this.model.selectedItems.on('add', onSelectedItemsAdd, this);
+        this.model.selectedItems.on('remove', onSelectedItemsRemove, this);
+        this.model.selectedItems.on('reset', onSelectedItemsReset, this);
         this.model.on('event:openView', onOpenView, this);
-        this.model.on('event:changeWindowFocus', onChangeWindowFocus, this);
+        this.model.on('event:changeViewFocus', onChangeViewFocus, this);
+        this.model.on('event:createDialog', onCreateDialog, this);
 
         this.tmpl = {
-            default: null,
-            scroll: null
+            view: handlebars.compile(this.el.querySelector('#view-template').innerHTML),
+            dialog: handlebars.compile(this.el.querySelector('#dialog-template').innerHTML),
+            dialogButton: handlebars.compile(this.el.querySelector('#dialog-button-template').innerHTML)
         };
-        this.tmpl.default = this.el.querySelector('#view-template').innerHTML;
-        console.log(this.tmpl);
 
         this.viewsEl = this.queryByHook('views');
         // createView(this, {
         //     scrollbar: false,
         //     url: './pages/start.html',
         // });
-        // createView(this, {
-        //     scrollbar: false,
-        //     url: './pages/examples/inputs.html'
-        // });
-        // createView(this, {
-        //     scrollbar: false,
-        //     url: './pages/workbench/settings.html'
-        // });
+        createView(this, {
+            scrollbar: false,
+            url: './pages/examples/inputs.html'
+        });
         // createView(this, {
         //     scrollbar: true,
         //     url: './pages/debug-view-scroll.html'
@@ -117,95 +132,165 @@ module.exports = Controller.extend({
         //     scrollbar: true,
         //     url: './pages/workbench/runtime_import_export.html'
         // });
+        // createView(this, {
+        //     url: './pages/workbench/settings.html'
+        // });
+        // createView(this, {
+        //     url: './pages/workbench/settings/debug.html'
+        // });
+        // createView(this, {
+        //     url: './pages/examples/dialog.html',
+        //     scaleable: true,
+        //     scrollable: false
+        // });
 
 
         var testItems = [{
-            type: TYPES.ITEM.DEFAULT,
-            icon: TYPES.ICON.DISK_1,
-            title: 'Test 1.',
-            position: {
-                x: 400,
-                y: 50
-            }
-        }, {
-            type: TYPES.ITEM.DEFAULT,
-            icon: TYPES.ICON.DISK_2,
-            title: 'Test 2.',
-            position: {
-                x: 400,
-                y: 50
-            }
-        }, {
-            type: TYPES.ITEM.FOLDER,
-            icon: TYPES.ICON.FOLDER,
-            title: 'Test 3.',
-            position: {
-                x: 400,
-                y: 50
-            },
-            items: [{
-                title: 'Sub Item 1.',
-            }, {
-                title: 'Sub Item 2.',
-            }, {
-                title: 'Sub Item 3.',
-            }, {
-                title: 'Sub Item 4.',
-            }]
-        }, {
-            type: TYPES.ITEM.FOLDER,
-            icon: TYPES.ICON.FOLDER,
-            title: 'Test 4.',
-            position: {
-                x: 400,
-                y: 50
-            },
-            items: [{
-                type: TYPES.ITEM.FOLDER,
-                icon: TYPES.ICON.FOLDER,
-                title: 'Test 4.1.',
+                type: TYPES.ITEM.DEFAULT,
+                icon: TYPES.ICON.DISK_1,
+                title: 'Google',
                 position: {
                     x: 400,
                     y: 50
+                }
+            }, {
+                type: TYPES.ITEM.FOLDER,
+                icon: TYPES.ICON.FOLDER,
+                title: 'Folder 2.',
+                position: {
+                    x: 150,
+                    y: 100
                 },
                 items: [{
-                    title: 'Sub Item 1.',
-                }, {
-                    title: 'Sub Item 2.',
-                }, {
-                    title: 'Sub Item 3.',
-                }, {
-                    title: 'Sub Item 4.',
+                    type: TYPES.ITEM.FOLDER,
+                    icon: TYPES.ICON.FOLDER,
+                    title: 'Test 4.1.',
+                    items: [{
+                        title: 'Sub Item 1.',
+                    }, {
+                        title: 'Sub Item 2.',
+                    }, {
+                        title: 'Sub Item 3.',
+                    }, {
+                        title: 'Sub Item 4.',
+                    }]
                 }]
-            }]
-        }];
+            }
+            // , {
+            //     type: TYPES.ITEM.DEFAULT,
+            //     icon: TYPES.ICON.DISK_2,
+            //     title: 'Facebook',
+            //     position: {
+            //         x: 400,
+            //         y: 50
+            //     }
+            // }, {
+            //     type: TYPES.ITEM.FOLDER,
+            //     icon: TYPES.ICON.FOLDER,
+            //     title: 'Folder 1.',
+            //     position: {
+            //         x: 400,
+            //         y: 50
+            //     },
+            //     items: [{
+            //         title: 'Sub Item 1.',
+            //     }, {
+            //         title: 'Sub Item 2.',
+            //     }, {
+            //         title: 'Sub Item 3.',
+            //     }, {
+            //         title: 'Sub Item 4.',
+            //     }]
+            // },
 
-        this.model.on('change:iconControl', function(model, iconControl) {
-            iconControl.items.add(testItems);
+        ];
+
+        this.model.on('change:itemControl', function(model, itemControl) {
+            itemControl.items.add(testItems);
         }, this);
     }
 });
+
+function refreshBounds(scope) {
+    var offset = scope.el.getBoundingClientRect();
+    scope.model.dimension.x = offset.width;
+    scope.model.dimension.y = offset.height;
+    scope.model.bounds.min.resetValues(offset.top, offset.left, 0);
+    scope.model.bounds.max.resetValues(scope.model.bounds.min.x + scope.model.dimension.x, scope.model.bounds.min.y + scope.model.dimension.y, 0);
+}
+
+/**
+ * Setup for Header ItemControls
+ */
+function setupItemControlMenu(scope) {
+
+}
+
+// Dialog
+//
+function onCreateDialog(options) {
+    createDialog(this, options);
+}
+
+function createDialog(scope, options) {
+
+    var view = createView(scope, {
+        title: options.title,
+        scaleable: true,
+        scrollable: false
+    });
+
+
+    var buttons = [];
+    options.buttons.forEach(function(button) {
+        buttons.push(scope.tmpl.dialogButton(button));
+    });
+
+
+    var dialog = scope.tmpl.dialog({
+        text: options.text,
+        buttons: buttons
+    });
+    $(view.contentEl).append(dialog);
+    global.animationFrame.add(function() {
+
+        view.setInitialDimension(scope);
+        view.on('change:dialog', function(model, dialog) {
+            dialog.buttons = options.buttons;
+        });
+        global.js.parse(view.contentEl);
+        view.setPosition('center');
+    });
+
+
+}
+
+// Views
 
 function createView(scope, options) {
     options = extend({
         url: null,
         title: null,
+        scale: false,
         scroll: false
     }, options);
-    var tmpl = scope.tmpl.default;
     var id = uniqueId('window_');
-    tmpl = tmpl.replace(/@id/g, id);
+    var tmpl = scope.tmpl.view({
+        id: id
+    });
     $(scope.viewsEl).append(tmpl);
-    var windowEl = scope.viewsEl.querySelector('[data-id="' + id + '"]');
+    var viewEl = scope.viewsEl.querySelector('[data-id="' + id + '"]');
     if (options.url) {
-        windowEl.setAttribute('data-url', options.url);
+        viewEl.setAttribute('data-url', options.url);
     }
-    var windowHeaderEl = windowEl.querySelector('[data-partial="components/header/view"]');
+    var viewHeaderEl = viewEl.querySelector('[data-partial="components/header/view"]');
     if (options.title) {
-        windowHeaderEl.setAttribute('data-title', options.title);
+        viewHeaderEl.setAttribute('data-title', options.title);
     }
-    controllerParser.parse(windowEl);
-    var controller = $(windowEl).data('controller');
+    viewEl.setAttribute('data-scaleable', options.scaleable ? 'true' : 'false');
+    viewEl.setAttribute('data-scrollable', options.scrollable ? 'true' : 'false');
+    global.js.parse(viewEl);
+    var controller = $(viewEl).data('controller');
     if (options.dimension) {
         controller.model.dimension.resetValues(options.dimension.x, options.dimension.y);
     }
@@ -232,8 +317,17 @@ function onOpenView(model, options) {
     }
 }
 
-function onChangeWindowFocus(model, data) {
+function onChangeViewFocus(model, data) {
     var $view = $('[data-partial="components/view"][data-id="' + data.id + '"]');
+    var focusedViews = model.views.filter(function(view) {
+        if (view.focus && view.id !== data.view.id) {
+            return view;
+        }
+    });
+    if (focusedViews.length) {
+        focusedViews[0].focus = false;
+    }
+    data.view.focus = true;
     if (data.moveTop) {
         if ($view.next().length) {
             $view.next().after($view);
@@ -243,10 +337,19 @@ function onChangeWindowFocus(model, data) {
     }
 }
 
-function refreshBounds(scope) {
-    var offset = scope.el.getBoundingClientRect();
-    scope.model.dimension.x = offset.width;
-    scope.model.dimension.y = offset.height;
-    scope.model.bounds.min.resetValues(offset.top, offset.left, 0);
-    scope.model.bounds.max.resetValues(scope.model.bounds.min.x + scope.model.dimension.x, scope.model.bounds.min.y + scope.model.dimension.y, 0);
+// Selected Items
+
+function onSelectedItemsAdd(item) {
+    item.selected = true;
+}
+
+function onSelectedItemsRemove(item) {
+    item.selected = false;
+}
+
+function onSelectedItemsReset(collection, options) {
+    options.previousModels.forEach(function(item) {
+        console.log('reset', item.selected);
+        item.selected = false;
+    });
 }

@@ -1,0 +1,22 @@
+.partial[data-partial="elements/context-menu/separator"] {
+  display: block;
+  height: 100%;
+  &:before {
+    content: "";
+    display: block;
+    background: $workbenchColor_3;
+  }
+  [data-partial="fragments/context-menu"]>li>& {
+    &:before {
+      width: 2px;
+      height: 1em;
+    }
+  }
+  [data-partial="fragments/context-menu"] [data-partial="fragments/context-menu"] & {
+    width: 100%;
+    &:before {
+      width: 100%;
+      height: 2px;
+    }
+  }
+}

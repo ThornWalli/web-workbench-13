@@ -5,7 +5,12 @@
     display: inline-block;
   }
   >.label {
-    line-height: 18px;
+    display: inline-block;
+    min-width: 120px;
+    vertical-align: middle;
+    &:after {
+      content: ":";
+    }
   }
   >select {
     appearance: none;

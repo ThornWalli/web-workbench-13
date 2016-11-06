@@ -1,0 +1,24 @@
+---
+items:
+  -
+    name: 'Test Use CSS-Transform?'
+  -
+    name: 'Test Use 1084 Background with 640px x 400px'
+---
+<div class="partial controller" data-partial="components/settings/debug" data-controller="./partials/components/settings/Debug">
+  <ul data-hook="list">
+    {{#each items}}
+      <li>
+        <span class="name">{{{name}}}</span><span class="value">{{{value}}}</span>
+      </li>
+    {{/each}}
+  </ul>
+  {{{{raw}}}}
+  <script data-hook="template-list-items" type="text/x-handlebars-template">
+    {{#each this}}
+      <li>
+        <span class="name">{{{name}}}</span><span class="value">{{{value}}}</span>
+      </li>
+    {{/each}}
+  </script>{{{{/raw}}}}
+</div>

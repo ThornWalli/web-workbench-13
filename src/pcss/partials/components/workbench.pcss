@@ -1,10 +1,15 @@
 .partial[data-partial="components/workbench"] {
-  body>& {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin-left: -calc(860 / 2)px;
-    margin-top: -calc(672 / 2)px
+  /* ###### */
+  height: 100%;
+  &.js-with-screen {
+    height: auto;
+    body>& {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-left: -calc(860 / 2)px;
+      margin-top: -calc(672 / 2)px
+    }
   }
   user-select: none;
   * {

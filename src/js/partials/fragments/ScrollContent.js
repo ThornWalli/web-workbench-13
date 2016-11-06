@@ -34,9 +34,12 @@ module.exports = Controller.extend({
                 type: 'boolean',
                 required: true,
                 default: function() {
-                    return true;
+                    return false;
                 }
             }
+        },
+        refresh: function() {
+            this.trigger('event:refresh');
         }
     }),
 
@@ -70,8 +73,8 @@ module.exports = Controller.extend({
         $(this.scrollBottomSpacerEl).on('pointerdown', onPointerDownBottomSpacer.bind(this));
 
         this.targetModel.scrollContent = this.model;
-        this.targetModel.scale = true;
         this.targetModel.on('event:refresh', onRefresh.bind(this)(), this);
+        this.model.on('event:refresh', onRefresh.bind(this)(), this);
 
         this.scrollContentEl.addEventListener('scroll', global.animationFrame.throttle('scroll-content' + this.cid, function() {
             updateEl(this);

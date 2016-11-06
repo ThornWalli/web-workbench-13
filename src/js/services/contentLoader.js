@@ -1,6 +1,5 @@
 "use strict";
 
-
 var ContentLoader = function() {
     this._htmlCache = [];
 };

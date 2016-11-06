@@ -1,8 +1,8 @@
 ---
 
 ---
-<nav class="partial" data-partial="fragments/header/navigation">
+<nav class="partial" {{#block "attributes"}} data-partial="fragments/header/navigation"{{/block}}>
 
-  {{{mixin "fragments/header/context-menu" this}}}
+  {{{mixin "fragments/context-menu" this}}}
 
 </nav>

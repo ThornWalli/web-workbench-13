@@ -1,0 +1,26 @@
+.partial[data-partial="fragments/dialog"] {
+  border: solid $workbenchColor_1 2px;
+  outline: solid $workbenchColor_3 2px;
+  outline-offset: -4px;
+  background: $workbenchColor_1;
+  color: $workbenchColor_3;
+  p {
+    padding: 5px;
+  }
+  .buttons {
+    margin: 5px 0;
+    padding: 0 10px;
+    width: 100%;
+    @mixin clearfix;
+    >* {
+      width: auto;
+      white-space: nowrap;
+      &:first-child {
+        float: left;
+      }
+      &:last-child {
+        float: right;
+      }
+    }
+  }
+}

@@ -28,7 +28,6 @@
       /*Fix Table width, with margin (Chrome)*/
       margin-right: 4px;
       margin-bottom: 2px;
-
       padding: 0px;
       box-sizing: content-box;
       th {
@@ -90,7 +89,7 @@
       fill: $workbenchColor_3;
     }
   }
-  &.js-scroll {
+  &.js-scrollable {
     >.inner {
       height: 100%;
     }
@@ -99,12 +98,12 @@
     border-color: $workbenchColor_4;
     border-width: 2px;
     mix-blend-mode: difference;
-    * {
+    *, :after, :before {
       visibility: hidden !important;
     }
     background:transparent;
   }
-  &.js-scale {
+  &.js-scaleable {
     >.helper-scale {
       display: block;
     }

@@ -30,6 +30,11 @@
     }]
   },
   "handlebars": {
+    "registry" : {
+      "js" : "src/js/packages.js",
+      "pcss" : "src/pcss/partials.pcss",
+      "pcssExclude": ["agency-pkg-documentation", "agency-pkg-documentation/*"]
+    },
     "helpers": [{
       "name": "doc",
       "src": "agency-environment/lib/handlebars/helpers/doc",
@@ -121,7 +126,7 @@
       }
     }],
     "watch": [{
-      "src": ["src/tmpl/**/*.hbs", "src/data/**/*.json"]
+      "src": ["src/tmpl/**/*.hbs", "src/data/**/*.json", "src/pcss/critical.pcss"]
     }]
   },
   "registerpackages": {

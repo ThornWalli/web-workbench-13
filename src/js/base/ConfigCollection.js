@@ -31,11 +31,16 @@ ConfigCollection.prototype.set = function(data, value) {
     if (typeof data === 'object') {
         if (Array.isArray(data)) {
             data.forEach(function(entry) {
+                var name = entry.name,
+                    value = entry.value;
                 if (!this.dataMap[name]) {
                     this.data.push(entry);
                     this.dataMap[name] = entry;
+                    value = entry.value;
+                } else {
+                    entry = this.dataMap[name];
+                    entry.value = value;
                 }
-                entry.value = data[name];
                 this.trigger('change:' + name, value);
             }.bind(this));
         } else {
@@ -104,15 +109,16 @@ function setStorage(scope, storageType) {
             break;
     }
     if (!!scope.storage.workbench13) {
-        scope.data = JSON.parse(scope.storage.workbench13).data;
-        console.log('loaded config', scope.storage);
+        scope.data = JSON.parse(scope.storage.getItem('workbench13')).data;
+        console.log('loaded config', scope.data);
     }
 }
 
 function save(scope) {
-    scope.storage.workbench13 = JSON.stringify({
+    console.log('save', scope.data);
+    scope.storage.setItem('workbench13', JSON.stringify({
         data: scope.data
-    });
+    }));
 }
 
 function createEntry(name, value) {

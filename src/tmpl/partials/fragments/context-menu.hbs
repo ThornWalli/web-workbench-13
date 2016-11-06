@@ -1,0 +1,42 @@
+---
+items:
+  -
+    title: 'Item 1'
+  -
+    title: 'Item 2'
+    items:
+      -
+        title: 'Sub Item 1'
+      -
+        separator: true
+      -
+        title: 'Sub Item 2'
+        items:
+          -
+            title: 'Sub Item 2.1'
+          -
+            title: 'Sub Item 2.2'
+      -
+        title: 'Sub Item 3'
+  -
+    separator: true
+  -
+    title: 'Item 4'
+  -
+    title: 'Item 5'
+
+---
+<ul class="partial" data-partial="fragments/context-menu">
+  {{#each items}}
+    <li{{#if list-item-class}} class="{{{list-item-class}}}"{{/if}}>
+      {{#if separator}}
+        {{{mixin "elements/context-menu/separator" this}}}
+      {{else}}
+        {{{mixin "elements/context-menu/item" this}}}
+        {{#if items}}
+          {{{mixin "fragments/context-menu" this}}}
+        {{/if}}
+      {{/if}}
+    </li>
+  {{/each}}
+</ul>

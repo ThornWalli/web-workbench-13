@@ -1,7 +1,12 @@
 .partial[data-partial="fragments/view/scroll-content"] {
   &:not(.js-active) {
     >.scroll-wrapper {
-      >.scroll-content {}
+      .js-scaleable & {
+        padding-right: 14px;
+      }
+      >.scroll-content {
+        >.scroll-inner {}
+      }
     }
     >.scrollbar {
       display: none;
@@ -39,6 +44,14 @@
       }
     }
     /* ###################### */
+    >.spacer {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: $workbenchColor_1;
+      width: 14px;
+      height: 18px;
+    }
     >.scrollbar {
       .helper-top, .helper-left, .helper-bottom, .helper-right {
         .primary {

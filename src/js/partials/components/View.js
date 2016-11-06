@@ -3,8 +3,6 @@
 var loadingUrlTmpl = require('../../tmpl/messages/loading-url.hbs');
 var errorFromUrlTmpl = require('../../tmpl/messages/error-from-url.hbs');
 
-var controllerParser = require('agency-pkg-service-parser');
-
 var Controller = require('agency-pkg-base/Controller');
 var DomModel = require('agency-pkg-base/DomModel');
 var Bounds = require('agency-pkg-base/Bounds');
@@ -38,7 +36,12 @@ module.exports = Controller.extend({
                 required: true,
                 default: null
             },
-            iconControl: {
+            dialog: {
+                type: 'object',
+                required: true,
+                default: null
+            },
+            itemControl: {
                 type: 'object',
                 required: true,
                 default: null
@@ -64,12 +67,17 @@ module.exports = Controller.extend({
                 type: 'string',
                 default: null
             },
-            scale: {
+            scaleable: {
                 type: 'boolean',
                 required: true,
                 default: true
             },
-            scroll: {
+            scrollable: {
+                type: 'boolean',
+                required: true,
+                default: false
+            },
+            focus: {
                 type: 'boolean',
                 required: true,
                 default: false
@@ -105,6 +113,15 @@ module.exports = Controller.extend({
                 type: 'boolean',
                 required: true,
                 default: false
+            },
+            loading: {
+                type: 'boolean',
+                required: true,
+                default: false
+            },
+            contentEl: {
+                type: 'HTMLElement',
+                required: false
             }
         },
 
@@ -121,10 +138,24 @@ module.exports = Controller.extend({
         },
 
 
+        close: function() {
+            this.trigger('event:close');
+        },
 
+        refresh: function(options) {
+            this.trigger('event:refresh', options);
+        },
 
-        refresh: function() {
-            this.trigger('event:refresh');
+        refreshBounds: function() {
+            this.trigger('event:refreshBounds');
+        },
+
+        setInitialDimension: function() {
+            this.trigger('event:setInitialDimension');
+        },
+
+        setPosition: function(position) {
+            this.trigger('event:position', position);
         },
 
         // #########################
@@ -136,10 +167,9 @@ module.exports = Controller.extend({
             return;
         }
     }),
-
     events: {
-
-
+        'pointerdown': onPointerDown,
+        'pointerdown .helper-scale': onPointerDownHelperScale,
         'pointerdown [data-partial="components/header/view"] [data-hook="focus-max"]': onPointerUpFocusMax,
         'pointerdown [data-partial="components/header/view"] [data-hook="focus-min"]': onPointerUpFocusMin,
         'pointerdown [data-partial="components/header/view"] > .title': onPointerDownHelperMove,
@@ -148,13 +178,13 @@ module.exports = Controller.extend({
     },
 
     bindings: {
-        'model.scroll': {
+        'model.scrollable': {
             type: 'booleanClass',
-            yes: 'js-scroll'
+            yes: 'js-scrollable'
         },
-        'model.scale': {
+        'model.scaleable': {
             type: 'booleanClass',
-            yes: 'js-scale'
+            yes: 'js-scaleable'
         },
         'model.scaling': {
             type: 'booleanClass',
@@ -163,6 +193,14 @@ module.exports = Controller.extend({
         'model.moving': {
             type: 'booleanClass',
             yes: 'js-moving'
+        },
+        'model.loading': {
+            type: 'booleanClass',
+            yes: 'js-loading'
+        },
+        'model.focus': {
+            type: 'booleanClass',
+            yes: 'js-focus'
         }
     },
 
@@ -177,37 +215,63 @@ module.exports = Controller.extend({
         Controller.prototype.destroy.apply(this, arguments);
     },
 
-    refresh: function() {
-        var css = '';
-        if (workbenchConfig.get('core-css-transform') && (this.model.scaling || this.model.moving)) {
-            css += 'left: ' + this.move_startPosition.x + 'px; top: ' + this.move_startPosition.y + 'px;width: ' + this.scale_startDimension.x + 'px; height: ' + this.scale_startDimension.y + 'px;';
-            css += 'transform: translate(' + ((this.model.bounds.min.x - this.move_startPosition.x) / this.scale_startDimension.x) * 100 + '%, ' + ((this.model.bounds.min.y - this.move_startPosition.y) / this.scale_startDimension.y) * 100 + '%) scale(' + (this.model.dimension.x / this.scale_startDimension.x) + ', ' + (this.model.dimension.y / this.scale_startDimension.y) + ');';
+    refresh: function(options) {
+        options = options || {};
+        if (!this.model.loading) {
+            var css = '';
+            if (workbenchConfig.get('core-css-transform') && (this.model.scaling || this.model.moving)) {
+                css += 'left: ' + this.move_startPosition.x + 'px; top: ' + this.move_startPosition.y + 'px;width: ' + this.scale_startDimension.x + 'px; height: ' + this.scale_startDimension.y + 'px;';
+                css += 'transform: translate(' + ((this.model.bounds.min.x - this.move_startPosition.x) / this.scale_startDimension.x) * 100 + '%, ' + ((this.model.bounds.min.y - this.move_startPosition.y) / this.scale_startDimension.y) * 100 + '%) scale(' + (this.model.dimension.x / this.scale_startDimension.x) + ', ' + (this.model.dimension.y / this.scale_startDimension.y) + ');';
 
-        } else {
-            css += 'left: ' + this.model.bounds.min.x + 'px; top: ' + this.model.bounds.min.y + 'px;width: ' + this.model.dimension.x + 'px; height: ' + this.model.dimension.y + 'px;';
+            } else {
+                css += 'left: ' + this.model.bounds.min.x + 'px; top: ' + this.model.bounds.min.y + 'px;';
+                if (!options.withoutSize) {
+                    css += 'width: ' + this.model.dimension.x + 'px; height: ' + this.model.dimension.y + 'px';
+                }
+            }
+            this.el.style.cssText = css;
         }
-        this.el.style.cssText = css;
     }
 });
 
 
 function setup(scope) {
 
+    //  Events
 
-    scope.helperScaleEl = scope.el.querySelector('.helper-scale');
-    $(scope.helperScaleEl).on('pointerdown', onPointerDownHelperScale.bind(scope));
+    scope.model.on('event:position', onPosition, scope);
 
-    scope.contentEl = scope.queryByHook('view-content');
+    scope.model.on('event:close', function() {
+        this.destroy();
+    }, scope);
+    scope.model.on('event:refreshBounds', function() {
+        refreshBounds(this, this.model.bounds.min.x, this.model.bounds.min.y);
+    }, scope);
+    scope.model.on('event:refresh', scope.refresh, scope);
+    scope.model.on('event:setInitialDimension', onSetInitialDimension, scope);
+    scope.model.on('change:scrollable', function(model, scrollable) {
+        model.scrollContent.active = scrollable;
+    });
+    scope.model.on('change:scrollContent', function(model, scrollContent) {
+        scrollContent.active = this.model.scrollable;
+    }, scope);
+
+    // scope.helperScaleEl = scope.el.querySelector('.helper-scale');
+    // $(scope.helperScaleEl).on('pointerdown', onPointerDownHelperScale.bind(scope));
+
+    scope.model.contentEl = scope.queryByHook('view-content');
     scope.contentSize = new Vector();
+    scope.model.dimension = new Vector(150, 100, 0);
     scope.model.screenBounds = scope.targetModel.bounds;
 
+    // move
     scope.move_startPosition = new Vector();
     scope.move_movePosition = new Vector();
     scope.move_moveOffset = new Vector();
+    // scale
     scope.scale_startDimension = new Vector();
     scope.scale_startPosition = new Vector();
     scope.scale_movePosition = new Vector();
-    scope.model.dimension = new Vector(150, 100, 0);
 
     if (scope.targetModel) {
         scope.targetModel.registerView(scope.model);
@@ -218,26 +282,31 @@ function setup(scope) {
     // Events
     scope.model.on('change:header', function() {
         if (scope.model.url) {
-            scope.contentEl.innerHTML = loadingUrlTmpl({
+            scope.model.contentEl.innerHTML = loadingUrlTmpl({
                 url: scope.model.url
             });
+            scope.model.loading = true;
             contentLoader.load(scope.model.url, function(html) {
-                scope.contentEl.innerHTML = html;
-                controllerParser.parse(scope.contentEl);
-                if (scope.contentEl.children.length && scope.contentEl.children[0].dataset.title) {
-                    scope.model.header.title = scope.contentEl.children[0].dataset.title;
+                scope.model.contentEl.innerHTML = html;
+                scope.model.refresh({
+                    withoutSize: true
+                });
+                global.js.parse(scope.model.contentEl);
+                if (scope.model.contentEl.children.length && scope.model.contentEl.children[0].dataset.title) {
+                    scope.model.header.title = scope.model.contentEl.children[0].dataset.title;
                 }
-                global.animationFrame.add(function() {
-                    setDimensionInitial(scope);
-                }.bind(scope));
+                scope.model.loading = false;
+                scope.model.setInitialDimension(scope);
+
             }.bind(scope), function(e) {
-                scope.contentEl.innerHTML += errorFromUrlTmpl({
+                scope.model.contentEl.innerHTML += errorFromUrlTmpl({
                     url: scope.model.url,
                     status: e.status
                 });
                 scope.model.header.title = 'Error';
                 global.animationFrame.add(function() {
-                    setDimensionInitial(scope);
+                    scope.model.loading = false;
+                    scope.model.setInitialDimension(scope);
                 }.bind(scope));
             }.bind(scope));
         } else {
@@ -246,21 +315,46 @@ function setup(scope) {
     }, scope);
 }
 
+function onPointerDown() {
+    this.targetModel.setViewFocus(this.model);
+}
 
-function setDimensionInitial(scope) {
+var borderSize = 2;
+var rightScrollBarWidth = 14;
+var headerHeight = 20 - borderSize;
 
-    scope.contentSize.resetValues(scope.contentEl.offsetWidth, scope.contentEl.offsetHeight, 0);
-    setDimension(scope, scope.contentSize.x, scope.contentSize.y);
-
-    if (!scope.model.iconControl && scope.contentSize.x <= scope.model.dimension.x && scope.contentSize.y <= scope.model.dimension.y && scope.contentSize.x <= scope.model.screenBounds.max.x - scope.model.screenBounds.min.x && scope.contentSize.y <= scope.model.screenBounds.max.y - scope.model.screenBounds.min.y) {
-        scope.model.scrollContent.active = false;
-    } else {
-        scope.model.scrollContent.active = true;
+function getContentSize(scope) {
+    var size = {
+        x: scope.model.contentEl.offsetWidth + borderSize * 2,
+        y: scope.model.contentEl.offsetHeight + borderSize * 2
+    };
+    if (scope.model.scaleable) {
+        size.x += rightScrollBarWidth;
     }
+    return size;
+}
 
-    scope.scale_startDimension.reset(scope.model.dimension);
-    scope.refresh();
-    scope.model.refresh();
+function onSetInitialDimension(size) {
+    this.contentSize.reset(size || getContentSize(this));
+    setDimension(this, this.contentSize.x, this.contentSize.y);
+
+    // if (!this.model.itemControl && this.contentSize.x <= this.model.dimension.x && this.contentSize.y <= this.model.dimension.y && this.contentSize.x <= this.model.screenBounds.max.x - this.model.screenBounds.min.x && this.contentSize.y <= this.model.screenBounds.max.y - this.model.screenBounds.min.y) {
+    //     this.model.scrollable = false;
+    // } else {
+    //     this.model.scrollable = true;
+    // }
+
+    this.scale_startDimension.reset(this.model.dimension);
+    this.model.refresh();
+
+    if (!size && !this.model.scrollable) {
+        // check content size
+        var checkSize = getContentSize(this);
+        console.log(this.contentSize.x, checkSize.x, '|', this.contentSize.y, checkSize.y);
+        if (this.contentSize.x !== checkSize.x || this.contentSize.y !== checkSize.y) {
+            onSetInitialDimension.bind(this)(this.contentSize);
+        }
+    }
 }
 
 function onPointerUpClose() {
@@ -297,18 +391,21 @@ function onPointerDownHelperMove(e) {
 function onPointerMoveHelperMove(e) {
     var x = e.clientX;
     var y = e.clientY;
-
     this.move_movePosition.setX(x - this.move_moveOffset.x).setY(y - this.move_moveOffset.y);
-    x = Math.min(Math.max(this.move_movePosition.x, 0), this.targetModel.dimension.x - this.model.dimension.x);
-    y = Math.min(Math.max(this.move_movePosition.y, 0), this.targetModel.dimension.y - this.model.dimension.y);
+    refreshBounds(this, this.move_movePosition.x, this.move_movePosition.y);
+}
 
-    this.model.bounds.min.x = x;
-    this.model.bounds.min.y = y;
-    this.model.bounds.max.x = this.model.bounds.min.x + this.model.dimension.x;
-    this.model.bounds.max.y = this.model.bounds.min.y + this.model.dimension.y;
+function refreshBounds(scope, x, y) {
 
-    this.refresh();
+    x = Math.min(Math.max(x, 0), scope.targetModel.dimension.x - scope.model.dimension.x);
+    y = Math.min(Math.max(y, 0), scope.targetModel.dimension.y - scope.model.dimension.y);
 
+    scope.model.bounds.min.x = x;
+    scope.model.bounds.min.y = y;
+    scope.model.bounds.max.x = scope.model.bounds.min.x + scope.model.dimension.x;
+    scope.model.bounds.max.y = scope.model.bounds.min.y + scope.model.dimension.y;
+
+    scope.refresh();
 }
 
 function onPointerUpHelperMove() {
@@ -317,7 +414,6 @@ function onPointerUpHelperMove() {
     // global.animationFrame.add(onRefresh.bind(this));
     this.model.moving = false;
     this.model.refresh();
-    this.refresh();
 }
 
 
@@ -340,7 +436,7 @@ function onPointerMoveHelperScale(e) {
 function setDimension(scope, width, height) {
     width = Math.max(width, 150);
     height = Math.max(height, 100);
-    if (!scope.model.scroll || !scope.model.scrollContent.active) {
+    if (!scope.model.scrollable || !scope.model.scrollContent.active) {
         width = Math.max(width, scope.contentSize.x);
         height = Math.max(height, scope.contentSize.y);
     }
@@ -357,7 +453,23 @@ function onPointerUpHelperScale() {
     // global.animationFrame.add(onRefresh.bind(this)());
     this.scale_startDimension.reset(this.model.dimension);
     this.model.scaling = false;
-    this.refresh();
     this.model.refresh();
     console.log('pointer up move');
+}
+
+// View Position
+function onPosition(position) {
+
+    switch (position) {
+        case 'center':
+
+            var x = (this.model.screenBounds.max.x - this.model.dimension.x) / 2,
+                y = (this.model.screenBounds.max.y - this.model.dimension.y) / 2;
+            refreshBounds(this, x, y);
+
+            break;
+        default:
+
+    }
+
 }

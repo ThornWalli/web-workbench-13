@@ -18,5 +18,5 @@ options:
 {{#if label}}
   <span class="label">{{{label}}}</span>
 {{/if}}
-  <select{{#if name}} name="{{{name}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}}>{{#block "options"}}{{#each options}}<option value="{{{value}}}">{{{title}}}</option>{{/each}}{{/block}}</select>
+  <select{{#if name}} name="{{{name}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}}{{#if size}} size="{{{size}}}"{{/if}}{{#if multiple}} multiple{{/if}}>{{#block "options"}}{{#each options}}<option value="{{{value}}}">{{{title}}}</option>{{/each}}{{/block}}</select>
 </label>

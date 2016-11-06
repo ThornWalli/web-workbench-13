@@ -1,9 +1,23 @@
 .partial[data-partial="components/settings"] {
   padding: 0 5px;
-  [data-partial^="elements/input/button/"] {
+  /*[data-partial^="elements/input/button/"] {
     display: block;
     width: 100%;
     margin-top: 8px;
+  }*/
+  >.buttons {
+    @mixin clearfix;
+    /*padding-right: 15px;*/
+    /*padding-bottom: 15px;*/
+    text-align: right;
+    >* {
+      display: inline-block;
+      width: auto;
+      vertical-align: middle;
+      float: right;
+      &:first-child {
+        float: left;
+      }
+    }
   }
-
 }

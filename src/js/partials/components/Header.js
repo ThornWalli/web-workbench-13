@@ -23,7 +23,9 @@ module.exports = Controller.extend({
 
 function onClickWindowOpen(e) {
     e.preventDefault();
-    this.targetModel.openView(e.currentTarget.getAttribute('href'), {
-        scrollbar: e.currentTarget.dataset.scrollbar || false
+    console.log(e.currentTarget.dataset);
+    this.targetModel.openView(e.currentTarget.dataset.viewPath || e.currentTarget.href, {
+        scaleable: e.currentTarget.dataset.scaleable || false,
+        scrollable: e.currentTarget.dataset.scrollable || false
     });
 }

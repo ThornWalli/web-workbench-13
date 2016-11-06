@@ -1,6 +1,40 @@
 ---
 layout: 'layouts/view-content'
 title: 'Examples Input'
+group:
+  item-select:
+    multiple: false
+    items:
+      -
+        label: 'Item 1'
+        value: '1'
+        name: 'examples-input-item'
+        checked: false
+      -
+        label: 'Item 2'
+        name: 'examples-input-item'
+        checked: true
+      -
+        label: 'Item 3'
+        name: 'examples-input-item'
+        checked: false
+  item-select-multiply:
+    multiple: true
+    items:
+      -
+        label: 'Multiply Item 1'
+        value: '1'
+        name: 'examples-input-item-multiply'
+        checked: false
+      -
+        label: 'Multiply Item 2'
+        name: 'examples-input-item-multiply'
+        checked: true
+      -
+        label: 'Multiply Item 3'
+        name: 'examples-input-item-multiply'
+        checked: false
+
 ---
 <section>
 
@@ -19,22 +53,21 @@ title: 'Examples Input'
 
     <tr>
       <td>
-        {{{mixin "fragments/input/group"}}} {{{mixin "fragments/input/group/checkbox"}}} {{{mixin "fragments/input/group/radio"}}}
+        {{{mixin "fragments/input/group"}}}
+        {{{mixin "fragments/input/group/checkbox"}}}
+        {{{mixin "fragments/input/group/radio"}}}
+        {{{mixin "fragments/input/group/item-select" group.item-select}}}
+        {{{mixin "fragments/input/group/item-select" group.item-select-multiply}}}
       </td>
       <td>
         {{#mixin "fragments/input/group/button"}}
 
         {{#content "items"}}
 
-            <li>
-                        {{{mixin "elements/input/button/upload" import}}}
-            </li>
-                          <li>
-                        {{{mixin "elements/input/button/primary" export}}}
-            </li>
-                          <li>
-                        {{{mixin "elements/input/button/secondary" export}}}
-            </li>
+            <li>{{{mixin "elements/input/button/upload" import}}}</li>
+            <li>{{{mixin "elements/input/button/primary" export}}}</li>
+            <li>{{{mixin "elements/input/button/secondary" export}}}</li>
+            <li>{{{mixin "elements/input/button/dialog" dialog}}}</li>
 
         {{/content}}
 
@@ -42,7 +75,7 @@ title: 'Examples Input'
 
       </td>
       <td>
-        {{#mixin "fragments/input/group"}}
+        {{#mixin "fragments/input/group" this}}
 
           {{#content "items"}}
             <li>
@@ -52,7 +85,16 @@ title: 'Examples Input'
               {{{mixin "elements/input/radio"}}}
             </li>
             <li>
-            {{{mixin "elements/input/select"}}}
+              {{{mixin "elements/input/item"}}}
+            </li>
+            <li>
+            {{{mixin "elements/input/select" select}}}
+            </li>
+            <li>
+              {{{mixin "elements/input/textbox"}}}
+            </li>
+            <li>
+              {{{mixin "elements/input/textarea"}}}
             </li>
           {{/content}}
 
@@ -61,8 +103,5 @@ title: 'Examples Input'
     </tr>
 
   </table>
-
-
-  </div>
 
 </section>

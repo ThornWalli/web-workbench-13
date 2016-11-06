@@ -1,0 +1,20 @@
+.partial[data-partial="elements/item-control/icon"], .partial[data-partial^="elements/item-control/icon/"] {
+  margin: 0;
+  padding: 10px 10px;
+  display: inline-block;
+  >span {
+    display: block;
+    text-align: center;
+    >* {
+      display: inline-block;
+    }
+  }
+  >figcaption {
+    font-weight: normal;
+    margin-top: 5px;
+    text-align: center;
+  }
+  &:active, &.js-selected {
+    filter: invert();
+  }
+}

@@ -8,32 +8,64 @@ header:
           -
             class: 'js-click-view-open'
             title: 'Import/Export Runtime'
-            url: './pages/workbench/runtime_import_export.html'
+            view-path: './pages/workbench/runtime_import_export.html'
           -
             hotkey: 'i'
             class: 'js-click-view-open'
             title: 'Settings'
-            url: './pages/workbench/settings.html'
+            view-path: './pages/workbench/settings.html'
+          -
+            separator: true
           -
             hotkey: 'i'
             class: 'js-click-view-open'
             title: 'Info'
-            url: './pages/info.html'
+            view-path: './pages/info.html'
+      -
+        list-item-class: 'js-icon-manager-controls'
+        title: 'File'
+        items:
+          -
+            class: 'js-icon-manager-control-new'
+            title: 'New'
+          -
+            disabled: true
+            class: 'js-icon-manager-control-open'
+            title: 'Open'
+          -
+            disabled: true
+            class: 'js-icon-manager-control-close'
+            title: 'Close'
+          -
+            disabled: true
+            class: 'js-icon-manager-control-duplicate'
+            title: 'Duplicate'
+          -
+            disabled: true
+            class: 'js-icon-manager-control-info'
+            title: 'Info'
+          -
+            disabled: false
+            class: 'js-icon-manager-control-discard'
+            title: 'Discard'
       -
         title: 'Examples'
         items:
           -
             class: 'js-click-view-open'
             title: 'Inputs'
-            url: './pages/examples/inputs.html'
-      -
-        title: 'Debug'
-        items:
+            view-path: './pages/examples/inputs.html'
+          -
+            class: 'js-click-view-open'
+            title: 'Dialog'
+            view-path: './pages/examples/dialog.html'
           -
             class: 'js-click-view-open'
             title: 'View with Scrollbars'
-            scrollbar: true
-            url: './pages/debug-view-scroll.html'
+            scrollable: true
+            scaleable: true
+            view-path: './pages/examples/view-scroll.html'
+
 
 ---
 <div class="partial controller" data-partial="components/workbench" data-controller="./partials/components/Workbench">
@@ -51,7 +83,7 @@ header:
         {{/content}}
         {{#content "content"}}
 
-          {{{mixin "fragments/icon-control"}}}
+          {{{mixin "fragments/item-control"}}}
 
         {{/content}}
 

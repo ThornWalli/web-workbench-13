@@ -1,10 +1,10 @@
 "use strict";
 
-var Controller = require('agency-pkg-base/Controller');
+var ViewController = require('../../base/ViewController');
 var DomModel = require('agency-pkg-base/DomModel');
 var workbenchConfig = require('../../services/workbenchConfig');
 
-module.exports = Controller.extend({
+module.exports = ViewController.extend({
 
 
     modelConstructor: DomModel.extend({
@@ -18,25 +18,17 @@ module.exports = Controller.extend({
 
 
     initialize: function() {
-        Controller.prototype.initialize.apply(this, arguments);
+        ViewController.prototype.initialize.apply(this, arguments);
         if (this.targetModel) {
-
-            var onRefresh = function() {
-                console.log('refresh');
-                this.queryByHook('icons').innerHTML = this.targetModel.iconControl.items.length;
-                this.queryByHook('views').innerHTML = this.targetModel.views.length;
-            };
-
-            this.viewModel = this.targetModel.getViewModel($(this.el).closest('[data-partial="components/view"]').attr('data-id'));
-            this.viewModel.on('destroy', function() {
-                this.targetModel.iconControl.items.off('add', onRefresh);
-                this.targetModel.iconControl.items.off('remove', onRefresh);
-                this.targetModel.views.off('add', onRefresh);
-                this.targetModel.views.off('remove', onRefresh);
-                workbenchConfig.off('change', onRefresh);
-            }.bind(this));
-            this.targetModel.iconControl.items.on('add', onRefresh, this);
-            this.targetModel.iconControl.items.on('remove', onRefresh, this);
+            if (this.view) {
+                this.view.on('destroy', function() {
+                    this.targetModel.itemControl.items.off(null, null, this);
+                    this.targetModel.views.off(null, null, this);
+                    workbenchConfig.off(null, null, this);
+                }, this);
+            }
+            this.targetModel.itemControl.items.on('add', onRefresh, this);
+            this.targetModel.itemControl.items.on('remove', onRefresh, this);
             this.targetModel.views.on('add', onRefresh, this);
             this.targetModel.views.on('remove', onRefresh, this);
             workbenchConfig.on('change', onRefresh, this);
@@ -50,9 +42,11 @@ module.exports = Controller.extend({
 
 });
 
-
-
-
+function onRefresh() {
+    console.log('refresh');
+    this.queryByHook('icons').innerHTML = this.targetModel.itemControl.items.length;
+    this.queryByHook('views').innerHTML = this.targetModel.views.length;
+}
 
 function onClickImport() {}
 
@@ -71,7 +65,7 @@ function generateExport(scope) {
     data.config = workbenchConfig.data;
     // icons
     data.icons = [];
-    scope.targetModel.iconControl.items.forEach(function(itemModel) {
+    scope.targetModel.itemControl.items.forEach(function(itemModel) {
         data.icons.push(itemModel.toArray());
         // data.views.push({
         //     url: viewModel.url,
@@ -93,8 +87,8 @@ function generateExport(scope) {
     // views
     data.views = [];
     scope.targetModel.views.forEach(function(viewModel) {
-        // ignore view with iconControl (Folder)
-        if (!viewModel.iconControl) {
+        // ignore view with itemControl (Folder)
+        if (!viewModel.itemControl) {
             data.views.push({
                 url: viewModel.url,
                 options: {
@@ -134,7 +128,7 @@ function fileReaderSetup(scope) {
         }
         workbenchConfig.set(data.config);
         console.log('data.icons', data.icons);
-        scope.targetModel.iconControl.items.add(data.icons);
+        scope.targetModel.itemControl.items.add(data.icons);
         data.views.forEach(function(viewModel) {
             var options = viewModel.options;
             options.dimension = {

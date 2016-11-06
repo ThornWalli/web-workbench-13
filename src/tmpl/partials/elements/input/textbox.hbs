@@ -1,0 +1,9 @@
+---
+label: 'Textbox Label'
+---
+<label class="partial" data-partial="elements/input/textbox">
+  {{#if label}}
+    <span class="label">{{{label}}}</span>
+  {{/if}}
+  <input type="text"{{#if name}} name="{{{name}}}"{{/if}} />
+</label>

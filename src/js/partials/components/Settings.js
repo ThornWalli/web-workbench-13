@@ -1,10 +1,10 @@
 "use strict";
 
-var Controller = require('agency-pkg-base/Controller');
+var ViewController = require('../../base/ViewController');
 var DomModel = require('agency-pkg-base/DomModel');
 var workbenchConfig = require('../../services/workbenchConfig');
 
-module.exports = Controller.extend({
+module.exports = ViewController.extend({
 
 
     modelConstructor: DomModel.extend({
@@ -13,25 +13,44 @@ module.exports = Controller.extend({
 
     events: {
         'change input': onChange,
-        'change select': onChange
+        'change select': onChange,
+        'click [data-hook="save"]': onClickSave,
+        'click [data-hook="debug-overview"]': onClickDebugOverview
     },
 
 
     initialize: function() {
-        Controller.prototype.initialize.apply(this, arguments);
-
+        ViewController.prototype.initialize.apply(this, arguments);
         getFields(this);
-
         loadData(this, workbenchConfig.data);
-        // getFormData(this)
+        if (this.view) {
+            this.view.on('destroy', function() {
+                this.destroy();
+            }, this);
+        }
     }
 
 });
 
-function onChange() {
-
-    var data = getFormData(this);
+function save(scope, cb) {
+    var data = getFormData(scope);
     workbenchConfig.set(data);
+    cb();
+}
+
+function onChange() {
+    save(this);
+}
+
+function onClickSave() {
+    save(this, function() {
+        if (this.view) {
+            this.view.close();
+        }
+    }.bind(this));
+}
+
+function onClickDebugOverview() {
 
 }
 
@@ -44,12 +63,10 @@ function getFields(scope) {
             scope.fieldMap[element.name] = element;
         }
     });
-    console.log(fields, scope.fieldMap);
     return fields;
 }
 
 function loadData(scope, data) {
-    console.log('loadData', data);
     data.forEach(function(entry) {
         var el = scope.fieldMap[entry.name];
         if (el && isInput(el)) {
@@ -62,11 +79,12 @@ function loadData(scope, data) {
 
 function getFormData(scope) {
     var data = [];
-    scope.queryAll('input,select').forEach(function(input) {
-        console.log(input);
-        data[input.name] = getValue(input);
+    scope.queryAll('input[type="text"],input[type="checkbox"],input[type="radio"],input[type="number"],input[type="email"],select,textarea').forEach(function(input) {
+        data.push({
+            name: input.name,
+            value: getValue(input)
+        });
     });
-    console.log('data', data);
     return data;
 
 }
