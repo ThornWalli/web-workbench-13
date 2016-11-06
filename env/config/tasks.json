@@ -277,6 +277,9 @@
             "customs": ["agency-environment/lib/handlebars/customs/yamlExclude"]
           }
         }, {
+          "test": ".json$",
+          "loader": "json!"
+        }, {
           "test": ".css$",
           "loader": "style-loader!css-loader"
         }, {

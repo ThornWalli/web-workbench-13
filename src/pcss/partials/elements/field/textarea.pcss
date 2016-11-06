@@ -1,0 +1,35 @@
+@import "../field.pcss";
+.partial[data-partial="elements/field/textarea"] {
+  >.label {
+    display: inline-block;
+    padding-top: 8px;
+    min-width: 120px;
+    vertical-align: top;
+    &:after {
+      content: ":";
+    }
+  }
+  textarea {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 6px 6px;
+    padding-bottom: 4px;
+    appearance: none;
+    background: $workbenchColor_3;
+    border: solid $workbenchColor_3 2px;
+    outline: solid $workbenchColor_1 2px;
+    outline-offset: -4px;
+    line-height: 1.2;
+    resize:none;
+    html.no-touchevents & {
+      &:hover {
+        filter: invert();
+      }
+    }
+    html.touchevents & {
+      &:active {
+        filter: invert();
+      }
+    }
+  }
+}

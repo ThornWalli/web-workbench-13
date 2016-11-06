@@ -1,0 +1,78 @@
+@import "../field.pcss";
+.partial[data-partial="elements/field/select"] {
+  position: relative;
+  display: inline-block;
+  >* {
+    display: inline-block;
+    font-size: 1rem;
+  }
+  >.label {
+    display: inline-block;
+    min-width: 120px;
+    vertical-align: middle;
+    &:after {
+      content: ":";
+    }
+  }
+  >select {
+    appearance: none;
+    outline: none;
+    margin: 0;
+    padding: 6px 10px;
+    padding-right: 32px;
+    padding-bottom: 4px;
+    border-radius: 0;
+    background: $workbenchColor_3;
+    border: solid $workbenchColor_3 2px;
+    outline: solid $workbenchColor_1 2px;
+    outline-offset: -4px;
+    color: $workbenchColor_1;
+    html.no-touchevents & {
+      &:hover {
+        filter: invert();
+      }
+    }
+    html.touchevents & {
+      &:active {
+        filter: invert();
+      }
+    }
+  }
+  >.expander {
+    margin-left: -2px;
+    padding: 6px 10px;
+    height: 1em;
+    line-height: 1;
+    vertical-align: bottom;
+    border: solid $workbenchColor_3;
+    border-width: 2px 2px 2px 0;
+    position: relative;
+    display: inline-block;
+    background: $workbenchColor_1;
+    &:after {
+      display: block;
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -2px;
+      margin-left: -1px;
+      width: 4px;
+      height: 4px;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      border: solid $workbenchColor_3 2px;
+      border-width: 2px;
+      border-color: transparent transparent $workbenchColor_3 $workbenchColor_3;
+    }
+  }
+  html.no-touchevents & {
+    >select:hover+.expander {
+      filter: invert();
+    }
+  }
+  html.touchevents & {
+    >select:active+.expander {
+      filter: invert();
+    }
+  }
+}

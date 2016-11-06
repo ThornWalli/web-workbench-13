@@ -1,0 +1,30 @@
+@import "../button.pcss";
+.partial[data-partial="elements/button/upload"] {
+  overflow: hidden;
+  position: relative;
+  display: block;
+  padding: 0;
+  outline: solid $workbenchColor_3 2px;
+  outline-offset: -4px;
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-25%);
+    visibility: hidden;
+  }
+  label {
+    display: block;
+    background: transparent;
+    margin: 0;
+    padding: 6px;
+    padding-bottom: 4px;
+    text-align: center;
+    border: solid $workbenchColor_1 2px;
+    color: $workbenchColor_3;
+    background: $workbenchColor_1;
+  }
+  &:active {
+  filter: invert();
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "applications": {
+    "file": {
+      "dialogs": {
+        "discard": {
+          "title": "Discard File",
+          "text": "<p>Would you like remove file ?</p>"
+        }
+      }
+    }
+  },
+  "view": {
+    "errorFromUrl": "<p><br />ERROR {{{status}}}<br /><br />CAN'T LOAD HTML FROM URL <br /><br />{{{url}}}<br /></p>",
+    "loadingUrl": "<p>Load URL: {{{url}}} <br />LOADING...<br /></p>"
+  }
+}

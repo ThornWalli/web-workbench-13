@@ -1,0 +1,21 @@
+@import "../field.pcss";
+.partial[data-partial="elements/field/item"] {
+  >* {
+    display: inline-block;
+  }
+  >input {
+    display: none;
+  }
+  border: solid $workbenchColor_1 2px;
+  >.label {
+    display: block;
+    background: $workbenchColor_3;
+    padding: 4px;
+    padding-bottom: 0px;
+    line-height: 18px;
+    text-transform: uppercase;
+  }
+  >input:checked+.label {
+    filter: invert();
+  }
+}

@@ -14,10 +14,12 @@
   },
   "license": "MIT",
   "author": "Thorn Walli <lammpee@gmail.com>",
-  "contributors": [{
-    "name": "Thorn Walli",
-    "email": "lammpee@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Thorn Walli",
+      "email": "lammpee@gmail.com"
+    }
+  ],
   "main": "none",
   "repository": {
     "type": "git",
@@ -56,6 +58,7 @@
     "fastdom": "^1.0.1",
     "fastdom-sequencer": "^1.0.3",
     "gsap": "^1.18.4",
+    "json-loader": "^0.5.4",
     "modernizr": "^3.0.0",
     "url": "^0.11.0"
   },

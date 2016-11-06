@@ -53,21 +53,21 @@ group:
 
     <tr>
       <td>
-        {{{mixin "fragments/input/group"}}}
-        {{{mixin "fragments/input/group/checkbox"}}}
-        {{{mixin "fragments/input/group/radio"}}}
-        {{{mixin "fragments/input/group/item-select" group.item-select}}}
-        {{{mixin "fragments/input/group/item-select" group.item-select-multiply}}}
+        {{{mixin "fragments/field/group"}}}
+        {{{mixin "fragments/field/group/checkbox"}}}
+        {{{mixin "fragments/field/group/radio"}}}
+        {{{mixin "fragments/field/group/item-select" group.item-select}}}
+        {{{mixin "fragments/field/group/item-select" group.item-select-multiply}}}
       </td>
       <td>
-        {{#mixin "fragments/input/group/button"}}
+        {{#mixin "fragments/field/group/button"}}
 
         {{#content "items"}}
 
-            <li>{{{mixin "elements/input/button/upload" import}}}</li>
-            <li>{{{mixin "elements/input/button/primary" export}}}</li>
-            <li>{{{mixin "elements/input/button/secondary" export}}}</li>
-            <li>{{{mixin "elements/input/button/dialog" dialog}}}</li>
+            <li>{{{mixin "elements/button/upload" import}}}</li>
+            <li>{{{mixin "elements/button/primary" export}}}</li>
+            <li>{{{mixin "elements/button/secondary" export}}}</li>
+            <li>{{{mixin "elements/button/dialog" dialog}}}</li>
 
         {{/content}}
 
@@ -75,26 +75,26 @@ group:
 
       </td>
       <td>
-        {{#mixin "fragments/input/group" this}}
+        {{#mixin "fragments/field/group" this}}
 
           {{#content "items"}}
             <li>
-              {{{mixin "elements/input/checkbox"}}}
+              {{{mixin "elements/field/checkbox"}}}
             </li>
             <li>
-              {{{mixin "elements/input/radio"}}}
+              {{{mixin "elements/field/radio"}}}
             </li>
             <li>
-              {{{mixin "elements/input/item"}}}
+              {{{mixin "elements/field/item"}}}
             </li>
             <li>
-            {{{mixin "elements/input/select" select}}}
+            {{{mixin "elements/field/select" select}}}
             </li>
             <li>
-              {{{mixin "elements/input/textbox"}}}
+              {{{mixin "elements/field/textbox"}}}
             </li>
             <li>
-              {{{mixin "elements/input/textarea"}}}
+              {{{mixin "elements/field/textarea"}}}
             </li>
           {{/content}}
 

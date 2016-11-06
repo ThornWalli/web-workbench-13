@@ -45,7 +45,7 @@ function setupButtons(scope) {
     scope.buttonsEl = scope.queryByHook('buttons');
     scope.buttonElMap = {};
 
-    scope.buttonsEl.querySelectorAll('[data-partial^="elements/input/button"]').forEach(function(el) {
+    scope.buttonsEl.querySelectorAll('[data-partial^="elements/button"]').forEach(function(el) {
         scope.buttonElMap[el.getAttribute('name')] = el;
     });
 

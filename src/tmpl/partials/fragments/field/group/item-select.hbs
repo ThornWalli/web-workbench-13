@@ -1,0 +1,33 @@
+---
+multiple: false
+items:
+  -
+    label: 'Item 1'
+    value: '1'
+    name: 'examples-input-item'
+    checked: false
+  -
+    label: 'Item 2'
+    name: 'examples-input-item'
+    checked: true
+  -
+    label: 'Item 3'
+    name: 'examples-input-item'
+    checked: false
+---
+
+{{#mixin "fragments/field/group" this}}
+
+  {{#content "attributes"}} data-partial="fragments/field/group/item-select"{{/content}}
+
+  {{#content "items"}}
+
+    {{#each items}}
+      <li>
+        {{{mixin "elements/field/item" this multiple=../../multiple}}}
+      </li>
+    {{/each}}
+
+  {{/content}}
+
+{{/mixin}}

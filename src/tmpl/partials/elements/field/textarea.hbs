@@ -1,0 +1,9 @@
+---
+label: 'Textarea Label'
+---
+<label class="partial" data-partial="elements/field/textarea">
+  {{#if label}}
+    <span class="label">{{{label}}}</span>
+  {{/if}}
+  <textarea{{#if name}} name="{{{name}}}"{{/if}}></textarea>
+</label>

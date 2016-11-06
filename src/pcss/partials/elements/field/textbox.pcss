@@ -1,0 +1,34 @@
+@import "../field.pcss";
+.partial[data-partial="elements/field/textbox"] {
+  >.label {
+    display: inline-block;
+    margin-top: 1px;
+    min-width: 120px;
+    vertical-align: middle;
+    line-height: 1;
+    &:after {
+      content: ":";
+    }
+  }
+  input {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 6px;
+    padding-bottom: 4px;
+    appearance: none;
+    background: $workbenchColor_3;
+    border: solid $workbenchColor_3 2px;
+    outline: solid $workbenchColor_1 2px;
+    outline-offset: -4px;
+    html.no-touchevents & {
+      &:hover {
+        filter: invert();
+      }
+    }
+    html.touchevents & {
+      &:active {
+        filter: invert();
+      }
+    }
+  }
+}

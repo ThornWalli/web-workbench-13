@@ -1,0 +1,26 @@
+---
+buttons:
+  import:
+    type: 'button'
+    hook: 'import'
+    title: 'Import'
+  export:
+    type: 'button'
+    hook: 'export'
+    title: 'Export'
+
+---
+<div class="partial controller" data-partial="components/applications/runtime-import-export" data-controller="./partials/components/applications/RuntimeImportExport" data-target="[data-partial='fragments/workbench-control']">
+
+  <p>
+    Applications: <span data-hook="application">0</span><br/><br/>
+    Views: <span data-hook="views">0</span>
+    Icons: <span data-hook="icons">0</span>
+  </p>
+
+  {{#with buttons}}
+    {{{mixin "elements/button/upload" import}}}
+    {{{mixin "elements/button/primary" export}}}
+  {{/with}}
+
+</div>

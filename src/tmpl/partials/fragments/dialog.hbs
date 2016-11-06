@@ -1,5 +1,5 @@
 ---
-text: 'Ok to Initialize volume<br />RAM DISK<br />(all data will be erased) ?'
+text: '<p>Ok to Initialize volume<br />RAM DISK<br />(all data will be erased) ?</p>'
 buttons:
   -
     name: 'continue'
@@ -11,11 +11,11 @@ buttons:
     title: 'Cancel'
 ---
 <div class="partial controller" data-partial="fragments/dialog" data-controller="./partials/fragments/Dialog"{{#if target}} data-target="{{{target}}}"{{/if}}>
-  <p>{{{text}}}</p>
+  {{{text}}}
   <div class="buttons" data-hook="buttons">
     {{#block "buttons"}}
       {{#each buttons}}
-        {{{mixin "elements/input/button/dialog" this}}}
+        {{{mixin "elements/button/dialog" this}}}
       {{/each}}
     {{/block}}
   </div>

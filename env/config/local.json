@@ -94,6 +94,9 @@
             "customs": ["agency-environment/lib/handlebars/customs/yamlExclude"]
           }
         }, {
+          "test": ".json$",
+          "loader": "json-loader"
+        }, {
           "test": ".css$",
           "loader": "style-loader!css-loader"
         }, {
@@ -225,6 +228,9 @@
           "agency": {
             "customs": ["agency-environment/lib/handlebars/customs/yamlExclude"]
           }
+        }, {
+          "test": ".json$",
+          "loader": "json-loader"
         }, {
           "test": ".css$",
           "loader": "style-loader!css-loader"

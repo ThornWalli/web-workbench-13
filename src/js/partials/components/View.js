@@ -1,20 +1,22 @@
 "use strict";
 
-var loadingUrlTmpl = require('../../tmpl/messages/loading-url.hbs');
-var errorFromUrlTmpl = require('../../tmpl/messages/error-from-url.hbs');
+var handlebars = require('handlebars/dist/handlebars');
 
 var Controller = require('agency-pkg-base/Controller');
 var DomModel = require('agency-pkg-base/DomModel');
 var Bounds = require('agency-pkg-base/Bounds');
 var Vector = require('agency-pkg-base/Vector');
 
+var lang = require('../../../data/globals/lang.json');
 var workbenchConfig = require('../../services/workbenchConfig');
 
 var contentLoader = require('../../services/contentLoader');
 
 require('pepjs');
-
 module.exports = Controller.extend({
+
+    template_loadingUrl: handlebars.compile(lang.view.loadingUrl),
+    template_errorFromUrl: handlebars.compile(lang.view.errorFromUrl),
 
     move_startPosition: null,
     move_movePosition: null,
@@ -281,36 +283,36 @@ function setup(scope) {
 
     // Events
     scope.model.on('change:header', function() {
-        if (scope.model.url) {
-            scope.model.contentEl.innerHTML = loadingUrlTmpl({
-                url: scope.model.url
+        if (this.model.url) {
+            this.model.contentEl.innerHTML = this.template_loadingUrl({
+                url: this.model.url
             });
-            scope.model.loading = true;
-            contentLoader.load(scope.model.url, function(html) {
-                scope.model.contentEl.innerHTML = html;
-                scope.model.refresh({
+            this.model.loading = true;
+            contentLoader.load(this.model.url, function(html) {
+                this.model.contentEl.innerHTML = html;
+                this.model.refresh({
                     withoutSize: true
                 });
-                global.js.parse(scope.model.contentEl);
-                if (scope.model.contentEl.children.length && scope.model.contentEl.children[0].dataset.title) {
-                    scope.model.header.title = scope.model.contentEl.children[0].dataset.title;
+                global.js.parse(this.model.contentEl);
+                if (this.model.contentEl.children.length && this.model.contentEl.children[0].dataset.title) {
+                    this.model.header.title = this.model.contentEl.children[0].dataset.title;
                 }
-                scope.model.loading = false;
-                scope.model.setInitialDimension(scope);
+                this.model.loading = false;
+                this.model.setInitialDimension(this);
 
-            }.bind(scope), function(e) {
-                scope.model.contentEl.innerHTML += errorFromUrlTmpl({
-                    url: scope.model.url,
+            }.bind(this), function(e) {
+                this.model.contentEl.innerHTML += this.template_errorFromUrlTmpl({
+                    url: this.model.url,
                     status: e.status
                 });
-                scope.model.header.title = 'Error';
+                this.model.header.title = 'Error';
                 global.animationFrame.add(function() {
-                    scope.model.loading = false;
-                    scope.model.setInitialDimension(scope);
-                }.bind(scope));
-            }.bind(scope));
+                    this.model.loading = false;
+                    this.model.setInitialDimension(this);
+                }.bind(this));
+            }.bind(this));
         } else {
-            scope.refresh();
+            this.refresh();
         }
     }, scope);
 }

@@ -1,0 +1,24 @@
+---
+type:
+  title: 'Type'
+  items:
+    -
+      label: 'File'
+      value: 'file'
+      name: 'type'
+      checked: false
+    -
+      label: 'Directory'
+      value: 'directory'
+      name: 'type'
+      checked: false
+
+filename:
+  label: 'Filename'
+  name: 'filename'
+---
+<div class="partial" data-partial="components/applications/file/new">
+  {{{mixin "fragments/field/group/item-select" type}}}
+  {{{mixin "elements/field/textbox" filename}}}
+  {{{mixin "elements/button/primary"}}}
+</div>

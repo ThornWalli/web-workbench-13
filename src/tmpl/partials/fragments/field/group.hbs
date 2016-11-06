@@ -1,0 +1,26 @@
+---
+title: 'Group Title'
+items:
+  -
+    title: 'Item 1'
+    value: '1'
+    name: 'examples-input-radios'
+  -
+    title: 'Radio Box 2'
+    name: 'examples-input-radios'
+  -
+    title: 'Radio Box 3'
+    name: 'examples-input-radios'
+---
+<div class="partial {{{class}}}" {{#block "attributes"}} data-partial="fragments/field/group"{{/block}}>
+  {{#if title}}<span class="title">{{{title}}}</span>{{/if}}
+  <ul>
+    {{#block "items"}}
+      {{#each items}}
+        <li>
+          {{{title}}}
+        </li>
+      {{/each}}
+    {{/block}}
+  </ul>
+</div>

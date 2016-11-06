@@ -56,9 +56,9 @@ dialog-button-tmpl:
   {{#with dialog-button-tmpl}}
     <script id="{{{id}}}" type="text/x-handlebars-template">
       {{#with data}}
-        {{#mixin "elements/input/button/dialog" this}}
+        {{#mixin "elements/button/dialog" this}}
         {{#content "attributes"}}
-         data-partial="elements/input/button/dialog"
+         data-partial="elements/button/dialog"
          {{{{raw}}}}{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{{{/raw}}}}
         {{/content}}
         {{/mixin}}
@@ -66,5 +66,5 @@ dialog-button-tmpl:
     </script>
   {{/with}}
 
-  {{{mixin "elements/icon-manager" target="[data-partial='fragments/workbench-control']"}}}
+  {{{mixin "elements/applications" target="[data-partial='fragments/workbench-control']"}}}
 </div>
