@@ -26,7 +26,7 @@ module.exports = ViewController.extend({
             this.targetModel.core.itemsSelected = this.targetModel.selectedItems.length > 0;
         }, this);
         this.targetModel.core.on('change:itemsSelected', function(model, itemsSelected) {
-            document.querySelector('.js-icon-manager-control-discard').classList.toggle('js-disabled', !itemsSelected);
+            document.querySelector('.js-applications-control-files').classList.toggle('js-disabled', !itemsSelected);
         }, this);
 
 
