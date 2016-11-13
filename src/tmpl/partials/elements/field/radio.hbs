@@ -5,7 +5,7 @@ checked: true
 label: 'Radio Label'
 ---
 <label class="partial" data-partial="elements/field/radio">
-  <input{{#if name}} name="{{{name}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}} type="radio"{{#if checked}} checked{{/if}} />
+  <input{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}} type="radio"{{#if checked}} checked{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}} />
   {{{mixin "svgs/icons/controls/input-radio"}}}
   {{#if label}}
     <span class="label">{{{label}}}</span>

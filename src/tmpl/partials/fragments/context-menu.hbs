@@ -1,5 +1,5 @@
 ---
-items:
+this:
   -
     title: 'Item 1'
   -
@@ -24,17 +24,16 @@ items:
     title: 'Item 4'
   -
     title: 'Item 5'
-
 ---
 <ul class="partial" data-partial="fragments/context-menu">
-  {{#each items}}
+  {{#each this}}
     <li{{#if list-item-class}} class="{{{list-item-class}}}"{{/if}}>
       {{#if separator}}
-        {{{mixin "elements/context-menu/separator" this}}}
+        {{> "elements/context-menu/separator" this}}
       {{else}}
-        {{{mixin "elements/context-menu/item" this}}}
+        {{> "elements/context-menu/item" this}}
         {{#if items}}
-          {{{mixin "fragments/context-menu" this}}}
+          {{> "fragments/context-menu" items}}
         {{/if}}
       {{/if}}
     </li>

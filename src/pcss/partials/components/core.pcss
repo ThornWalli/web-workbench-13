@@ -1,0 +1,39 @@
+.partial[data-partial="components/core"] {
+  /* ###### */
+  height: 100%;
+  &.js-with-screen {
+    height: auto;
+    body>& {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-left: -calc(860 / 2)px;
+      margin-top: -calc(672 / 2)px
+    }
+  }
+  user-select: none;
+  * {
+    user-select: none;
+  }
+  &, * {
+    cursor: url(../assets/img/cursor/pointer.png), auto !important;
+    cursor: url(../assets/img/cursor/pointer.png), pointer !important;
+    cursor: url(../assets/img/cursor/pointer.png), text !important;
+  }
+  &.loading {
+    cursor: url(../assets/img/cursor/wait.png), auto;
+  }
+  .partial[data-partial="components/header"] {
+    z-index: 10000;
+  }
+  .partial[data-partial="fragments/view-control"] {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+  .partial[data-partial="elements/error"] {
+    z-index: 10001;
+  }
+}

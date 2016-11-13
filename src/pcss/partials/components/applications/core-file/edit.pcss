@@ -1,0 +1,34 @@
+.partial[data-partial="components/applications/core-file/edit"] {
+  >form>.link, >form>.html, >form>.media {
+    display: none;
+  }
+  &.js-image,&.js-video {
+    >form>.media {
+      display: block;
+    }
+  }
+  &.js-link {
+    >form>.link {
+      display: block;
+    }
+  }
+  &.js-html {
+    >form>.html {
+      display: block;
+    }
+  }
+  .buttons {
+    @mixin clearfix;
+    width: 100%;
+    text-align: center;
+    margin: 0px;
+      margin-top: 5px;
+    white-space: nowrap;
+    /*overflow: hidden;*/
+    * {
+      float: left;
+      width: 46%;
+      margin: 0 2%;
+    }
+  }
+}

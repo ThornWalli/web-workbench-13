@@ -20,7 +20,7 @@ items:
 
     {{#each items}}
       <li>
-        <label>{{{mixin "elements/field/radio" this}}}</label>
+        <label>{{{mixin "elements/field/radio" this form-ignore=../../form-ignore}}}</label>
       </li>
     {{/each}}
 

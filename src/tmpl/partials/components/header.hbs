@@ -2,14 +2,16 @@
 
 ---
 
-<div class="partial controller{{#if class}} {{{class}}}{{/if}}" {{#block "attributes"}}data-partial="components/header" data-controller="./partials/components/Header" data-target="[data-partial='fragments/workbench-control']"{{/block}}>
+<div class="partial controller{{#if class}} {{{class}}}{{/if}}" {{#block "attributes"}}data-partial="components/header" data-controller="./partials/components/Header" data-target="[data-partial='components/core']"{{/block}}>
 
     {{#block "content"}}
       <div class="cover">
         <span>Workbench release.</span>
         <span>852440 free memory</span>
       </div>
-      {{{mixin "fragments/header/navigation" navigation}}}
+        <div class="menu" data-hook="menu">
+          {{{mixin "fragments/context-menu" navigation}}}
+        </div>
     {{/block}}
 
 </div>

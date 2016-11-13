@@ -4,12 +4,12 @@
 
 var ViewController = require('../../base/ViewController');
 var DomModel = require('agency-pkg-base/DomModel');
-var Bounds = require('agency-pkg-base/Bounds');
 var Vector = require('agency-pkg-base/Vector');
 
 
-var imageTmpl = require('./itemControl/icon-image.hbs');
-var svgTmpl = require('./itemControl/icon-svg.hbs');
+var ContextualFragment = require('../../base/ContextualFragment');
+var imageTmpl = new ContextualFragment(require('./itemControl/icon-image.hbs'));
+var svgTmpl = new ContextualFragment(require('./itemControl/icon-svg.hbs'));
 var icons = require('../../utils/icons');
 var TYPES = require('../../utils/types');
 
@@ -142,7 +142,6 @@ function setItemsSize(scope) {
         height = 0;
     scope.model.items.forEach(function(item) {
         if (item.bounds.max.x > width) {
-            console.log('bounds', item.bounds.min, item.bounds.max);
             width = item.bounds.max.x;
         }
         if (item.bounds.max.y > height) {
@@ -150,7 +149,6 @@ function setItemsSize(scope) {
         }
     });
     scope.itemsEl.style.cssText = 'width: ' + width + 'px; height: ' + height + 'px;';
-    console.log(scope.targetModel.scrollContent);
     if (scope.view) {
         scope.view.scrollContent.refresh();
     }
@@ -184,7 +182,6 @@ function showFolder(scope, item) {
         }, scope);
 
         function changeItemControl(model, itemControl) {
-            console.log('item.items', item.items);
             itemControl.items = item.items;
             item.items = itemControl.items;
         }
@@ -202,11 +199,9 @@ function selectItem(scope, item) {
         if (item.selected) {
             if (TYPES.ITEM.FOLDER.is(item.type)) {
                 scope.targetModel.selectedItems.remove(item);
-                console.log('select FOLDER', item);
                 showFolder(scope, item);
                 item.disabled = true;
             } else {
-                console.log('select Item', item);
                 scope.targetModel.selectedItems.remove(item);
             }
         } else {
@@ -216,26 +211,24 @@ function selectItem(scope, item) {
 }
 
 function renderItem(scope, item) {
-    var html;
+    var node;
     if (TYPES.ICON_TYPE.SVG.is(item.iconType) || TYPES.ICON_TYPE.DEFAULT.is(item.iconType)) {
-        console.log(item.icon.key, icons);
-        html = svgTmpl({
+        node = svgTmpl.generate({
             svg: icons[item.icon.key](),
             title: item.title,
         });
     } else if (TYPES.ICON_TYPE.IMG.is(item.iconType)) {
-        html = imageTmpl({
+        node = imageTmpl.generate({
             svg: icons[item.icon.key](),
             title: item.title,
         });
     }
-    scope.iconBuilderEl.innerHTML = html;
-    var el = scope.iconBuilderEl.children[0];
-    el.setAttribute('data-id', item.id);
-    scope.itemsEl.appendChild(el);
-    scope.itemElMap[item.id] = el;
+    node = node.children[0];
+    node.setAttribute('data-id', item.id);
+    scope.itemsEl.appendChild(node);
+    scope.itemElMap[item.id] = node;
 
-    item.dimension.resetValues(el.offsetWidth, el.offsetHeight);
+    item.dimension.resetValues(node.offsetWidth, node.offsetHeight);
     refreshBounds(scope, item, item.bounds.min.x, item.bounds.min.y);
 
     setItemsSize(scope);
@@ -254,6 +247,6 @@ function refreshBounds(scope, item, x, y) {
     item.bounds.min.y = y;
     item.bounds.max.x = item.bounds.min.x + item.dimension.x;
     item.bounds.max.y = item.bounds.min.y + item.dimension.y;
-    console.log('move', item.bounds.min);
+
     refreshIcon(scope, item);
 }

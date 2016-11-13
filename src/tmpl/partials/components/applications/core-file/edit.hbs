@@ -1,0 +1,87 @@
+---
+fileType:
+  label: 'File-Type'
+  name: 'fileType'
+  hook: 'file-type'
+  items:
+    -
+      title: 'Link'
+      value: 'link'
+      selected: true
+    -
+      title: 'Image (Url or Base64-Url)'
+      value: 'image'
+      selected: false
+    -
+      title: 'Video (only Url)'
+      value: 'video'
+      selected: false
+    -
+      title: 'HTML (Saved as Base64)'
+      value: 'html'
+      selected: false
+linkType:
+  itlte: 'Link-Type'
+  name: 'linkType'
+  items:
+    -
+      title: 'Link (New Window)'
+      value: 'link'
+      selected: false
+    -
+      title: 'Link (Extern)'
+      value: 'link_extern'
+      selected: false
+
+url:
+  class: 'label-top'
+  label: 'Url'
+  name: 'url'
+  placeholder: 'Url…'
+src:
+  class: 'label-top'
+  label: 'Src'
+  name: 'src'
+  placeholder: 'Src…'
+name:
+  label: 'Name'
+  name: 'name'
+  placeholder: 'Name…'
+title:
+  class: 'label-top'
+  label: 'Title'
+  name: 'title'
+  placeholder: 'Title…'
+
+editor:
+  class: 'label-top'
+  label: 'HTML'
+  placeholder: 'Write HTML…'
+
+buttons:
+  cancel:
+    title: 'Cancel'
+  create:
+    title: 'Create'
+---
+<div class="partial controller" data-partial="components/applications/core-file/edit" data-controller="./partials/components/applications/core-file/Edit">
+  <form data-hook="form">
+    {{{mixin "elements/field/select" fileType}}}
+    {{{mixin "elements/field/textbox" name}}}
+    {{{mixin "elements/field/textbox" title}}}
+    <div class="link">
+      {{{mixin "elements/field/textbox" url}}}
+      {{{mixin "elements/field/select" linkType}}}
+    </div>
+    <div class="html">
+      {{{mixin "elements/field/textarea" editor}}}
+    </div>
+    <div class="media">
+      {{{mixin "elements/field/textbox" src}}}
+    </div>
+    <div class="buttons">
+      {{{mixin "elements/button/secondary" buttons.cancel}}}
+      {{{mixin "elements/button/primary" buttons.create}}}
+    </div>
+  </form>
+</div>

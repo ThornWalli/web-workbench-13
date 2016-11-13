@@ -6,7 +6,7 @@ label: 'Item Label'
 multiple: true
 ---
 <label class="partial" data-partial="elements/field/item">
-  <input{{#if name}} name="{{{name}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}} type="{{#if multiple}}checkbox{{else}}radio{{/if}}"{{#if checked}} checked{{/if}} {{#if value}} value="{{{value}}}"{{/if}} />
+  <input{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}} type="{{#if multiple}}checkbox{{else}}radio{{/if}}"{{#if checked}} checked{{/if}}{{#if disabled}} disabled{{/if}} {{#if value}} value="{{{value}}}"{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}} />
   {{#if label}}
     <span class="label">{{{label}}}</span>
   {{/if}}

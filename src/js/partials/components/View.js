@@ -1,9 +1,9 @@
 "use strict";
 
-var handlebars = require('handlebars/dist/handlebars');
+var template = require('lodash/template');
 
 var Controller = require('agency-pkg-base/Controller');
-var DomModel = require('agency-pkg-base/DomModel');
+var DomModel = require('../../base/DomModel');
 var Bounds = require('agency-pkg-base/Bounds');
 var Vector = require('agency-pkg-base/Vector');
 
@@ -15,13 +15,15 @@ var contentLoader = require('../../services/contentLoader');
 require('pepjs');
 module.exports = Controller.extend({
 
-    template_loadingUrl: handlebars.compile(lang.view.loadingUrl),
-    template_errorFromUrl: handlebars.compile(lang.view.errorFromUrl),
+    template_loadingUrl: template(lang.view.loadingUrl),
+    template_errorFromUrl: template(lang.view.errorFromUrl),
 
+    // move
     move_startPosition: null,
     move_movePosition: null,
     move_moveOffset: null,
 
+    // scale
     scale_startDimension: null,
     scale_startPosition: null,
     scale_movePosition: null,
@@ -29,16 +31,25 @@ module.exports = Controller.extend({
     contentEl: null,
     contentSize: null,
 
-
-
     modelConstructor: DomModel.extend({
+
         session: {
+            viewControl: {
+                type: 'object',
+                required: true,
+                default: null
+            },
             header: {
                 type: 'object',
                 required: true,
                 default: null
             },
             dialog: {
+                type: 'object',
+                required: true,
+                default: null
+            },
+            application: {
                 type: 'object',
                 required: true,
                 default: null
@@ -59,6 +70,11 @@ module.exports = Controller.extend({
                 default: function() {
                     return 'window_default_id';
                 }
+            },
+            zIndex: {
+                type: 'number',
+                required: true,
+                default: -1
             },
             title: {
                 type: 'string',
@@ -141,23 +157,22 @@ module.exports = Controller.extend({
 
 
         close: function() {
-            this.trigger('event:close');
+            this.trigger('View:close');
         },
 
         refresh: function(options) {
-            this.trigger('event:refresh', options);
+            this.trigger('View:refresh', options);
         },
 
-        refreshBounds: function() {
-            this.trigger('event:refreshBounds');
+        refreshBounds: function(xMin, yMin) {
+            this.trigger('View:refreshBounds', xMin || this.bounds.min.x, yMin || this.bounds.min.y);
         },
 
+        refreshDimension: function() {
+            this.trigger('View:setInitialDimension');
+        },
         setInitialDimension: function() {
-            this.trigger('event:setInitialDimension');
-        },
-
-        setPosition: function(position) {
-            this.trigger('event:position', position);
+            this.trigger('View:setInitialDimension');
         },
 
         // #########################
@@ -172,9 +187,9 @@ module.exports = Controller.extend({
     events: {
         'pointerdown': onPointerDown,
         'pointerdown .helper-scale': onPointerDownHelperScale,
-        'pointerdown [data-partial="components/header/view"] [data-hook="focus-max"]': onPointerUpFocusMax,
-        'pointerdown [data-partial="components/header/view"] [data-hook="focus-min"]': onPointerUpFocusMin,
         'pointerdown [data-partial="components/header/view"] > .title': onPointerDownHelperMove,
+        'pointerup [data-partial="components/header/view"] [data-hook="move-top"]': onPointerUpMoveTop,
+        'pointerup [data-partial="components/header/view"] [data-hook="move-bottom"]': onPointerUpMoveBottom,
         'pointerup [data-partial="components/header/view"] [data-hook="close"]': onPointerUpClose
 
     },
@@ -208,9 +223,7 @@ module.exports = Controller.extend({
 
     initialize: function() {
         Controller.prototype.initialize.apply(this, arguments);
-
         setup(this);
-
     },
 
     destroy: function() {
@@ -241,16 +254,15 @@ function setup(scope) {
 
     //  Events
 
-    scope.model.on('event:position', onPosition, scope);
-
-    scope.model.on('event:close', function() {
+    scope.model.on('View:close', function() {
         this.destroy();
     }, scope);
-    scope.model.on('event:refreshBounds', function() {
-        refreshBounds(this, this.model.bounds.min.x, this.model.bounds.min.y);
+    scope.model.on('View:refreshBounds', function(xMin, yMin) {
+        refreshBounds(this, xMin, yMin);
     }, scope);
-    scope.model.on('event:refresh', scope.refresh, scope);
-    scope.model.on('event:setInitialDimension', onSetInitialDimension, scope);
+    scope.model.on('View:refresh', scope.refresh, scope);
+    scope.model.on('change:loading', onChangeLoading, scope);
+    scope.model.on('View:setInitialDimension', onSetInitialDimension, scope);
     scope.model.on('change:scrollable', function(model, scrollable) {
         model.scrollContent.active = scrollable;
     });
@@ -276,13 +288,13 @@ function setup(scope) {
     scope.scale_movePosition = new Vector();
 
     if (scope.targetModel) {
-        scope.targetModel.registerView(scope.model);
+        scope.targetModel.register(scope.model);
     } else {
         console.error('View has no Target');
     }
 
     // Events
-    scope.model.on('change:header', function() {
+    scope.model.getIfExists('header', function(header) {
         if (this.model.url) {
             this.model.contentEl.innerHTML = this.template_loadingUrl({
                 url: this.model.url
@@ -295,35 +307,32 @@ function setup(scope) {
                 });
                 global.js.parse(this.model.contentEl);
                 if (this.model.contentEl.children.length && this.model.contentEl.children[0].dataset.title) {
-                    this.model.header.title = this.model.contentEl.children[0].dataset.title;
+                    header.title = this.model.contentEl.children[0].dataset.title;
                 }
                 this.model.loading = false;
-                this.model.setInitialDimension(this);
+                this.model.refreshDimension(this);
 
             }.bind(this), function(e) {
-                this.model.contentEl.innerHTML += this.template_errorFromUrlTmpl({
+                this.model.contentEl.innerHTML += this.template_errorFromUrl({
                     url: this.model.url,
                     status: e.status
                 });
-                this.model.header.title = 'Error';
+                header.title = 'Error';
                 global.animationFrame.add(function() {
                     this.model.loading = false;
-                    this.model.setInitialDimension(this);
+                    this.model.refreshDimension(this);
                 }.bind(this));
             }.bind(this));
         } else {
             this.refresh();
         }
     }, scope);
-}
 
-function onPointerDown() {
-    this.targetModel.setViewFocus(this.model);
+
 }
 
 var borderSize = 2;
 var rightScrollBarWidth = 14;
-var headerHeight = 20 - borderSize;
 
 function getContentSize(scope) {
     var size = {
@@ -340,36 +349,37 @@ function onSetInitialDimension(size) {
     this.contentSize.reset(size || getContentSize(this));
     setDimension(this, this.contentSize.x, this.contentSize.y);
 
-    // if (!this.model.itemControl && this.contentSize.x <= this.model.dimension.x && this.contentSize.y <= this.model.dimension.y && this.contentSize.x <= this.model.screenBounds.max.x - this.model.screenBounds.min.x && this.contentSize.y <= this.model.screenBounds.max.y - this.model.screenBounds.min.y) {
-    //     this.model.scrollable = false;
-    // } else {
-    //     this.model.scrollable = true;
-    // }
-
     this.scale_startDimension.reset(this.model.dimension);
     this.model.refresh();
 
     if (!size && !this.model.scrollable) {
         // check content size
         var checkSize = getContentSize(this);
-        console.log(this.contentSize.x, checkSize.x, '|', this.contentSize.y, checkSize.y);
         if (this.contentSize.x !== checkSize.x || this.contentSize.y !== checkSize.y) {
             onSetInitialDimension.bind(this)(this.contentSize);
         }
     }
 }
 
-function onPointerUpClose() {
-    this.destroy();
+
+function onChangeLoading(model, loading) {
+    var id = '.view-resize-' + this.cid;
+    if (!loading) {
+        // textarea resizing
+        console.log('pointerdown' + id, this.el.querySelectorAll('textarea'));
+        $(this.el.querySelectorAll('textarea')).on('pointerdown' + id, function() {
+            $(document).on('pointermove' + id, function() {
+                model.refreshDimension();
+            });
+        });
+        $(this.el.querySelector('textarea')).on('pointerup' + id, function() {
+            $(document).off(id);
+        });
+    } else {
+        $(this.el.querySelectorAll('textarea')).off('pointerdown' + id);
+    }
 }
 
-function onPointerUpFocusMax() {
-    this.targetModel.setViewFocus(this.model, true);
-}
-
-function onPointerUpFocusMin() {
-    this.targetModel.setViewFocus(this.model, false);
-}
 /**
  *
  *
@@ -377,8 +387,21 @@ function onPointerUpFocusMin() {
  *
  */
 
+function onPointerDown() {
+    this.targetModel.setViewFocus(this.model);
+}
 
+function onPointerUpClose() {
+    this.destroy();
+}
 
+function onPointerUpMoveTop() {
+    this.targetModel.setViewTopBottom(this.model, true);
+}
+
+function onPointerUpMoveBottom() {
+    this.targetModel.setViewTopBottom(this.model, false);
+}
 
 function onPointerDownHelperMove(e) {
     var x = e.clientX;
@@ -413,7 +436,6 @@ function refreshBounds(scope, x, y) {
 function onPointerUpHelperMove() {
     $(document).off('pointerup.move_' + this.cid);
     $(document).off('pointermove.move_' + this.cid);
-    // global.animationFrame.add(onRefresh.bind(this));
     this.model.moving = false;
     this.model.refresh();
 }
@@ -457,21 +479,4 @@ function onPointerUpHelperScale() {
     this.model.scaling = false;
     this.model.refresh();
     console.log('pointer up move');
-}
-
-// View Position
-function onPosition(position) {
-
-    switch (position) {
-        case 'center':
-
-            var x = (this.model.screenBounds.max.x - this.model.dimension.x) / 2,
-                y = (this.model.screenBounds.max.y - this.model.dimension.y) / 2;
-            refreshBounds(this, x, y);
-
-            break;
-        default:
-
-    }
-
 }

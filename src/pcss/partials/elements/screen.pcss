@@ -2,14 +2,14 @@
   $contentSize_height: 400px;
   .partial[data-partial="elements/screen"] {
     position: relative;
-    .partial[data-partial="components/workbench"]:not(.js-with-screen) &{
+    .partial[data-partial="components/core"]:not(.js-with-screen) &{
       background-color: $workbenchBackgroundColor_screen;
       height: 100%;
       >.content {
         height: 100%;
       }
     }
-    .partial[data-partial="components/workbench"].js-with-screen &{
+    .partial[data-partial="components/core"].js-with-screen &{
       width: 860px;
       height: 672px;
       >.background {
@@ -21,10 +21,10 @@
         width: 730px;
         height: 500px;
         background-color: $workbenchBackgroundColor_screen;
-        [data-partial="components/workbench"].js-workbench-error & {
+        [data-partial="components/core"].js-workbench-error & {
           background-color: #000000;
         }
-        [data-partial="components/workbench"].js-workbench-off & {
+        [data-partial="components/core"].js-workbench-off & {
           background-color: #111111;
           * {
             visibility: hidden;
@@ -51,13 +51,13 @@
             width: 14px;
             height: 7px;
             background: red;
-            [data-partial="components/workbench"].js-workbench-off & {
+            [data-partial="components/core"].js-workbench-off & {
               background: darkred;
             }
           }
         }
       }
-      [data-partial="components/workbench"].js-workbench-off & {
+      [data-partial="components/core"].js-workbench-off & {
         >.content {
           * {
             visibility: hidden;

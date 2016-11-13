@@ -15,10 +15,9 @@ items:
   </ul>
   {{{{raw}}}}
   <script data-hook="template-list-items" type="text/x-handlebars-template">
-    {{#each this}}
-      <li>
-        <span class="name">{{{name}}}</span><span class="value">{{{value}}}</span>
-      </li>
-    {{/each}}
+    <% obj.forEach(function (obj) { %><li>
+  <span class="name"><%= obj.name %></span><span class="value"><%= obj.value %></span>
+</li><% }); %>
+
   </script>{{{{/raw}}}}
 </div>

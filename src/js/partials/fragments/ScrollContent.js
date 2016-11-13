@@ -73,8 +73,8 @@ module.exports = Controller.extend({
         $(this.scrollBottomSpacerEl).on('pointerdown', onPointerDownBottomSpacer.bind(this));
 
         this.targetModel.scrollContent = this.model;
-        this.targetModel.on('event:refresh', onRefresh.bind(this)(), this);
-        this.model.on('event:refresh', onRefresh.bind(this)(), this);
+        this.targetModel.on('event:refresh', onRefresh, this);
+        this.model.on('event:refresh', onRefresh, this);
 
         this.scrollContentEl.addEventListener('scroll', global.animationFrame.throttle('scroll-content' + this.cid, function() {
             updateEl(this);
@@ -82,8 +82,8 @@ module.exports = Controller.extend({
             refreshScrollbar(this);
         }.bind(this)));
 
-        viewport.on('RESIZE', onRefresh.bind(this)());
-        onRefresh.bind(this)()();
+        viewport.on('RESIZE', onRefresh.bind(this));
+        onRefresh.bind(this)();
 
     }
 });
@@ -152,7 +152,7 @@ function refreshScrollbar(scope) {
     value = (value * 100) / 100;
     value *= -1 + scope.scrollBottomHelperWidth / scope.scrollBottomSpacerWidth;
     scope.scrollX = value;
-    console.log(scope.scrollInnerDimension.y, scope.scrollWrapperDimension.y, scope.offsetTop);
+
     var value = (scope.scrollContentEl.scrollTop) / (((scope.scrollInnerDimension.y - scope.offsetTop) - scope.scrollWrapperDimension.y));
     value = (value * 100) / 100;
     value *= -1 + scope.scrollRightHelperHeight / scope.scrollRightSpacerHeight;
@@ -161,12 +161,9 @@ function refreshScrollbar(scope) {
 
 
 function onRefresh() {
-    return global.animationFrame.throttle('scroll-content' + this.cid, function() {
-        updateEl(this);
-    }.bind(this), function() {
-
+    global.animationFrame.add(function() {
         this.offsetTop = this.el.offsetTop;
-
+        refreshScrollbar(this);
         this.dimension.resetValues(this.el.offsetWidth, this.el.offsetHeight, 0);
         this.scrollContentDimension.resetValues(this.scrollContentEl.offsetWidth, this.scrollContentEl.offsetHeight, 0);
         this.scrollWrapperDimension.resetValues(this.scrollWrapperEl.offsetWidth, this.scrollWrapperEl.offsetHeight, 0);
@@ -178,7 +175,7 @@ function onRefresh() {
         this.scrollRightHelperHeight = this.scrollRightHelperEl.offsetHeight;
         this.scrollRightSpacerHeight = (this.scrollContentDimension.y / this.scrollInnerDimension.y) * this.scrollRightHelperHeight;
 
-        refreshScrollbar(this);
+        updateEl(this);
     }.bind(this));
 }
 

@@ -8,22 +8,24 @@ items:
     label: 'Use 1084 Background with 640px x 400px'
 buttons:
   save:
+    submit: true
     hook: 'save'
     title: 'Save'
   debug:
     class: 'js-click-view-open'
     hook: 'debug'
     title: 'Debug'
-    view-path: './pages/workbench/settings/debug.html'
+    view-path: './pages/workbench/applications/settings/debug.html'
 
 ---
-<form class="partial controller" data-partial="components/applications/settings" data-controller="./partials/components/applications/Settings">
-  {{{mixin "fragments/field/group/checkbox" this}}}
-
-  {{#with buttons}}
-    <div class="buttons">
-        {{{mixin "elements/button/secondary" debug}}}
-        {{{mixin "elements/button/primary" save}}}
-    </div>
-  {{/with}}
-</form>
+<section class="partial controller" data-partial="components/applications/settings" data-controller="./partials/components/applications/Settings">
+  <form data-hook="form">
+    {{{mixin "fragments/field/group/checkbox" this}}}
+    {{#with buttons}}
+      <div class="buttons">
+          {{{mixin "elements/button/secondary" debug}}}
+          {{{mixin "elements/button/primary" save}}}
+      </div>
+    {{/with}}
+  </form>
+</section>

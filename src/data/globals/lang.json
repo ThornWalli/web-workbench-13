@@ -1,16 +1,36 @@
 {
   "applications": {
+    "core":{
+      "menuItems": {
+        "webWorkbench": "Web-Workbench",
+        "impExpRuntime": "Import/Export Runtime",
+        "settings": "Settings",
+              "applicationManager": "Application-Manager",
+                "info": "Info",
+                  "examples": "Examples",
+                    "examplesDialog": "Dialog",
+                      "examplesViewScrollBar": "View with Scrollbars"
+
+      }
+    },
     "file": {
       "dialogs": {
         "discard": {
           "title": "Discard File",
           "text": "<p>Would you like remove file ?</p>"
         }
+      },
+      "menuItems": {
+        "window": "Window",
+        "center": "Center",
+        "order": "Order",
+        "orderDiagonalRight": "Diagonal (Left to right)",
+        "orderDiagonalLeft": "Diagonal (Right to left)"
       }
     }
   },
   "view": {
-    "errorFromUrl": "<p><br />ERROR {{{status}}}<br /><br />CAN'T LOAD HTML FROM URL <br /><br />{{{url}}}<br /></p>",
-    "loadingUrl": "<p>Load URL: {{{url}}} <br />LOADING...<br /></p>"
+    "errorFromUrl": "<p><br />ERROR <%= status %><br /><br />CAN'T LOAD HTML FROM URL <br /><br /><%= url %><br /></p>",
+    "loadingUrl": "<p>Load URL: <%= url %> <br />LOADING...<br /></p>"
   }
 }

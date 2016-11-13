@@ -1,0 +1,54 @@
+.partial[data-partial="components/applications/core-file/new"] {
+  .preview-icon {
+    @mixin clearfix;
+    padding: 20px 0;
+    >* {
+      position: relative;
+      float: left;
+      width: 46%;
+      margin: 0 2%;
+      height: 80px;
+      min-height: 80px;
+      >* {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0;
+      }
+    }
+    >.icon {
+      display: inline-block;
+    }
+    text-align: center;
+    svg {
+      display: inline-block;
+    }
+  }
+  .directory, .file {
+    display: none;
+  }
+
+  &.js-directory {
+    .directory {
+      display: block;
+    }
+  }
+  &.js-file {
+    .file {
+      display: block;
+    }
+  }
+  .buttons {
+    @mixin clearfix;
+    width: 100%;
+    text-align: center;
+    margin: 0px;
+    white-space: nowrap;
+    /*overflow: hidden;*/
+    * {
+      float: left;
+      width: 46%;
+      margin: 0 2%;
+    }
+  }
+}

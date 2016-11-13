@@ -20,7 +20,13 @@
     outline: solid $workbenchColor_1 2px;
     outline-offset: -4px;
     line-height: 1.2;
-    resize:none;
+    resize: vertical;
+    &::placeholder {
+      color: $workbenchColor_1;
+    }
+    &:focus {
+      filter: invert();
+    }
     html.no-touchevents & {
       &:hover {
         filter: invert();
@@ -30,6 +36,17 @@
       &:active {
         filter: invert();
       }
+    }
+  }
+  &.label-top {
+  margin-top: 10px;
+    >.label {
+      display: block;
+      padding-top: 0px;
+    }
+    textarea {
+      display: block;
+      width: 100%;
     }
   }
 }

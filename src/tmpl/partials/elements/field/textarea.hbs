@@ -1,9 +1,10 @@
 ---
 label: 'Textarea Label'
+placeholder: 'Textarea Placeholder…'
 ---
-<label class="partial" data-partial="elements/field/textarea">
+<label class="partial{{#if class}} {{{class}}}{{/if}}" data-partial="elements/field/textarea">
   {{#if label}}
     <span class="label">{{{label}}}</span>
   {{/if}}
-  <textarea{{#if name}} name="{{{name}}}"{{/if}}></textarea>
+  <textarea{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if placeholder}} placeholder="{{{placeholder}}}"{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}}></textarea>
 </label>

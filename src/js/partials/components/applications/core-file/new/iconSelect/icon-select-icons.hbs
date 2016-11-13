@@ -1,0 +1,12 @@
+<ul class="icons">
+  {{#each icons}}
+    <li class="icon">
+      <label>
+      <input name="icon-select-{{{../id}}}" type="radio" value="{{{name}}}" />
+      <span>
+      <span>{{{svg}}}<span class="name">{{{name}}}</span></span>
+    </span>
+    </label>
+    </li>
+  {{/each}}
+</ul>

@@ -1,9 +1,10 @@
 ---
 label: 'Textbox Label'
+placeholder: 'Textbox Placeholder…'
 ---
-<label class="partial" data-partial="elements/field/textbox">
+<label class="partial{{#if class}} {{{class}}}{{/if}}" data-partial="elements/field/textbox">
   {{#if label}}
     <span class="label">{{{label}}}</span>
   {{/if}}
-  <input type="text"{{#if name}} name="{{{name}}}"{{/if}} />
+  <input type="text"{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if placeholder}} placeholder="{{{placeholder}}}"{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}} />
 </label>

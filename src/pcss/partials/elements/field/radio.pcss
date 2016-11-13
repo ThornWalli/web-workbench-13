@@ -32,6 +32,11 @@
     padding-left: 22px;
     line-height: 18px;
   }
+  &:focus {
+    >svg {
+      filter: invert();
+    }
+  }
   html.no-touchevents & {
     &:hover {
       >svg {

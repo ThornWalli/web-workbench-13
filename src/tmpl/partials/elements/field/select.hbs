@@ -3,7 +3,7 @@ name: # Field Name
 id: # Field Id
 checked: true
 label: 'Select Label'
-options:
+items:
   -
     title: 'Option 1.'
     value: 'option-1'
@@ -18,5 +18,7 @@ options:
 {{#if label}}
   <span class="label">{{{label}}}</span>
 {{/if}}
-  <select{{#if name}} name="{{{name}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}}{{#if size}} size="{{{size}}}"{{/if}}{{#if multiple}} multiple{{/if}}>{{#block "options"}}{{#each options}}<option value="{{{value}}}">{{{title}}}</option>{{/each}}{{/block}}</select><span class="expander"></span>
+  <select{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}}{{#if size}} size="{{{size}}}"{{/if}}{{#if multiple}} multiple{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}}>
+    {{#block "options"}}{{#each items}}<option value="{{{value}}}">{{{title}}}</option>{{/each}}{{/block}}
+  </select><span class="expander">{{{mixin "svgs/defaults/tiny-arrow-down"}}}</span>
 </label>

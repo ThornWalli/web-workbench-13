@@ -21,17 +21,16 @@ module.exports = ViewController.extend({
             }
         },
         close: function() {
-            this.trigger('event:close');
+            this.trigger('Dialog:close');
         }
     }),
 
     initialize: function() {
         ViewController.prototype.initialize.apply(this, arguments);
-        this.model.on('event:close', function() {
+        this.model.on('Dialog:close', function() {
             this.view.close();
         }, this);
         setupButtons(this);
-
         if (this.view) {
             this.view.dialog = this.model;
             this.view.on('destroy', function() {}.bind(this));
@@ -44,11 +43,9 @@ module.exports = ViewController.extend({
 function setupButtons(scope) {
     scope.buttonsEl = scope.queryByHook('buttons');
     scope.buttonElMap = {};
-
     scope.buttonsEl.querySelectorAll('[data-partial^="elements/button"]').forEach(function(el) {
         scope.buttonElMap[el.getAttribute('name')] = el;
     });
-
     // Map ButtonEl with Button Object
     scope.model.on('change:buttons', function(model, buttons) {
         buttons.forEach(function(button) {

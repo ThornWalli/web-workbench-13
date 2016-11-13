@@ -5,7 +5,7 @@ checked: true
 label: 'Checkbox Label'
 ---
 <label class="partial" data-partial="elements/field/checkbox">
-  <input{{#if name}} name="{{{name}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}} type="checkbox"{{#if checked}} checked{{/if}} {{#if value}} value="{{{value}}}"{{/if}} />
+  <input{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if id}} id="{{{id}}}"{{/if}} type="checkbox"{{#if checked}} checked{{/if}} {{#if value}} value="{{{value}}}"{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}} />
   {{{mixin "svgs/icons/controls/input-checkbox"}}}
   {{#if label}}
     <span class="label">{{{label}}}</span>

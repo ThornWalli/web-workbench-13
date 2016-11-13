@@ -26,13 +26,13 @@
     "url": "git+https://github.com/ThornWalli/workbench-13.git"
   },
   "scripts": {
-    "heroku": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=production --server=agency-server",
-    "build": "node node_modules/gulp/bin/gulp build --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=build",
-    "export": "node node_modules/gulp/bin/gulp export --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=export",
-    "dev": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=development --server=agency-server",
-    "dev-ip": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=development --server=agency-server --ip=true",
-    "prod": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/local.json --configTasks=./env/config/tasks.json --env=production --server=agency-server",
-    "server": "node node_modules/gulp/bin/gulp default --serverConfig=./env/config/local.json --env=development --server=agency-server",
+    "heroku": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/agency/server.json --configTasks=./env/config/agency/tasks.json --env=production --server=agency-server",
+    "build": "node node_modules/gulp/bin/gulp build --serverConfig=./env/config/agency/server.json --configTasks=./env/config/agency/tasks.json --env=build",
+    "export": "node node_modules/gulp/bin/gulp export --serverConfig=./env/config/agency/server.json --configTasks=./env/config/agency/tasks.json --env=export",
+    "dev": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/agency/server.json --configTasks=./env/config/agency/tasks.json --env=development --server=agency-server",
+    "dev-ip": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/agency/server.json --configTasks=./env/config/agency/tasks.json --env=development --server=agency-server --ip=true",
+    "prod": "node node_modules/gulp/bin/gulp run --serverConfig=./env/config/agency/server.json --configTasks=./env/config/agency/tasks.json --env=production --server=agency-server",
+    "server": "node node_modules/gulp/bin/gulp default --serverConfig=./env/config/agency/server.json --env=development --server=agency-server",
     "test": "npm run build",
     "template": "yo agency-boilerplate:hbs-template",
     "create-package": "yo agency-boilerplate:package"

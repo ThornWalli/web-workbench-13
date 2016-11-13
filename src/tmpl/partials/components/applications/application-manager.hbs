@@ -1,0 +1,21 @@
+---
+
+active-applications:
+  multiple: false
+  title: 'Active Applications'
+  items:
+    -
+      label: 'Core'
+      value: 'core'
+      name: 'active-applications'
+      checked: true
+    -
+      label: 'File'
+      value: 'file'
+      name: 'active-applications'
+      checked: false
+
+---
+<div class="partial controller" data-partial="components/applications/application-manager" data-controller="./partials/components/applications/ApplicationManager">
+  {{{mixin "fragments/field/group/item-select" active-applications}}}
+</div>

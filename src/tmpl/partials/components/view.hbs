@@ -3,7 +3,7 @@ id: 'dummy-view'
 scrollable: true
 focus: true
 ---
-<aside class="partial controller{{#if focus}} js-focus{{/if}}" data-partial="components/view" data-controller="./partials/components/View" data-id="{{{id}}}" data-target="[data-partial='fragments/workbench-control']"{{#if scrollable}} data-scrollable="true"{{/if}}{{#if scaleable}} data-scaleable="true"{{/if}}>
+<aside class="partial controller{{#if focus}} js-focus{{/if}}" data-partial="components/view" data-controller="./partials/components/View" data-id="{{{id}}}" data-target="[data-partial='fragments/view-control']"{{#if scrollable}} data-scrollable="true"{{/if}}{{#if scaleable}} data-scaleable="true"{{/if}}>
 
   {{{mixin "components/header/view" header view-id=id}}}
   {{{mixin "fragments/view/scroll-content" this}}}

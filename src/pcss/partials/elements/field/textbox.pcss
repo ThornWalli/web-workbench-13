@@ -2,7 +2,7 @@
 .partial[data-partial="elements/field/textbox"] {
   >.label {
     display: inline-block;
-    margin-top: 1px;
+    padding-top: 1px;
     min-width: 120px;
     vertical-align: middle;
     line-height: 1;
@@ -20,6 +20,12 @@
     border: solid $workbenchColor_3 2px;
     outline: solid $workbenchColor_1 2px;
     outline-offset: -4px;
+    &::placeholder {
+      color: $workbenchColor_1;
+    }
+    &:focus {
+      filter: invert();
+    }
     html.no-touchevents & {
       &:hover {
         filter: invert();
@@ -29,6 +35,17 @@
       &:active {
         filter: invert();
       }
+    }
+  }
+  &.label-top {
+    >.label {
+      display: block;
+      padding-top: 0px;
+      margin-bottom: 5px;
+    }
+    input {
+      display: block;
+      width: 100%;
     }
   }
 }

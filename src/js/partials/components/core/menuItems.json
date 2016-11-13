@@ -1,0 +1,47 @@
+
+[{
+  "order": 0,
+  "title": "<%= lang.applications.core.menuItems.webWorkbench %>",
+  "items": [{
+    "class": "js-click-view-open",
+    "title": "<%= lang.applications.core.menuItems.impExpRuntime %>",
+    "view-path": "./pages/workbench/applications/runtime_import_export.html"
+  }, {
+    "class": "js-click-view-open",
+    "title": "<%= lang.applications.core.menuItems.settings %>",
+    "view-path": "./pages/workbench/applications/settings.html"
+  }, {
+    "separator": true
+  }, {
+    "class": "js-click-view-open",
+    "title": "<%= lang.applications.core.menuItems.applicationManager %>",
+    "view-path": "./pages/workbench/applications/application-manager.html"
+  }, {
+    "separator": true
+  }, {
+    "hotkey": "i",
+    "class": "js-click-view-open",
+    "title": "<%= lang.applications.core.menuItems.info %>",
+    "view-path": "./pages/workbench/info.html"
+  }]
+}, {
+  "order": 5,
+  "title": "<%= lang.applications.core.menuItems.examples %>",
+  "items": [{
+    "class": "js-click-view-open",
+    "title": "Inputs",
+    "view-path": "./pages/examples/inputs.html",
+    "scrollable": true,
+    "scaleable": true
+  }, {
+    "class": "js-click-view-open",
+    "title": "<%= lang.applications.core.menuItems.examplesDialog %>",
+    "view-path": "./pages/examples/dialog.html"
+  }, {
+    "class": "js-click-view-open",
+    "title": "<%= lang.applications.core.menuItems.examplesViewScrollBar %>",
+    "view-path": "./pages/examples/view-scroll.html",
+    "scrollable": true,
+    "scaleable": true
+  }]
+}]

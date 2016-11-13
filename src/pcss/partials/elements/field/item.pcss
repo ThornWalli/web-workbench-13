@@ -1,5 +1,6 @@
 @import "../field.pcss";
 .partial[data-partial="elements/field/item"] {
+  margin: 0;
   >* {
     display: inline-block;
   }
@@ -17,5 +18,9 @@
   }
   >input:checked+.label {
     filter: invert();
+  }
+  >input[disabled]+.label {
+    color: $workbenchColor_1;
+    background: $workbenchColor_2;
   }
 }

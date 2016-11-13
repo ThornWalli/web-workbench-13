@@ -1,21 +1,28 @@
 "use strict";
 
-var handlebars = require('handlebars/dist/handlebars');
+var template = require('lodash/template');
 var ApplicationController = require('../../../../base/ApplicationController');
-var DomModel = require('agency-pkg-base/DomModel');
 var workbenchConfig = require('../../../../services/workbenchConfig');
 
 module.exports = ApplicationController.extend({
 
     template_listItem: null,
 
-    modelConstructor: DomModel.extend({}),
+    modelConstructor: ApplicationController.prototype.modelConstructor.extend({
+        session: {
+            applicationName: {
+                type:'string',
+                required:true,
+                default: 'SettingsDebug'
+            }
+        }
+    }),
 
     events: {},
 
     initialize: function() {
         ApplicationController.prototype.initialize.apply(this, arguments);
-        this.template_listItem = handlebars.compile(this.queryByHook('template-list-items').innerHTML);
+        this.template_listItem = template(this.queryByHook('template-list-items').innerHTML);
 
         this.listEl = this.queryByHook('list');
         refreshList(this);

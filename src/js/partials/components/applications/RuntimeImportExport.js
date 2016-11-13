@@ -1,14 +1,20 @@
 "use strict";
 
 var ApplicationController = require('../../../base/ApplicationController');
-var DomModel = require('agency-pkg-base/DomModel');
 var workbenchConfig = require('../../../services/workbenchConfig');
 
 module.exports = ApplicationController.extend({
 
+    viewControl: null,
 
-    modelConstructor: DomModel.extend({
-
+    modelConstructor: ApplicationController.prototype.modelConstructor.extend({
+        session: {
+            applicationName: {
+                type:'string',
+                required:true,
+                default: 'RuntimeImportExport'
+            }
+        }
     }),
 
     events: {
@@ -19,18 +25,20 @@ module.exports = ApplicationController.extend({
 
     initialize: function() {
         ApplicationController.prototype.initialize.apply(this, arguments);
-        if (this.targetModel) {
-            if (this.view) {
-                this.view.on('destroy', function() {
-                    this.targetModel.itemControl.items.off(null, null, this);
-                    this.targetModel.views.off(null, null, this);
-                    workbenchConfig.off(null, null, this);
-                }, this);
-            }
-            this.targetModel.itemControl.items.on('add', onRefresh, this);
-            this.targetModel.itemControl.items.on('remove', onRefresh, this);
-            this.targetModel.views.on('add', onRefresh, this);
-            this.targetModel.views.on('remove', onRefresh, this);
+        if (this.view) {
+            this.viewControl = this.view.viewControl;
+            this.model.on('Application:unregister', function() {
+                if (this.view) {
+                    this.viewControl.itemControl.items.off(null, null, this);
+                    this.viewControl.views.off(null, null, this);
+                    this.applicationControl.on(null,null, this);
+                }
+                workbenchConfig.off(null, null, this);
+            }, this);
+            this.applicationControl.on('register', onRefresh, this);
+            this.applicationControl.on('unregister', onRefresh, this);
+            this.viewControl.views.on('add', onRefresh, this);
+            this.viewControl.views.on('remove', onRefresh, this);
             workbenchConfig.on('change', onRefresh, this);
             onRefresh.bind(this)();
         }
@@ -44,8 +52,8 @@ module.exports = ApplicationController.extend({
 
 function onRefresh() {
     console.log('refresh');
-    this.queryByHook('icons').innerHTML = this.targetModel.itemControl.items.length;
-    this.queryByHook('views').innerHTML = this.targetModel.views.length;
+    this.queryByHook('applications').innerHTML = this.applicationControl.applications.length;
+    this.queryByHook('views').innerHTML = this.viewControl.views.length;
 }
 
 function onClickImport() {}
@@ -65,7 +73,7 @@ function generateExport(scope) {
     data.config = workbenchConfig.data;
     // icons
     data.icons = [];
-    scope.targetModel.itemControl.items.forEach(function(itemModel) {
+    scope.viewControl.itemControl.items.forEach(function(itemModel) {
         data.icons.push(itemModel.toArray());
         // data.views.push({
         //     url: viewModel.url,
@@ -86,7 +94,7 @@ function generateExport(scope) {
     });
     // views
     data.views = [];
-    scope.targetModel.views.forEach(function(viewModel) {
+    scope.viewControl.views.forEach(function(viewModel) {
         // ignore view with itemControl (Folder)
         if (!viewModel.itemControl) {
             data.views.push({
@@ -128,14 +136,14 @@ function fileReaderSetup(scope) {
         }
         workbenchConfig.set(data.config);
         console.log('data.icons', data.icons);
-        scope.targetModel.itemControl.items.add(data.icons);
+        scope.viewControl.itemControl.items.add(data.icons);
         data.views.forEach(function(viewModel) {
             var options = viewModel.options;
             options.dimension = {
                 x: options.bounds.max.x - options.bounds.min.x,
                 y: options.bounds.max.y - options.bounds.min.y
             };
-            scope.targetModel.openView(viewModel.url, options);
+            scope.viewControl.openView(viewModel.url, options);
         });
         scope.fileEl.value = null;
 

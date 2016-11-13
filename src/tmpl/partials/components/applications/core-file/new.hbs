@@ -1,0 +1,58 @@
+---
+type:
+  form-ignore: true
+  title: 'Type'
+  items:
+    -
+      label: 'File'
+      value: 'file'
+      name: 'type'
+      hook: 'type'
+      checked: true
+    -
+      label: 'Directory'
+      value: 'directory'
+      name: 'type'
+      hook: 'type'
+      checked: false
+name:
+  label: 'Name'
+  name: 'name'
+  placeholder: 'Name…'
+icon:
+  name: 'icon'
+  hook: 'icon'
+buttons:
+  iconSelect:
+    title: 'Icon Select…'
+    hook: 'icon-select'
+  cancel:
+    title: 'Cancel'
+    hook: 'cancel'
+  create:
+    submit: true
+    title: 'Create'
+    hook: 'create'
+---
+<div class="partial controller" data-partial="components/applications/core-file/new" data-controller="./partials/components/applications/core-file/New">
+  <form data-hook="form">
+    {{{mixin "fragments/field/group/item-select" type}}}
+    {{{mixin "elements/field/textbox" name}}}
+    <div class="directory"></div>
+    <div class="file">
+      <div class="preview-icon">
+        <span class="icon" data-hook="preview-icon">
+          <span></span>
+        </span>
+        <span>
+        {{{mixin "elements/button/secondary" buttons.iconSelect}}}
+        {{{mixin "elements/field/hidden" icon}}}
+      </span>
+      </div>
+    </div>
+    <div class="buttons">
+      {{{mixin "elements/button/secondary" buttons.cancel}}}
+      {{{mixin "elements/button/primary" buttons.create}}}
+    </div>
+  </form>
+</div>
