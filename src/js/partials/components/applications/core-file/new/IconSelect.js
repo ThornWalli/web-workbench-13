@@ -65,6 +65,7 @@ function renderIcons(scope) {
 
 function onChange(e) {
     this.model.icon = e.target.value;
+    this.view.close();
 }
 
 function getListNode(node) {

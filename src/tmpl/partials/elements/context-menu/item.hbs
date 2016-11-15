@@ -7,4 +7,7 @@ disabled: false
   {{#if hotkey}}
     <span class="hotkey">{{> "svgs/icons/controls/context-item-hotkey"}}{{{hotkey}}}</span>
   {{/if}}
+  {{#if items}}
+    <span class="indicator-context">{{> "svgs/defaults/small-arrow-right"}}</span>
+  {{/if}}
 </a>

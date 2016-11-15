@@ -1,17 +1,34 @@
 ---
 type:
-  form-ignore: true
   title: 'Type'
   items:
     -
-      label: 'File'
-      value: 'file'
+      label: 'Directory'
+      value: 'DIRECTORY'
+      name: 'type'
+      hook: 'type'
+      checked: false
+    -
+      label: 'Link'
+      value: 'LINK'
       name: 'type'
       hook: 'type'
       checked: true
     -
-      label: 'Directory'
-      value: 'directory'
+      label: 'Image (Url or Base64-Url)'
+      value: 'IMAGE'
+      name: 'type'
+      hook: 'type'
+      checked: false
+    -
+      label: 'Video (only Url)'
+      value: 'VIDEO'
+      name: 'type'
+      hook: 'type'
+      checked: false
+    -
+      label: 'HTML (Saved as Base64)'
+      value: 'HTML'
       name: 'type'
       hook: 'type'
       checked: false
@@ -19,6 +36,12 @@ name:
   label: 'Name'
   name: 'name'
   placeholder: 'Name…'
+  autocomplete: false
+title:
+  label: 'Title'
+  name: 'title'
+  placeholder: 'Title…'
+  autocomplete: false
 icon:
   name: 'icon'
   hook: 'icon'
@@ -37,9 +60,10 @@ buttons:
 <div class="partial controller" data-partial="components/applications/core-file/new" data-controller="./partials/components/applications/core-file/New">
   <form data-hook="form">
     {{{mixin "fragments/field/group/item-select" type}}}
-    {{{mixin "elements/field/textbox" name}}}
+      {{{mixin "elements/field/textbox" name}}}
+      {{{mixin "elements/field/textbox" title}}}
     <div class="directory"></div>
-    <div class="file">
+    <div class="default">
       <div class="preview-icon">
         <span class="icon" data-hook="preview-icon">
           <span></span>

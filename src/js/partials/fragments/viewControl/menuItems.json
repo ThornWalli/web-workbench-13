@@ -2,7 +2,7 @@
   "order": 10,
   "title": "<%= lang.applications.file.menuItems.window %>",
   "items": [{
-    "class": "js-click-view-control-position-center",
+    "class": "js-menu-item-view-control-position-center",
     "title": "<%= lang.applications.file.menuItems.center %>",
     "disabled": true
   }, {
@@ -10,11 +10,17 @@
   }, {
     "title": "<%= lang.applications.file.menuItems.order %>",
     "items": [ {
-      "class": "js-click-view-control-order-diagonal-right",
+      "class": "js-menu-item-view-control-order-diagonal-right",
       "title": "<%= lang.applications.file.menuItems.orderDiagonalRight %>"
     },{
-      "class": "js-click-view-control-order-diagonal-left",
+      "class": "js-menu-item-view-control-order-diagonal-left",
       "title": "<%= lang.applications.file.menuItems.orderDiagonalLeft %>"
+    }]
+  }, {
+    "title": "<%= lang.applications.file.menuItems.icons %>",
+    "items": [{
+      "class": "js-menu-item-view-control-icon-rearrange-icons",
+      "title": "<%= lang.applications.file.menuItems.rearrangeIcons %>"
     }]
   }]
 }]

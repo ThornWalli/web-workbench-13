@@ -42,12 +42,14 @@ function getFields(scope) {
 
 function getData(scope) {
     var data = [];
-    scope.el.querySelectorAll(scope.fieldSelector.join(',')).forEach(function(el) {
-        if (!el.disabled && !el.dataset.formIgnore) {
-            data.push({
-                name: el.name,
-                value: getValue(el)
-            });
+    scope.el.querySelectorAll(scope.fieldSelector.join(',')).forEach(function(element) {
+        if (!element.disabled && !element.dataset.formIgnore) {
+            if (!isInputRadio(element) || isInputRadio(element) && element.checked) {
+                data.push({
+                    name: element.name,
+                    value: getValue(element)
+                });
+            }
         }
     });
     return data;
@@ -60,10 +62,10 @@ function setData(scope, data) {
         if (el && isInput(el)) {
             if (isInputCheckbox(el) || isInputRadio(el)) {
                 el.checked = entry.value;
-            } else if(isSelect(el)) {
+            } else if (isSelect(el)) {
                 el.value = entry.value;
-            } else if(isTextarea(el)) {
-                el.innerHTML = entry.value;
+            } else if (isTextarea(el)) {
+                el.value = entry.value;
             } else {
                 el.value = entry.value;
             }
@@ -76,7 +78,6 @@ function getValue(element) {
     if (isInput(element)) {
 
         if (isInputCheckbox(element) || isInputRadio(element)) {
-
             if (element.checked) {
                 return element.value === 'on' ? true : element.value;
             }
@@ -86,6 +87,8 @@ function getValue(element) {
             return element.value;
         }
 
+    } else if (isTextarea(element)) {
+        return element.value;
     } else if (isSelect(element)) {
         return element.value;
     }
@@ -106,7 +109,7 @@ function isInput(el) {
 }
 
 function isTextarea(el) {
-    return el.tagName.toLowerCase() === 'select';
+    return el.tagName.toLowerCase() === 'textarea';
 }
 
 function isSelect(el) {

@@ -4,9 +4,6 @@ var Enum = require('enum');
 var EnumItem = require('enum/dist/enumItem');
 module.exports = {
     dataTypes: {
-        ItemEnum: getDefinition('ItemEnum', EnumItem, require('../../utils/types').ITEM),
-        IconEnum: getDefinition('IconEnum', EnumItem, require('../../utils/types').ICON),
-        IconTypeEnum: getDefinition('IconTypeEnum', EnumItem, require('../../utils/types').ICON_TYPE)
     }
 };
 

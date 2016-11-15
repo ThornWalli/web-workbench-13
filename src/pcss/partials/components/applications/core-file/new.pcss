@@ -24,18 +24,15 @@
       display: inline-block;
     }
   }
-  .directory, .file {
+  .directory {
     display: none;
   }
-
   &.js-directory {
     .directory {
       display: block;
     }
-  }
-  &.js-file {
-    .file {
-      display: block;
+    .default {
+      display: none;
     }
   }
   .buttons {

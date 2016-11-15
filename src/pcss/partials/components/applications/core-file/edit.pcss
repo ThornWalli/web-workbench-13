@@ -2,7 +2,7 @@
   >form>.link, >form>.html, >form>.media {
     display: none;
   }
-  &.js-image,&.js-video {
+  &.js-image, &.js-video {
     >form>.media {
       display: block;
     }
@@ -22,13 +22,27 @@
     width: 100%;
     text-align: center;
     margin: 0px;
-      margin-top: 5px;
+    margin-top: 5px;
     white-space: nowrap;
     /*overflow: hidden;*/
     * {
       float: left;
       width: 46%;
       margin: 0 2%;
+    }
+  }
+  .create {
+    display: none;
+  }
+  .save {
+    display: block;
+  }
+  &.js-create {
+    .create {
+      display: block;
+    }
+    .save {
+      display: none;
     }
   }
 }

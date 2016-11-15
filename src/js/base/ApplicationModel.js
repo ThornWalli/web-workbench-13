@@ -23,6 +23,11 @@ module.exports = Model.extend({
             type: 'Form',
             required: false,
             default: null
+        },
+        applicationControl: {
+            type: 'object',
+            required: true,
+            default: null
         }
     }
 });

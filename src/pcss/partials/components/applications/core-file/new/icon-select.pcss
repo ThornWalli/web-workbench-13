@@ -1,8 +1,7 @@
-@import "../../../../elements/item-control/icon.pcss";
 .partial[data-partial="components/applications/core-file/new/icon-select"] {
   .icons {
     min-width: 100px;
-      min-height: 100px;
+    min-height: 100px;
     @mixin clearfix;
     .icon {
       position: relative;
@@ -17,9 +16,9 @@
       max-width: 100px;
       text-align: center;
       >* {
-      position: absolute;
-      top: 0;
-      left: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
       }
@@ -34,24 +33,21 @@
           display: block;
           width: 100%;
           height: 100%;
-
-            >span {
+          >span {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-
             >* {
-
               transform: translateX(0.5px);
             }
+          }
         }
-    }
       }
       input {
         display: none;
       }
-      input:checked+span, &:hover+span  {
+      input:checked+span,&:hover>label>span {
         background: #ff8a00;
         >* {
           filter: invert();

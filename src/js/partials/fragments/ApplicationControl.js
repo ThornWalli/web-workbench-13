@@ -1,7 +1,7 @@
 "use strict";
 
 var Controller = require('agency-pkg-base/Controller');
-var DomModel = require('agency-pkg-base/DomModel');
+var DomModel = require('../../base/DomModel');
 
 require('pepjs');
 
@@ -22,6 +22,7 @@ module.exports = Controller.extend({
 
         register: function(application) {
             this.applications.add(application);
+            application.applicationControl = this;
             application.trigger('Application:register', application, this);
             this.trigger('ApplicationControl:register', this);
         },
@@ -46,7 +47,6 @@ module.exports = Controller.extend({
         var core = this.model.core;
         core.getIfExists('ready', function() {
             core.viewControl.selectedItems.on('all', function() {
-                console.log(core.viewControl.selectedItems.length);
                 core.itemsSelected = core.viewControl.selectedItems.length > 0;
             }, this);
             core.on('change:itemsSelected', function(model, itemsSelected) {

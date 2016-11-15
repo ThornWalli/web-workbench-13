@@ -3,8 +3,7 @@
 module.exports = {
     dataTypes: {
         ApplicationCollection: getDefinition('ItemCollection', require('./ApplicationCollection')),
-        ItemCollection: getDefinition('ItemCollection', require('./itemControl/ItemCollection')),
-        ItemSubCollection: getDefinition('ItemSubCollection', require('./itemControl/ItemSubCollection'))
+        ItemCollection: getDefinition('ItemCollection', require('./itemControl/ItemCollection'))
     }
 };
 

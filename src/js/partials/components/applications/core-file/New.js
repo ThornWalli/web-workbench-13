@@ -30,6 +30,10 @@ module.exports = ApplicationController.extend({
                 default: function() {
                     return TYPES.ICON.DEFAULT;
                 }
+            },
+            itemControl: {
+                type: 'object',
+                required: false,
             }
         }
     }),
@@ -47,17 +51,19 @@ module.exports = ApplicationController.extend({
     },
 
     events: {
-        'click [data-hook="icon-select"]': onClickIconSelect,
-        'change [data-hook="type"]': onChangeType,
-        'click [data-hook="cancel"]': onClickCancel,
-        'submit [data-hook="form"]': onFormSubmit
+        'click [data-hook="icon-select"]': onClickHookIconSelect,
+        'change [data-hook="type"]': onChangeHookType,
+        'click [data-hook="cancel"]': onClickHookCancel,
+        'submit [data-hook="form"]': onSubmitHookForm
     },
 
     initialize: function() {
         ApplicationController.prototype.initialize.apply(this, arguments);
         this.model.on('change:icon', onChangeIcon, this);
+        this.model.on('change:type', onChangeType, this);
         this.previewIconEl = this.queryByHook('preview-icon');
         this.iconEl = this.queryByHook('icon');
+        this.iconSelectEl = this.queryByHook('icon-select');
         refreshIcon(this);
     }
 
@@ -65,23 +71,14 @@ module.exports = ApplicationController.extend({
 
 
 function save(scope) {
-
-    var formData = [];
-    formData = scope.model.applicationForm.getData();
-    console.log('formData', formData);
-
+    var formData = scope.model.applicationForm.getData();
     scope.applicationControl.core.viewControl.openView('./pages/workbench/applications/core-file/edit.html', {
         scaleable: true,
         scrollable: false
     }, function(view) {
         view.getIfExists('application', function(application) {
-            application.getIfExists('applicationForm', function(applicationForm) {
-                applicationForm.setData(formData.filter(function(field) {
-                    if (field.name === 'name') {
-                        return field;
-                    }
-                }));
-            });
+            application.preItemData = formData;
+            application.itemControl = scope.model.itemControl;
         });
         scope.view.close();
     });
@@ -105,25 +102,37 @@ function onChangeIcon() {
     refreshIcon(this);
 }
 
-function onChangeType(e) {
-    this.model.type = e.target.value;
+function onChangeType(model, type) {
+    console.log(this.iconSelectEl);
+    if (TYPES.ITEM_TYPE.DIRECTORY.is(type)) {
+        model.icon = TYPES.ICON.FOLDER;
+        this.iconSelectEl.disabled = true;
+    } else {
+        this.iconSelectEl.disabled = false;
+    }
 }
 
 
-// events dom
 
-function onFormSubmit(e) {
+
+// events dom
+function onChangeHookType(e) {
+    this.model.type = e.target.value;
+}
+
+function onSubmitHookForm(e) {
     this.model.applicationForm.submit(e, function() {
         save(this);
     }, this);
 }
 
-function onClickIconSelect() {
+function onClickHookIconSelect() {
     var viewControl = this.applicationControl.core.viewControl;
     viewControl.openView('./pages/workbench/applications/core-file/new/icon-select.html', {
         id: this.cid
     }, function(view) {
         view.getIfExists('application', function(application) {
+            application.icon = this.model.icon;
             application.on('change:icon', function(model, icon) {
                 this.model.icon = icon;
             }, this);
@@ -135,6 +144,6 @@ function onClickIconSelect() {
     }.bind(this));
 }
 
-function onClickCancel() {
+function onClickHookCancel() {
     this.view.close();
 }

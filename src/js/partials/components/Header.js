@@ -43,6 +43,7 @@ module.exports = Controller.extend({
                 this.model.on('change:items', onChangeItems, this);
                 this.core.applicationControl.on('ApplicationControl:register', onRefreshNavigation, this);
                 this.core.applicationControl.on('ApplicationControl:unregister', onRefreshNavigation, this);
+                onRefreshNavigation.bind(this)(this.core.applicationControl);
             }, this);
 
         }

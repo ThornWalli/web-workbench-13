@@ -18,6 +18,9 @@ module.exports = AmpersandModel.extend(dataTypeDefinition, require('./enumTypeDe
             };
             this.once('change:' + name, onChange);
         }
+    },
+    equal: function(model) {
+        return this.cid === model.cid;
     }
 
 });

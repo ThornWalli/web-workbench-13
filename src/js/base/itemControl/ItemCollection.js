@@ -1,9 +1,9 @@
 "use strict";
 
 var AmpersandCollection = require('ampersand-collection');
-var AmpersandModel = require('ampersand-model');
+var Model = require('../Model');
 
 var ItemCollection = AmpersandCollection.extend({
-    model: AmpersandModel.extend(require('agency-pkg-base/dataTypeDefinition'), require('./itemTypeDefinition'), require('./itemAttributes'))
+    model: Model.extend(require('./itemTypeDefinition'), require('./itemAttributes'))
 });
 module.exports = ItemCollection;

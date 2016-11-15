@@ -25,7 +25,9 @@
         "center": "Center",
         "order": "Order",
         "orderDiagonalRight": "Diagonal (Left to right)",
-        "orderDiagonalLeft": "Diagonal (Right to left)"
+        "orderDiagonalLeft": "Diagonal (Right to left)",
+        "icons": "Icons",
+        "rearrangeIcons": "Rearrange Icons"
       }
     }
   },

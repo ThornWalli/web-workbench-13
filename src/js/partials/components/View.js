@@ -245,6 +245,9 @@ module.exports = Controller.extend({
                 }
             }
             this.el.style.cssText = css;
+
+            this.model.scrollContent.refresh();
+
         }
     }
 });
@@ -262,6 +265,7 @@ function setup(scope) {
     }, scope);
     scope.model.on('View:refresh', scope.refresh, scope);
     scope.model.on('change:loading', onChangeLoading, scope);
+    scope.model.on('change:focus', onChangeFocus, scope);
     scope.model.on('View:setInitialDimension', onSetInitialDimension, scope);
     scope.model.on('change:scrollable', function(model, scrollable) {
         model.scrollContent.active = scrollable;
@@ -361,12 +365,19 @@ function onSetInitialDimension(size) {
     }
 }
 
+// events model
+
+
+function onChangeFocus(model, focus) {
+    if (focus) {
+        this.el.focus();
+    }
+}
 
 function onChangeLoading(model, loading) {
     var id = '.view-resize-' + this.cid;
     if (!loading) {
         // textarea resizing
-        console.log('pointerdown' + id, this.el.querySelectorAll('textarea'));
         $(this.el.querySelectorAll('textarea')).on('pointerdown' + id, function() {
             $(document).on('pointermove' + id, function() {
                 model.refreshDimension();
@@ -442,7 +453,6 @@ function onPointerUpHelperMove() {
 
 
 function onPointerDownHelperScale(e) {
-    console.log('pointer down move');
     $(document).on('pointermove.scale_' + this.cid, onPointerMoveHelperScale.bind(this));
     $(document).on('pointerup.scale_' + this.cid, onPointerUpHelperScale.bind(this));
     this.scale_startPosition.setX(e.pageX).setY(e.pageY);
@@ -477,6 +487,6 @@ function onPointerUpHelperScale() {
     // global.animationFrame.add(onRefresh.bind(this)());
     this.scale_startDimension.reset(this.model.dimension);
     this.model.scaling = false;
+    refreshBounds(this, this.model.bounds.min.x, this.model.bounds.min.y);
     this.model.refresh();
-    console.log('pointer up move');
 }

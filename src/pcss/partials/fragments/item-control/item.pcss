@@ -1,4 +1,4 @@
-.partial[data-partial="elements/item-control/icon"], .partial[data-partial^="elements/item-control/icon/"] {
+.partial[data-partial="fragments/item-control/item"], .partial[data-partial^="fragments/item-control/item/"] {
   margin: 0;
   padding: 10px 10px;
   display: inline-block;
@@ -17,4 +17,9 @@
   &:active, &.js-selected {
     filter: invert();
   }
+  &.js-moving {
+    z-index: 100;
+  }
+  max-width: 160px;
+  &[data-type="DIRECTORY"] {}
 }

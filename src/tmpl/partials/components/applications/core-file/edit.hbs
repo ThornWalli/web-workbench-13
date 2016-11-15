@@ -1,80 +1,55 @@
 ---
-fileType:
-  label: 'File-Type'
-  name: 'fileType'
-  hook: 'file-type'
-  items:
-    -
-      title: 'Link'
-      value: 'link'
-      selected: true
-    -
-      title: 'Image (Url or Base64-Url)'
-      value: 'image'
-      selected: false
-    -
-      title: 'Video (only Url)'
-      value: 'video'
-      selected: false
-    -
-      title: 'HTML (Saved as Base64)'
-      value: 'html'
-      selected: false
-linkType:
-  itlte: 'Link-Type'
-  name: 'linkType'
-  items:
-    -
-      title: 'Link (New Window)'
-      value: 'link'
-      selected: false
-    -
-      title: 'Link (Extern)'
-      value: 'link_extern'
-      selected: false
-
-url:
-  class: 'label-top'
-  label: 'Url'
-  name: 'url'
-  placeholder: 'Url…'
 src:
   class: 'label-top'
-  label: 'Src'
+  label: 'Source'
   name: 'src'
-  placeholder: 'Src…'
+  placeholder: 'Source (Url)…'
+  autocomplete: false
 name:
   label: 'Name'
   name: 'name'
   placeholder: 'Name…'
+  autocomplete: false
 title:
-  class: 'label-top'
   label: 'Title'
   name: 'title'
   placeholder: 'Title…'
-
-editor:
+  autocomplete: false
+linkUrl:
+  class: 'label-top'
+  label: 'Url'
+  name: 'linkUrl'
+  placeholder: 'Url…'
+  autocomplete: false
+code:
   class: 'label-top'
   label: 'HTML'
+  name: 'code'
   placeholder: 'Write HTML…'
+  autocomplete: false
 
 buttons:
   cancel:
+    hook: 'cancel'
     title: 'Cancel'
   create:
+    class: 'create'
+    submit: true
     title: 'Create'
+  save:
+    class: 'save'
+    submit: true
+    title: 'Save'
 ---
 <div class="partial controller" data-partial="components/applications/core-file/edit" data-controller="./partials/components/applications/core-file/Edit">
   <form data-hook="form">
-    {{{mixin "elements/field/select" fileType}}}
     {{{mixin "elements/field/textbox" name}}}
     {{{mixin "elements/field/textbox" title}}}
     <div class="link">
-      {{{mixin "elements/field/textbox" url}}}
-      {{{mixin "elements/field/select" linkType}}}
+      {{{mixin "elements/field/textbox" linkUrl}}}
     </div>
     <div class="html">
-      {{{mixin "elements/field/textarea" editor}}}
+      {{{mixin "elements/field/textarea" code}}}
     </div>
     <div class="media">
       {{{mixin "elements/field/textbox" src}}}
@@ -82,6 +57,7 @@ buttons:
     <div class="buttons">
       {{{mixin "elements/button/secondary" buttons.cancel}}}
       {{{mixin "elements/button/primary" buttons.create}}}
+      {{{mixin "elements/button/primary" buttons.save}}}
     </div>
   </form>
 </div>

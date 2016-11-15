@@ -74,7 +74,7 @@ function generateExport(scope) {
     // icons
     data.icons = [];
     scope.viewControl.itemControl.items.forEach(function(itemModel) {
-        data.icons.push(itemModel.toArray());
+        data.icons.push(itemModel.toJSON());
         // data.views.push({
         //     url: viewModel.url,
         //     options: {

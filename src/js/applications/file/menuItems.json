@@ -6,28 +6,33 @@
     "order" : 0,
     "class": "js-applications-control-file-new",
     "title": "New"
-  }, {
+  },{
     "order" : 1,
+    "disabled": true,
+    "class": "js-applications-control-file-edit",
+    "title": "Edit"
+  }, {
+    "order" : 2,
     "disabled": true,
     "class": "js-applications-control-file-open",
     "title": "Open"
   }, {
-    "order" : 2,
+    "order" : 3,
     "disabled": true,
     "class": "js-applications-control-file-close",
     "title": "Close"
   }, {
-    "order" : 3,
+    "order" : 4,
     "disabled": true,
     "class": "js-applications-control-file-duplicate",
     "title": "Duplicate"
   }, {
-    "order" : 4,
+    "order" : 5,
     "disabled": true,
     "class": "js-applications-control-file-info",
     "title": "Info"
   }, {
-    "order" : 5,
+    "order" : 6,
     "disabled": false,
     "class": "js-applications-control-file-discard",
     "title": "Discard"

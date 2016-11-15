@@ -102,6 +102,10 @@ module.exports = Controller.extend({
             this.model.refresh();
         }.bind(this));
 
+// prevent context menu
+        // global.addEventListener('contextmenu', function (e) {
+        //     e.preventDefault();
+        // });
     }
 
 });

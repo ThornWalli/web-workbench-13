@@ -45,6 +45,10 @@ module.exports = Controller.extend({
                     return new AmpersandCollection();
                 }
             },
+            helpersEl: {
+                type: 'HTMLElement',
+                required: false
+            },
             // root itemControl
             itemControl: {
                 type: 'object',
@@ -52,7 +56,7 @@ module.exports = Controller.extend({
                 default: null
             },
             selectedItems: {
-                type: 'ItemCollection',
+                type: 'AmpersandCollection',
                 required: true
             },
             core: {
@@ -62,7 +66,6 @@ module.exports = Controller.extend({
             },
             focusedView: {
                 type: 'object',
-                required: true,
                 default: null
             },
             dimension: {
@@ -98,7 +101,7 @@ module.exports = Controller.extend({
             }, options));
         },
         setViewFocus: function(view) {
-            this.trigger('event:changeViewFocus', this, view);
+            this.trigger('ViewControl:changeViewFocus', this, view);
         },
         setViewTopBottom: function(view, top) {
             this.trigger('event:setViewTopBottom', this, {
@@ -111,13 +114,37 @@ module.exports = Controller.extend({
         },
         deselectItems: function() {
             this.selectedItems.reset();
+        },
+        getViewsByZIndex: function() {
+            return this.views.models.sort(function(a, b) {
+                return a.zIndex > b.zIndex ? 1 : -1;
+            });
         }
     }),
+
+    events: {
+        'click': function(e) {
+            function closestWithView(selector, node) {
+                if (node.parentElement) {
+                    var closest = node.parentElement.querySelector(selector);
+                    if ((!closest || closest && closest !== node)) {
+                        return closestWithView(selector, node.parentElement);
+                    }
+                    return closest;
+                }
+                return null;
+            }
+            if (!closestWithView('[data-partial="components/view"]', e.target)) {
+                this.model.setViewFocus(null);
+            }
+        }
+    },
 
     initialize: function() {
         Controller.prototype.initialize.apply(this, arguments);
 
         this.viewsEl = this.queryByHook('views');
+        this.model.helpersEl = this.queryByHook('helpers');
 
         // Events
         this.model.views.on('add', onViewsAdd, this);
@@ -126,7 +153,7 @@ module.exports = Controller.extend({
         this.model.selectedItems.on('remove', onSelectedItemsRemove, this);
         this.model.selectedItems.on('reset', onSelectedItemsReset, this);
         this.model.on('ViewControl:openView', onOpenView, this);
-        this.model.on('event:changeViewFocus', onChangeViewFocus, this);
+        this.model.on('ViewControl:changeViewFocus', onChangeViewFocus, this);
         this.model.on('event:setViewTopBottom', onSetViewTopBottom, this);
         this.model.on('event:createDialog', onCreateDialog, this);
 
@@ -143,9 +170,11 @@ module.exports = Controller.extend({
             core.applicationControl.register(this.model);
 
             this.model.on('change:focusedView', function(model, focusedView) {
-                document.querySelectorAll('.js-click-view-control-position-center').forEach(function(node) {
-                    node.classList.toggle('js-disabled', !focusedView.cid);
-                });
+                if (focusedView) {
+                    document.querySelectorAll('.js-menu-item-view-control-position-center').forEach(function(node) {
+                        node.classList.toggle('js-disabled', !focusedView.cid);
+                    });
+                }
             }, this);
 
             core.on('Core:refresh', function() {
@@ -175,17 +204,15 @@ module.exports = Controller.extend({
 
 function setup_viewPosition(scope) {
     [{
-        class: '.js-click-view-control-position-center',
+        class: '.js-menu-item-view-control-position-center',
         cb: function() {
             setViewPosition(this, TYPES.VIEW_POSITION.CENTER, this.model.focusedView);
         }
     }, {
-        class: '.js-click-view-control-order-diagonal-left',
+        class: '.js-menu-item-view-control-order-diagonal-left',
         cb: function() {
-            var views = [].concat(this.model.views.models);
-            views.sort(function(a, b) {
-                return a.zIndex > b.zIndex ? 1 : -1;
-            });
+            var views = [].concat(this.model.getViewsByZIndex());
+
             var offset = (1 / views.length);
             views.forEach(function(view, i) {
                 setViewPosition(this, TYPES.VIEW_POSITION.CENTER, view);
@@ -196,7 +223,7 @@ function setup_viewPosition(scope) {
             }.bind(this));
         }
     }, {
-        class: '.js-click-view-control-order-diagonal-right',
+        class: '.js-menu-item-view-control-order-diagonal-right',
         cb: function() {
             var views = [].concat(this.model.views.models);
             views.sort(function(a, b) {
@@ -211,21 +238,6 @@ function setup_viewPosition(scope) {
                 view.refreshBounds(x, y);
             }.bind(this));
         }
-    }, {
-        class: '.js-click-view-control-order-horizontal',
-        cb: function() {
-            var views = [].concat(this.model.views.models);
-            views.sort(function(a, b) {
-                return a.zIndex > b.zIndex ? 1 : -1;
-            });
-            views.forEach(function(view) {
-                view.setDimension(this.model.dimension.x / views.length, this.model.dimension.y / views.length);
-                // view.refreshBounds(x, y);
-            }.bind(this));
-        }
-    }, {
-        class: '.js-click-view-control-order-vertical',
-        cb: function() {}
     }].forEach(function(data) {
         $(document).on('pointerdown.view_control_' + scope.cid, data.class, data.cb.bind(scope));
     });
@@ -302,14 +314,16 @@ function createView(scope, options) {
     viewEl.setAttribute('data-scrollable', options.scrollable ? 'true' : 'false');
     global.js.parse(viewEl);
     var controller = $(viewEl).data('controller');
+    var view = controller.model;
     if (options.dimension) {
-        controller.model.dimension.resetValues(options.dimension.x, options.dimension.y);
+        view.dimension.resetValues(options.dimension.x, options.dimension.y);
     }
     if (options.bounds) {
-        controller.model.bounds.min.reset(options.bounds.min);
-        controller.model.bounds.max.reset(options.bounds.max);
+        view.bounds.min.reset(options.bounds.min);
+        view.bounds.max.reset(options.bounds.max);
     }
-    return controller.model;
+    onChangeViewFocus.bind(scope)(scope.model, view);
+    return view;
 }
 
 
@@ -343,7 +357,10 @@ function onSetViewTopBottom(model, data) {
 }
 
 function onChangeViewFocus(model, view) {
-    var id = view.id;
+    var id;
+    if (view) {
+        id = view.id;
+    }
     var focusedViews = model.views.filter(function(view) {
         if (view.focus && view.id !== id) {
             return view;
@@ -352,13 +369,16 @@ function onChangeViewFocus(model, view) {
     if (focusedViews.length) {
         focusedViews[0].focus = false;
     }
-    view.focus = true;
+    if (view) {
+        view.focus = true;
+    }
     this.model.focusedView = view;
 }
 
 // Selected Items
 
 function onSelectedItemsAdd(item) {
+    console.log('BAAAAm!', JSON.stringify(item._values));
     item.selected = true;
 }
 
@@ -409,11 +429,11 @@ function setViewPosition(scope, position, view) {
 
 
 function create_defaultContent(scope) {
-    createView(scope, {
-        url: './pages/workbench/applications/core-file/new.html',
-        scaleable: true,
-        scrollable: false
-    });
+    // createView(scope, {
+    //     url: './pages/workbench/applications/core-file/new.html',
+    //     scaleable: true,
+    //     scrollable: false
+    // });
     // createView(scope, {
     //     url: './pages/workbench/applications/core-file/edit.html',
     //     scaleable: true,
@@ -424,49 +444,51 @@ function create_defaultContent(scope) {
     //     scaleable: true,
     //     scrollable: false
     // });
-
+    // createView(scope, {
+    //     url: './pages/workbench/iframe.html',
+    //     scaleable: true,
+    //     scrollable: true
+    // });
 
     var testItems = [{
-            type: TYPES.ITEM.DEFAULT,
-            icon: TYPES.ICON.WORK,
-            title: 'Workbench on GitHub',
-            position: {
-                x: 0,
-                y: 0
-            }
-        },{
-                type: TYPES.ITEM.DEFAULT,
-                icon: TYPES.ICON.DISK_1,
-                title: 'Google',
-                position: {
-                    x: 400,
-                    y: 50
-                }
-            }, {
-            type: TYPES.ITEM.FOLDER,
-            icon: TYPES.ICON.FOLDER,
-            title: 'Folder 2.',
-            position: {
-                x: 150,
-                y: 100
-            },
-            items: [{
-                type: TYPES.ITEM.FOLDER,
-                icon: TYPES.ICON.FOLDER,
-                title: 'Test 4.1.',
-                items: [{
-                    title: 'Sub Item 1.',
-                }, {
-                    title: 'Sub Item 2.',
-                }, {
-                    title: 'Sub Item 3.',
-                }, {
-                    title: 'Sub Item 4.',
-                }]
-            }]
-        }
-
-    ];
+        "position": {
+            "x": 0,
+            "y": 0
+        },
+        "iconType": "DEFAULT",
+        "icon": "WORK",
+        "type": "LINK",
+        "title": "Workbench on GitHub",
+        "linkUrl": "http://github.com",
+        "code": "",
+        "src": ""
+    }, {
+        "position": {
+            "x": 181,
+            "y": 0
+        },
+        "iconType": "DEFAULT",
+        "icon": "FOLDER",
+        "type": "DIRECTORY",
+        "title": "Dir 1.",
+        "linkUrl": "",
+        "code": "",
+        "src": "",
+        "items": []
+    }, {
+        "position": {
+            "x": 181,
+            "y": 100
+        },
+        "iconType": "DEFAULT",
+        "icon": "FOLDER",
+        "type": "DIRECTORY",
+        "title": "Dir 2.",
+        "linkUrl": "",
+        "code": "",
+        "src": "",
+        "items": []
+    }];
 
     scope.model.getIfExists('itemControl', function(itemControl) {
         itemControl.items.add(testItems);

@@ -3,6 +3,23 @@
     content: "";
     clear: right;
   }
+  >.indicator-context {
+display: none;
+    /*background: red;*/
+    float: right;
+    line-height: 1;
+    svg {
+      display: block;
+      margin-top: 2px;
+      margin-left: 4px;
+      .primary {
+        fill: $workbenchColor_3;
+      }
+    }
+[data-partial="fragments/context-menu"] [data-partial="fragments/context-menu"] &{
+    display: inline-block;
+}
+  }
   >.hotkey {
     display: inline-block;
     float: right;

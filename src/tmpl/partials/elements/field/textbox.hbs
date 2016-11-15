@@ -6,5 +6,5 @@ placeholder: 'Textbox Placeholder…'
   {{#if label}}
     <span class="label">{{{label}}}</span>
   {{/if}}
-  <input type="text"{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if placeholder}} placeholder="{{{placeholder}}}"{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}} />
+  <input type="text"{{#if name}} name="{{{name}}}"{{/if}}{{#if hook}} data-hook="{{{hook}}}"{{/if}}{{#if placeholder}} placeholder="{{{placeholder}}}"{{/if}}{{#if form-ignore}} data-form-ignore="true"{{/if}}{{#unless autocomplete}} autocomplete="off"{{/unless}} />
 </label>
