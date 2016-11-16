@@ -31,7 +31,7 @@ module.exports = ApplicationController.extend({
                 if (this.view) {
                     this.viewControl.itemControl.items.off(null, null, this);
                     this.viewControl.views.off(null, null, this);
-                    this.applicationControl.on(null,null, this);
+                    this.applicationControl.off(null,null, this);
                 }
                 workbenchConfig.off(null, null, this);
             }, this);

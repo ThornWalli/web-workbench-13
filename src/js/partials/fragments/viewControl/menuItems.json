@@ -1,26 +1,26 @@
 [{
   "order": 10,
-  "title": "<%= lang.applications.file.menuItems.window %>",
+  "title": "<%= lang.applications.viewControl.menuItems.view %>",
   "items": [{
     "class": "js-menu-item-view-control-position-center",
-    "title": "<%= lang.applications.file.menuItems.center %>",
+    "title": "<%= lang.applications.viewControl.menuItems.center %>",
     "disabled": true
   }, {
     "separator": true
   }, {
-    "title": "<%= lang.applications.file.menuItems.order %>",
+    "title": "<%= lang.applications.viewControl.menuItems.order %>",
     "items": [ {
       "class": "js-menu-item-view-control-order-diagonal-right",
-      "title": "<%= lang.applications.file.menuItems.orderDiagonalRight %>"
+      "title": "<%= lang.applications.viewControl.menuItems.orderDiagonalRight %>"
     },{
       "class": "js-menu-item-view-control-order-diagonal-left",
-      "title": "<%= lang.applications.file.menuItems.orderDiagonalLeft %>"
+      "title": "<%= lang.applications.viewControl.menuItems.orderDiagonalLeft %>"
     }]
   }, {
-    "title": "<%= lang.applications.file.menuItems.icons %>",
+    "title": "<%= lang.applications.viewControl.menuItems.icons %>",
     "items": [{
       "class": "js-menu-item-view-control-icon-rearrange-icons",
-      "title": "<%= lang.applications.file.menuItems.rearrangeIcons %>"
+      "title": "<%= lang.applications.viewControl.menuItems.rearrangeIcons %>"
     }]
   }]
 }]

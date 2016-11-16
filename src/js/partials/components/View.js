@@ -223,7 +223,7 @@ module.exports = Controller.extend({
 
     initialize: function() {
         Controller.prototype.initialize.apply(this, arguments);
-        setup(this);
+        setupView(this);
     },
 
     destroy: function() {
@@ -253,7 +253,7 @@ module.exports = Controller.extend({
 });
 
 
-function setup(scope) {
+function setupView(scope) {
 
     //  Events
 
@@ -273,9 +273,6 @@ function setup(scope) {
     scope.model.on('change:scrollContent', function(model, scrollContent) {
         scrollContent.active = this.model.scrollable;
     }, scope);
-
-    // scope.helperScaleEl = scope.el.querySelector('.helper-scale');
-    // $(scope.helperScaleEl).on('pointerdown', onPointerDownHelperScale.bind(scope));
 
     scope.model.contentEl = scope.queryByHook('view-content');
     scope.contentSize = new Vector();
@@ -391,12 +388,45 @@ function onChangeLoading(model, loading) {
     }
 }
 
+
+
+function refreshBounds(scope, x, y) {
+
+    x = Math.min(Math.max(x, 0), scope.targetModel.dimension.x - scope.model.dimension.x);
+    y = Math.min(Math.max(y, 0), scope.targetModel.dimension.y - scope.model.dimension.y);
+
+    scope.model.bounds.min.x = x;
+    scope.model.bounds.min.y = y;
+    scope.model.bounds.max.x = scope.model.bounds.min.x + scope.model.dimension.x;
+    scope.model.bounds.max.y = scope.model.bounds.min.y + scope.model.dimension.y;
+
+    scope.refresh();
+}
+
+
+
+function setDimension(scope, width, height) {
+    width = Math.max(width, 150);
+    height = Math.max(height, 100);
+    if (!scope.model.scrollable || !scope.model.scrollContent.active) {
+        width = Math.max(width, scope.contentSize.x);
+        height = Math.max(height, scope.contentSize.y);
+    }
+    width = Math.min(scope.model.bounds.min.x + width, scope.model.screenBounds.max.x - scope.model.screenBounds.min.x);
+    width -= scope.model.bounds.min.x;
+    height = Math.min(scope.model.bounds.min.y + height, scope.model.screenBounds.max.y - scope.model.screenBounds.min.y);
+    height -= scope.model.bounds.min.y;
+    scope.model.dimension.resetValues(width, height, 0);
+}
+
 /**
  *
  *
  *
  *
  */
+
+// events dom
 
 function onPointerDown() {
     this.targetModel.setViewFocus(this.model);
@@ -431,19 +461,6 @@ function onPointerMoveHelperMove(e) {
     refreshBounds(this, this.move_movePosition.x, this.move_movePosition.y);
 }
 
-function refreshBounds(scope, x, y) {
-
-    x = Math.min(Math.max(x, 0), scope.targetModel.dimension.x - scope.model.dimension.x);
-    y = Math.min(Math.max(y, 0), scope.targetModel.dimension.y - scope.model.dimension.y);
-
-    scope.model.bounds.min.x = x;
-    scope.model.bounds.min.y = y;
-    scope.model.bounds.max.x = scope.model.bounds.min.x + scope.model.dimension.x;
-    scope.model.bounds.max.y = scope.model.bounds.min.y + scope.model.dimension.y;
-
-    scope.refresh();
-}
-
 function onPointerUpHelperMove() {
     $(document).off('pointerup.move_' + this.cid);
     $(document).off('pointermove.move_' + this.cid);
@@ -465,20 +482,6 @@ function onPointerMoveHelperScale(e) {
     this.scale_movePosition.subtractLocal(this.scale_startPosition);
     setDimension(this, this.scale_startDimension.x + this.scale_movePosition.x, this.scale_startDimension.y + this.scale_movePosition.y);
     this.refresh();
-}
-
-function setDimension(scope, width, height) {
-    width = Math.max(width, 150);
-    height = Math.max(height, 100);
-    if (!scope.model.scrollable || !scope.model.scrollContent.active) {
-        width = Math.max(width, scope.contentSize.x);
-        height = Math.max(height, scope.contentSize.y);
-    }
-    width = Math.min(scope.model.bounds.min.x + width, scope.model.screenBounds.max.x - scope.model.screenBounds.min.x);
-    width -= scope.model.bounds.min.x;
-    height = Math.min(scope.model.bounds.min.y + height, scope.model.screenBounds.max.y - scope.model.screenBounds.min.y);
-    height -= scope.model.bounds.min.y;
-    scope.model.dimension.resetValues(width, height, 0);
 }
 
 function onPointerUpHelperScale() {

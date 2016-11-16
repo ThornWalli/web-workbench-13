@@ -28,6 +28,10 @@ module.exports = ViewController.extend({
 
     modelConstructor: DomModel.extend(require('../../base/collectionTypeDefinition'), {
         session: {
+            parent: {
+                type: 'object',
+                required: false
+            },
             items: {
                 type: 'object',
                 required: true,
@@ -42,7 +46,7 @@ module.exports = ViewController.extend({
         ViewController.prototype.initialize.apply(this, arguments);
 
         this.model.on('change:items', onChangeItems, this);
-        this.el.classList.add('icon-control-' + this.cid);
+        this.el.classList.add('item-control-' + this.cid);
         this.itemElMap = {};
         this.itemsEl = this.queryByHook('items');
 
@@ -63,19 +67,21 @@ module.exports = ViewController.extend({
         this.move_moveOffset = new Vector();
 
 
-        $(document).on('pointerdown.itemControl_' + this.cid, '.icon-control-' + this.cid, function() {
+        $(document).on('pointerdown.itemControl_' + this.cid, '.item-control-' + this.cid, function() {
             this.targetModel.deselectItems();
         }.bind(this));
-        $(document).on('pointerdown.itemControl_' + this.cid, '.icon-control-' + this.cid + '>.items>*', onPointerDownItem.bind(this));
+        $(document).on('pointerdown.itemControl_' + this.cid, '.item-control-' + this.cid + '>.items>*', onPointerDownItem.bind(this));
 
         if (this.view) {
             this.view.itemControl = this.model;
             this.view.on('destroy', function() {
                 $(document).off('pointermove.itemControl_' + this.cid);
                 $(document).off('pointerdown.itemControl_' + this.cid);
-                this.model.items.on(null, null, this);
+                this.model.items.off(null, null, this);
             }.bind(this));
+            this.model.parent = this.view;
         } else if (this.targetModel) {
+            this.model.parent = this.targetModel;
             this.targetModel.itemControl = this.model;
         }
 
@@ -102,6 +108,7 @@ function toggleHelperMove(scope, item, move) {
 
 function intersectOtherItemControl(scope, item) {
     var views = scope.targetModel.getViewsByZIndex().reverse();
+    // root item-control
     var itemControl = scope.targetModel.itemControl || scope.view.viewControl.itemControl;
     for (var i = 0; i < views.length; i++) {
         var view = views[i];
@@ -119,13 +126,14 @@ function intersectOtherItemControl(scope, item) {
 }
 
 
-function moveItem(scope, items, item) {
+function moveItem(scope, items, item, x, y) {
     var itemData = item.toJSON();
+
+    // get relative offset from item-control
     itemData.position = {
-        x: 0,
-        y: 0
+        x: x,
+        y: y
     };
-    console.log(items, itemData);
     (items.add || items.push).apply(items, [itemData]);
     scope.model.items.remove(item);
     setItemsSize(scope);
@@ -297,6 +305,11 @@ function onChangeItems(model, items) {
     }.bind(this));
     console.log('tmpItems', tmpItems.length);
     items.add(tmpItems);
+
+    //     if (this.lastItems) {
+    //         this.lastItems.off(null, null, this);
+    //     }
+    // this.lastItems = items;
 }
 
 function removeItemEl(scope, id) {
@@ -366,42 +379,67 @@ function onPointerUpItem() {
     $(document).off('pointermove.itemControl_' + this.cid);
 
     if (this.move_moved) {
-        this.targetModel.selectedItems.remove(this.move_item);
-        toggleHelperMove(this, this.move_item, false);
-        this.move_moved = false;
-        this.move_item.moving = false;
+        var item = this.move_item;
 
-        var intersectedItemControl = intersectOtherItemControl(this, this.move_item);
-        // console.log(intersectedItemControl, this.move_item.itemControl.cid, intersectedItemControl.cid);
+
+        this.targetModel.selectedItems.remove(item);
+        toggleHelperMove(this, item, false);
+        this.move_moved = false;
+        item.moving = false;
+
+        var intersectedItemControl = intersectOtherItemControl(this, item);
+        // console.log(intersectedItemControl, item.itemControl.cid, intersectedItemControl.cid);
 
         if (intersectedItemControl) {
 
             var intersectedItem;
             for (var i = 0; i < intersectedItemControl.items.length; i++) {
                 intersectedItem = intersectedItemControl.items.models[i];
-                if (!intersectedItem.equal(this.move_item) && intersectedItem.screenBounds.intersects(this.move_item.screenBounds)) {
+                if (!intersectedItem.equal(item) && intersectedItem.screenBounds.intersects(item.screenBounds)) {
                     break;
                 }
                 intersectedItem = null;
             }
             if (intersectedItem) {
                 // intersects directory icon
-                moveItem(this, intersectedItem.items, this.move_item);
-            } else if (this.move_item.itemControl.cid !== intersectedItemControl.cid) {
-console.log('BAaaaaaaaam!');
-                if (this.view && this.view.cid === intersectedItemControl.cid) {
-                    // console.log('test!!!!');
-                } else {
-                    // intersects other icon-control
-                    moveItem(this, intersectedItemControl.items, this.move_item);
+                moveItem(this, intersectedItem.items, item, 0, 0);
+            } else if (item.itemControl.cid !== intersectedItemControl.cid) {
+                console.log('BAaaaaaaaam!');
+                if (!(this.view && this.view.cid === intersectedItemControl.cid)) {
+                    // intersects other item-control
+
+                    var itemControlBounds = getBoundsFromIconControl(intersectedItemControl);
+
+
+                    var x = item.screenBounds.min.x;
+                    x -= itemControlBounds.min.x;
+                    var y = item.screenBounds.min.y;
+                    y -= itemControlBounds.min.y;
+
+                    console.log('BOUNDS', x, y);
+                    // intersectedItemControl
+                    moveItem(this, intersectedItemControl.items, item, x, y);
                 }
 
             }
 
         }
-        refreshBounds(this, this.move_item, this.move_item.bounds.min.x, this.move_item.bounds.min.y);
+        refreshBounds(this, item, item.bounds.min.x, item.bounds.min.y);
         this.move_item = null;
     }
+}
+
+/**
+ * Get bounds from parent (ViewControl / View)
+ * @param  fragments/ItemControl scope
+ * @return agency-pkg-base/Bounds
+ */
+function getBoundsFromIconControl(itemControl) {
+    var parentBounds = new Bounds(),
+        bounds;
+    bounds = itemControl.parent.bounds;
+    parentBounds.reset(bounds.min, bounds.max);
+    return parentBounds;
 }
 
 function onPointerMove(e) {

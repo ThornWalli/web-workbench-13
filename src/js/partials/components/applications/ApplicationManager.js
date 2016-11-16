@@ -27,7 +27,7 @@ module.exports = ApplicationController.extend({
             this.viewControl = this.view.viewControl;
             this.model.on('Application:unregister', function() {
                 if (this.view) {
-                    this.applicationControl.on(null, null, this);
+                    this.applicationControl.off(null, null, this);
                 }
             }, this);
             this.applicationControl.on('ApplicationControl:register', onRefresh, this);

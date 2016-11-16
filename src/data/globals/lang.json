@@ -1,15 +1,15 @@
 {
   "applications": {
-    "core":{
+    "core": {
       "menuItems": {
         "webWorkbench": "Web-Workbench",
         "impExpRuntime": "Import/Export Runtime",
         "settings": "Settings",
-              "applicationManager": "Application-Manager",
-                "info": "Info",
-                  "examples": "Examples",
-                    "examplesDialog": "Dialog",
-                      "examplesViewScrollBar": "View with Scrollbars"
+        "applicationManager": "Application-Manager",
+        "info": "Info",
+        "examples": "Examples",
+        "examplesDialog": "Dialog",
+        "examplesViewScrollBar": "View with Scrollbars"
 
       }
     },
@@ -20,8 +20,11 @@
           "text": "<p>Would you like remove file ?</p>"
         }
       },
+      "menuItems": {}
+    },
+    "viewControl": {
       "menuItems": {
-        "window": "Window",
+        "view": "Window",
         "center": "Center",
         "order": "Order",
         "orderDiagonalRight": "Diagonal (Left to right)",

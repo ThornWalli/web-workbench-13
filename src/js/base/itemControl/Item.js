@@ -2,7 +2,7 @@
 
 var Model = require('../Model');
 
-var Item = Model.extend(require('./itemTypeDefinition'),require('./itemAttributes'), {
+var Item = Model.extend(require('./itemAttributes'), {
 
 
 });

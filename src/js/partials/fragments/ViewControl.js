@@ -11,6 +11,7 @@ var ContextualFragment = require('../../base/ContextualFragment');
 var template = require('lodash/template');
 
 var TYPES = require('../../utils/types');
+var dom = require('../../utils/dom');
 // var ItemCollection = require('../../base/itemControl/ItemCollection');
 
 var AmpersandCollection = require('ampersand-collection');
@@ -104,13 +105,13 @@ module.exports = Controller.extend({
             this.trigger('ViewControl:changeViewFocus', this, view);
         },
         setViewTopBottom: function(view, top) {
-            this.trigger('event:setViewTopBottom', this, {
+            this.trigger('ViewControl:setViewTopBottom', this, {
                 view: view,
                 moveTop: top || false
             });
         },
         createDialog: function(options) {
-            this.trigger('event:createDialog', options);
+            this.trigger('ViewControl:createDialog', options);
         },
         deselectItems: function() {
             this.selectedItems.reset();
@@ -124,18 +125,9 @@ module.exports = Controller.extend({
 
     events: {
         'click': function(e) {
-            function closestWithView(selector, node) {
-                if (node.parentElement) {
-                    var closest = node.parentElement.querySelector(selector);
-                    if ((!closest || closest && closest !== node)) {
-                        return closestWithView(selector, node.parentElement);
-                    }
-                    return closest;
-                }
-                return null;
-            }
-            if (!closestWithView('[data-partial="components/view"]', e.target)) {
-                this.model.setViewFocus(null);
+            console.log(!dom.closestWithView('[data-partial="components/view"]', e.target) , this.model.focusedView);
+            if (!dom.closestWithView('[data-partial="components/view"]', e.target) && this.model.focusedView) {
+                this.model.focusedView = null;
             }
         }
     },
@@ -154,8 +146,8 @@ module.exports = Controller.extend({
         this.model.selectedItems.on('reset', onSelectedItemsReset, this);
         this.model.on('ViewControl:openView', onOpenView, this);
         this.model.on('ViewControl:changeViewFocus', onChangeViewFocus, this);
-        this.model.on('event:setViewTopBottom', onSetViewTopBottom, this);
-        this.model.on('event:createDialog', onCreateDialog, this);
+        this.model.on('ViewControl:setViewTopBottom', onSetViewTopBottom, this);
+        this.model.on('ViewControl:createDialog', onCreateDialog, this);
 
         this.tmpl = {
             view: new ContextualFragment(template(this.el.querySelector('#view-template').innerHTML)),
@@ -238,6 +230,13 @@ function setup_viewPosition(scope) {
                 view.refreshBounds(x, y);
             }.bind(this));
         }
+    }, {
+        class: '.js-menu-item-view-control-icon-rearrange-icons',
+        cb: function() {
+            var itemControl = getCurrentIconControl(this);
+
+            console.log('current icon control', itemControl, itemControl.items);
+        }
     }].forEach(function(data) {
         $(document).on('pointerdown.view_control_' + scope.cid, data.class, data.cb.bind(scope));
     });
@@ -253,11 +252,15 @@ function refreshBounds(scope) {
     scope.model.bounds.max.resetValues(scope.model.bounds.min.x + scope.model.dimension.x, scope.model.bounds.min.y + scope.model.dimension.y, 0);
 }
 
-// Dialog
-
-function onCreateDialog(options) {
-    createDialog(this, options);
+function getCurrentIconControl(scope) {
+    var itemControl = scope.model.itemControl;
+    if (scope.model.focusedView && scope.model.focusedView.itemControl) {
+        itemControl = scope.model.focusedView.itemControl;
+    }
+    return itemControl;
 }
+
+// Dialog
 
 function createDialog(scope, options) {
 
@@ -327,23 +330,6 @@ function createView(scope, options) {
 }
 
 
-function onViewsAdd() {
-    refreshViewZIndex(this);
-}
-
-function onViewsRemove(model) {
-    if (this.model.focusedView && model.focus && model.cid === this.model.focusedView.cid) {
-        this.model.focusedView = {};
-    }
-}
-
-function onOpenView(model, options) {
-    var viewModel = createView(this, options);
-    if (options.openView_callback) {
-        options.openView_callback(viewModel);
-    }
-}
-
 function onSetViewTopBottom(model, data) {
     var $view = $('[data-partial="components/view"][data-id="' + data.view.id + '"]');
     if (data.moveTop) {
@@ -354,43 +340,6 @@ function onSetViewTopBottom(model, data) {
         $view.prev().before($view);
     }
     refreshViewZIndex(this);
-}
-
-function onChangeViewFocus(model, view) {
-    var id;
-    if (view) {
-        id = view.id;
-    }
-    var focusedViews = model.views.filter(function(view) {
-        if (view.focus && view.id !== id) {
-            return view;
-        }
-    });
-    if (focusedViews.length) {
-        focusedViews[0].focus = false;
-    }
-    if (view) {
-        view.focus = true;
-    }
-    this.model.focusedView = view;
-}
-
-// Selected Items
-
-function onSelectedItemsAdd(item) {
-    console.log('BAAAAm!', JSON.stringify(item._values));
-    item.selected = true;
-}
-
-function onSelectedItemsRemove(item) {
-    item.selected = false;
-}
-
-function onSelectedItemsReset(collection, options) {
-    options.previousModels.forEach(function(item) {
-        console.log('reset', item.selected);
-        item.selected = false;
-    });
 }
 
 function refreshViewZIndex(scope) {
@@ -424,6 +373,89 @@ function setViewPosition(scope, position, view) {
     }
 }
 
+
+
+// events model (properties)
+
+var lastFocusedView = null;
+function onChangeViewFocus(model, view) {
+
+
+    console.log('change view focused', view);
+    var id;
+    if (view) {
+        id = view.id;
+        var focusedViews = model.views.filter(function(view) {
+            if (view.focus && view.id !== id) {
+                return view;
+            }
+        });
+
+
+        if (focusedViews.length) {
+            focusedViews[0].focus = false;
+        }
+        view.focus = true;
+
+        this.model.focusedView = view;
+        lastFocusedView = view;
+    } else {
+        if(lastFocusedView) {
+            lastFocusedView.focus = false;
+            lastFocusedView = null;
+        }
+        model.focusedView.focus = false;
+        model.focusedView = null;
+    }
+}
+
+
+
+// events model (custom)
+
+
+function onCreateDialog(options) {
+    createDialog(this, options);
+}
+
+
+function onOpenView(model, options) {
+    var viewModel = createView(this, options);
+    if (options.openView_callback) {
+        options.openView_callback(viewModel);
+    }
+}
+
+// events collection
+
+// views
+
+function onViewsAdd() {
+    refreshViewZIndex(this);
+}
+
+function onViewsRemove(model) {
+    if (this.model.focusedView && model.focus && model.cid === this.model.focusedView.cid) {
+        this.model.focusedView = {};
+    }
+}
+
+// Selected Items
+
+function onSelectedItemsAdd(item) {
+    item.selected = true;
+}
+
+function onSelectedItemsRemove(item) {
+    item.selected = false;
+}
+
+function onSelectedItemsReset(collection, options) {
+    options.previousModels.forEach(function(item) {
+        console.log('reset', item.selected);
+        item.selected = false;
+    });
+}
 
 
 
